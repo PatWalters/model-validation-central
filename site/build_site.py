@@ -378,12 +378,32 @@ def summary_facts(studies) -> list[dict]:
     datasets = {d for s in studies for d in s.datasets}
     endpoints = max((s.endpoints for s in studies), default=0)
     return [
-        {"n": str(len(studies)), "label": "studies"},
+        # Reports first: it is the number a reader can count off against the cards.
+        # Studies is smaller, because one study can answer more than one question.
         {"n": str(len(reports)), "label": "reports"},
+        {"n": str(len(studies)), "label": "studies"},
         {"n": str(len(methods)), "label": "published methods"},
         {"n": str(endpoints), "label": "endpoints"},
         {"n": str(len(datasets)), "label": "data sets"},
     ]
+
+
+def report_count_note(studies) -> str:
+    """Say so when a study answers more than one question.
+
+    A card is a report, and the header counts studies, so the two numbers differ
+    whenever one directory produces two reports. Without a line saying that, the
+    page just looks as though it cannot count.
+    """
+    reports = all_reports(studies)
+    if len(reports) == len(studies):
+        return ""
+    plural = [s for s in studies if len(s.reports) > 1]
+    names = ", ".join(f"<code>{e(s.slug)}</code>" for s in plural)
+    verb = "produces" if len(plural) == 1 else "produce"
+    return (f"<p>{len(reports)} reports from {len(studies)} studies: {names} {verb} "
+            "more than one, asking different questions of the same folds. Each card "
+            "links to the directory it came from.</p>")
 
 
 def render_index(studies) -> str:
@@ -430,7 +450,8 @@ def render_index(studies) -> str:
   <h2>What makes these comparable</h2>
   {shared}
 
-  <h2>The studies</h2>
+  <h2>The reports</h2>
+  {report_count_note(studies)}
   <div class="cards bleed">{cards}</div>
 
   <hr class="rule">
