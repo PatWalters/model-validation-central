@@ -139,20 +139,27 @@ def load_studies() -> list[Study]:
 
 
 def all_reports(studies) -> list[Report]:
-    """Every report from every study, newest first.
+    """Every report, newest study first, with a study's own reports kept together.
 
-    The index reads as a feed rather than as a directory listing, so a study
-    added later lands at the top on its own and nothing has to be renumbered.
-    Two reports built the same day are separated by their study's slug, which
-    only keeps the order stable; it carries no meaning. A report with no date
-    sorts last rather than crashing the build.
+    A study is placed by its newest report, and its reports then run newest
+    first within that block. So a study added later arrives at the top without
+    anything being renumbered, and the two reports that come out of
+    expansion-ml-comparison still sit next to each other even though they were
+    built eight days apart.
+
+    A report with no date sorts last rather than crashing the build.
     """
-    reports = [report for study in studies for report in study.reports]
-    # Two passes rather than one reversed key: `reverse=True` would flip the
-    # tiebreak as well, ordering same-day reports by slug backwards.
-    reports.sort(key=lambda r: r.study.slug)
-    reports.sort(key=lambda r: r.when or "", reverse=True)
-    return reports
+    def newest(study) -> str:
+        return max((r.when or "" for r in study.reports), default="")
+
+    ordered = []
+    for study in sorted(studies, key=lambda s: (newest(s), s.slug), reverse=True):
+        # Two passes rather than one reversed key: `reverse=True` would flip the
+        # tiebreak as well, ordering same-day reports by slug backwards.
+        reports = sorted(study.reports, key=lambda r: r.slug)
+        reports.sort(key=lambda r: r.when or "", reverse=True)
+        ordered.extend(reports)
+    return ordered
 
 
 # ------------------------------------------------------------- copying pages
@@ -221,6 +228,77 @@ def papers_block(papers) -> str:
     label = "The paper put to the test" if len(papers) == 1 else "The papers put to the test"
     return (f'<div class="papers"><p class="plabel">{label}</p>'
             f'<ul class="paperlist">{"".join(items)}</ul></div>')
+
+
+def overview_block() -> str:
+    """The cross-study comparison, from what `site/overview.py` left behind.
+
+    Absent that file the page simply goes without it, so the index still builds
+    in an interpreter that has never seen pandas.
+    """
+    path = DOCS / "overview.json"
+    if not path.exists():
+        return ""
+    d = json.loads(path.read_text(encoding="utf-8"))
+    sets = d["datasets"]
+    keys = list(sets)
+
+    head = (
+        "<tr><th scope='col'></th><th scope='col'>From</th>"
+        + "".join(f"<th scope='col' colspan='3'>{e(sets[k]['label'])}, "
+                  f"of {sets[k]['combinations']}</th>" for k in keys)
+        + "</tr><tr><th></th><th></th>"
+        + "".join("<th>best alone</th><th>tied</th><th>worse</th>" for _ in keys)
+        + "</tr>"
+    )
+    rows = []
+    for m in d["methods"]:
+        cells = [
+            f'<th scope="row"><span class="swatch" style="background:{m["color"]}"></span>'
+            f'{e(m["label"])}</th>',
+            f'<td class="from">{e(m["study"])}</td>',
+        ]
+        for k in keys:
+            c = m["counts"][k]
+            for kind in ("alone", "tied", "worse"):
+                n = c[kind]
+                cls = "num zero" if n == 0 else "num"
+                cells.append(f'<td class="{cls}">{n}</td>')
+        rows.append("<tr>" + "".join(cells) + "</tr>")
+
+    figures = "".join(
+        f'<figure class="overfig"><img src="{sets[k]["figure"]}" '
+        f'alt="Tukey HSD on R squared, {e(sets[k]["label"])}, one panel per endpoint">'
+        f'<figcaption>{e(sets[k]["label"])}: one panel per endpoint, Tukey HSD on R² over '
+        f'the {sets[k]["folds_per_method"] // sets[k]["endpoints"]} folds. Blue is the best '
+        f'mean, grey cannot be separated from it, red is significantly worse.</figcaption>'
+        "</figure>"
+        for k in keys
+    )
+
+    return (
+        '<h2 id="overview">Every method, on the same folds</h2>'
+        "<p>The studies share their folds, and the four reference arms are copied "
+        "between them rather than refit, so their per-fold numbers are identical to "
+        "the last bit. That is checked before anything is pooled, and it means every "
+        "method below can go into one comparison — which is the whole reason for "
+        "collecting them.</p>"
+        "<p>One Tukey HSD per endpoint and metric, over the 25 folds. A method counts "
+        "as being on top whenever the correction cannot separate it from the leading "
+        "mean, so a combination with several methods on top gives <b>each of them a "
+        "tie</b> rather than crowning whichever had the higher mean. Only a "
+        "combination with exactly one method on top awards a <b>best alone</b>. "
+        "There are no bold maxima.</p>"
+        f'<div class="tablewrap bleed"><table class="overview">{head}{"".join(rows)}</table></div>'
+        '<p class="footnote">multimodal-fusion\'s 33 configurations would swamp a '
+        "ten-way comparison and widen the correction for everyone, so it is "
+        "represented by one cell of its grid chosen in advance rather than on the "
+        "results: all four modalities, early fusion, LightGBM. Its own report ranks "
+        "the whole grid. Counts here are also stricter than the ones in the "
+        "individual reports: Tukey's correction widens with the number of methods, so "
+        "pooling ten of them turns some outright wins into ties.</p>"
+        f'<div class="bleed">{figures}</div>'
+    )
 
 
 def card(report: Report) -> str:
@@ -303,6 +381,8 @@ def render_index(studies) -> str:
   can be read against one another instead of against whatever each paper chose to
   compare itself with.</p>
   {fact_block(summary_facts(studies))}
+
+  {overview_block()}
 
   <h2>What makes these comparable</h2>
   {shared}

@@ -1,0 +1,201 @@
+{
+  "methods": [
+    {
+      "method": "lgbm",
+      "label": "LightGBM + Morgan",
+      "color": "#4C72B0",
+      "study": "expansion-ml-comparison",
+      "counts": {
+        "expansion": {
+          "alone": 0,
+          "tied": 0,
+          "worse": 27
+        },
+        "biogen": {
+          "alone": 0,
+          "tied": 0,
+          "worse": 18
+        }
+      }
+    },
+    {
+      "method": "chemprop_st",
+      "label": "ChemProp single-task",
+      "color": "#C44E52",
+      "study": "expansion-ml-comparison",
+      "counts": {
+        "expansion": {
+          "alone": 0,
+          "tied": 4,
+          "worse": 23
+        },
+        "biogen": {
+          "alone": 0,
+          "tied": 0,
+          "worse": 18
+        }
+      }
+    },
+    {
+      "method": "chemprop",
+      "label": "ChemProp multi-task",
+      "color": "#DD8452",
+      "study": "expansion-ml-comparison",
+      "counts": {
+        "expansion": {
+          "alone": 0,
+          "tied": 7,
+          "worse": 20
+        },
+        "biogen": {
+          "alone": 0,
+          "tied": 0,
+          "worse": 18
+        }
+      }
+    },
+    {
+      "method": "chemeleon",
+      "label": "ChemProp + CheMeleon",
+      "color": "#55A868",
+      "study": "expansion-ml-comparison",
+      "counts": {
+        "expansion": {
+          "alone": 6,
+          "tied": 8,
+          "worse": 13
+        },
+        "biogen": {
+          "alone": 0,
+          "tied": 0,
+          "worse": 18
+        }
+      }
+    },
+    {
+      "method": "megacl",
+      "label": "MEGA-CL",
+      "color": "#8172B3",
+      "study": "expansion-ml-comparison",
+      "counts": {
+        "expansion": {
+          "alone": 0,
+          "tied": 0,
+          "worse": 27
+        },
+        "biogen": {
+          "alone": 0,
+          "tied": 0,
+          "worse": 18
+        }
+      }
+    },
+    {
+      "method": "monroe",
+      "label": "Monroe + TabPFN",
+      "color": "#937860",
+      "study": "expansion-ml-comparison",
+      "counts": {
+        "expansion": {
+          "alone": 10,
+          "tied": 9,
+          "worse": 8
+        },
+        "biogen": {
+          "alone": 18,
+          "tied": 0,
+          "worse": 0
+        }
+      }
+    },
+    {
+      "method": "moljepa",
+      "label": "Mol-JEPA + TabICL",
+      "color": "#DA8BC3",
+      "study": "expansion-ml-comparison",
+      "counts": {
+        "expansion": {
+          "alone": 0,
+          "tied": 0,
+          "worse": 27
+        },
+        "biogen": {
+          "alone": 0,
+          "tied": 0,
+          "worse": 18
+        }
+      }
+    },
+    {
+      "method": "trimole",
+      "label": "Trimole-Hybrid",
+      "color": "#CCB974",
+      "study": "expansion-ml-comparison",
+      "counts": {
+        "expansion": {
+          "alone": 0,
+          "tied": 2,
+          "worse": 25
+        },
+        "biogen": {
+          "alone": 0,
+          "tied": 0,
+          "worse": 18
+        }
+      }
+    },
+    {
+      "method": "ptgin",
+      "label": "PT-GIN + LightGBM",
+      "color": "#4878CF",
+      "study": "ecfp-pretrain",
+      "counts": {
+        "expansion": {
+          "alone": 0,
+          "tied": 0,
+          "worse": 27
+        },
+        "biogen": {
+          "alone": 0,
+          "tied": 0,
+          "worse": 18
+        }
+      }
+    },
+    {
+      "method": "fus_GRMS_early_lgbm",
+      "label": "Fusion, four modalities",
+      "color": "#6ACC64",
+      "study": "multimodal-fusion",
+      "counts": {
+        "expansion": {
+          "alone": 0,
+          "tied": 0,
+          "worse": 27
+        },
+        "biogen": {
+          "alone": 0,
+          "tied": 0,
+          "worse": 18
+        }
+      }
+    }
+  ],
+  "datasets": {
+    "expansion": {
+      "label": "ExpansionRx",
+      "endpoints": 9,
+      "combinations": 27,
+      "figure": "assets/tukey_r2_expansion.png",
+      "folds_per_method": 225
+    },
+    "biogen": {
+      "label": "Biogen ADME",
+      "endpoints": 6,
+      "combinations": 18,
+      "figure": "assets/tukey_r2_biogen.png",
+      "folds_per_method": 150
+    }
+  },
+  "note": "One Tukey HSD per endpoint and metric over the 25 folds. A method is counted as being on top whenever the correction cannot separate it from the leading mean, so a combination with several methods on top gives each of them a tie rather than crowning one."
+}

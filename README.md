@@ -59,6 +59,23 @@ PT-GIN is a Graph Isomorphism Network pre-trained on 462,189 QMugs molecules to 
 5 methods · 15 endpoints · 1,425 fold models · 10 released checkpoints  
 Code: [`studies/ecfp-pretrain`](studies/ecfp-pretrain/) · Report builder: `06_build_page.py`
 
+### [Does multimodal fusion help?](https://patwalters.github.io/model-validation-central/reports/multimodal-fusion.html)
+
+*Unimodal versus multimodal, on ADME data*
+
+Thirty-three ways of combining four molecular representations — RDKit descriptors, Mol2Vec, a supervised GNN's graph embedding and a character BiGRU's SMILES embedding — crossed with early and late fusion and three final learners, over the same fifteen endpoints. 12,375 fitted configurations and 6,375 more for the two controls.
+
+> **What came out.** The paper's central finding replicates: fusing modalities moves accuracy very little, and none of it survives a correction for multiple comparisons. What fusion buys is calibration. Two things the paper could not see from inside its own design also show up — a single well-initialised graph network beats all thirty-three configurations on both data sets, and when the GNN modality is actually a learned representation, which in the released code it is not, the ranking of which modality matters inverts.
+
+**Puts to the test**
+
+- Wasswa, J.; Kajjumba, G. W.; Ramsundar, B. **Unimodal vs Multimodal Learning: A Systematic Evaluation of Fusion Strategies and Model Design for Molecular Property Prediction and Uncertainty Quantification.** *J. Chem. Inf. Model. 2026.* [doi:10.1021/acs.jcim.6c01878](https://doi.org/10.1021/acs.jcim.6c01878)
+
+*A reimplementation. The authors' MIT-licensed release is a set of Colab dumps that cannot be run, so this is written from that source read as a specification alongside the paper's Supporting Information.*
+
+33 configurations · 15 endpoints · 18,750 fits · 4 modalities  
+Code: [`studies/multimodal-fusion`](studies/multimodal-fusion/) · Report builder: `12_build_page.py`
+
 ### [Seven ways to model ADME](https://patwalters.github.io/model-validation-central/reports/expansion-ml-comparison.html)
 
 *Which foundation model, and does it replicate?*
@@ -76,23 +93,6 @@ Seven modelling approaches over fifteen ADME and physicochemical endpoints on tw
 
 7 methods · 15 endpoints · 2,175 fold models · 2.48M predictions kept  
 Code: [`studies/expansion-ml-comparison`](studies/expansion-ml-comparison/) · Report builder: `06_build_page.py`
-
-### [Does multimodal fusion help?](https://patwalters.github.io/model-validation-central/reports/multimodal-fusion.html)
-
-*Unimodal versus multimodal, on ADME data*
-
-Thirty-three ways of combining four molecular representations — RDKit descriptors, Mol2Vec, a supervised GNN's graph embedding and a character BiGRU's SMILES embedding — crossed with early and late fusion and three final learners, over the same fifteen endpoints. 12,375 fitted configurations and 6,375 more for the two controls.
-
-> **What came out.** The paper's central finding replicates: fusing modalities moves accuracy very little, and none of it survives a correction for multiple comparisons. What fusion buys is calibration. Two things the paper could not see from inside its own design also show up — a single well-initialised graph network beats all thirty-three configurations on both data sets, and when the GNN modality is actually a learned representation, which in the released code it is not, the ranking of which modality matters inverts.
-
-**Puts to the test**
-
-- Wasswa, J.; Kajjumba, G. W.; Ramsundar, B. **Unimodal vs Multimodal Learning: A Systematic Evaluation of Fusion Strategies and Model Design for Molecular Property Prediction and Uncertainty Quantification.** *J. Chem. Inf. Model. 2026.* [doi:10.1021/acs.jcim.6c01878](https://doi.org/10.1021/acs.jcim.6c01878)
-
-*A reimplementation. The authors' MIT-licensed release is a set of Colab dumps that cannot be run, so this is written from that source read as a specification alongside the paper's Supporting Information.*
-
-33 configurations · 15 endpoints · 18,750 fits · 4 modalities  
-Code: [`studies/multimodal-fusion`](studies/multimodal-fusion/) · Report builder: `12_build_page.py`
 
 ### [Sixty models per fold](https://patwalters.github.io/model-validation-central/reports/trimole-hybrid.html)
 
@@ -119,10 +119,12 @@ Code: [`studies/expansion-ml-comparison`](studies/expansion-ml-comparison/) · R
 studies/<slug>/          one self-contained study: scripts, README, requirements,
                          per-fold metrics, tables, figures, and a study.json
 site/build_site.py       reads every study.json, writes docs/
+site/overview.py         the cross-study Tukey comparison at the top of the index
 site/style.py            the stylesheet the index shares with the reports
 docs/                    the GitHub Pages site
 docs/index.html            the overall report, one card per study report
 docs/reports/<slug>.html   each study's own report, copied from its results/
+docs/overview.json         the tally table, and docs/assets/ the figures with it
 ```
 
 A study directory stands on its own. It carries its own `config.py`,
@@ -143,6 +145,20 @@ and the card block in this README from the `study.json` files. It does not run a
 science. A study's report is built inside that study's own directory, in the
 environment that study needs — see its README for the commands and its
 `requirements.txt` for the environment.
+
+The cross-study comparison at the top of the index is the one part that does read
+the numbers, so it is a separate script and needs pandas, statsmodels and
+matplotlib:
+
+```bash
+python site/overview.py              # -> docs/overview.json, docs/assets/*.png
+python site/build_site.py            # embeds what it wrote
+```
+
+Run it when a study's `fold_metrics.csv` changes. It refuses to pool anything
+unless the four reference arms are identical across the studies that carry them,
+and it asserts the tie rule on every endpoint × metric combination before
+counting.
 
 ## Adding a study
 

@@ -75,6 +75,28 @@ code{font-family:ui-monospace,Menlo,monospace;font-size:.86em;
   text-transform:uppercase;padding:.1rem .35rem;border-radius:2px;font-weight:700;
   border:1px solid var(--rule);color:var(--muted)}
 
+/* --------------------------------------------------- THE OVERVIEW COMPARISON */
+.tablewrap{overflow-x:auto;margin:1rem 0 .4rem}
+table.overview{border-collapse:collapse;width:100%;font-size:.9rem;background:var(--panel)}
+table.overview th,table.overview td{padding:.4rem .6rem;text-align:right;
+  border-bottom:1px solid var(--rule);white-space:nowrap}
+table.overview thead th{font-weight:600}
+table.overview tr:first-child th{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--muted);text-align:center;border-bottom:1px solid var(--rule)}
+table.overview tr:nth-child(2) th{font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--muted);font-weight:600;border-bottom:1.5px solid var(--rule)}
+table.overview th[scope="row"]{text-align:left;font-weight:500;white-space:nowrap}
+table.overview td.from{text-align:left;font-size:.76rem;color:var(--muted);
+  font-family:ui-monospace,Menlo,monospace}
+table.overview td.num{font-family:ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
+table.overview td.zero{color:var(--muted);opacity:.55}
+table.overview tbody tr:hover,table.overview tr:hover{background:var(--accent-soft)}
+.overfig{margin:1.4rem 0 .4rem;display:flex;flex-direction:column;gap:.5rem}
+.overfig img{display:block;width:100%;height:auto;border:1px solid var(--rule);
+  border-radius:3px;background:#fff}
+.overfig figcaption{font-size:.86rem;color:var(--muted);max-width:74ch;
+  margin-inline:auto;text-align:center;text-wrap:pretty}
+
 /* ------------------------------------------------------------------ CARDS */
 .cards{display:grid;gap:1.5rem;grid-template-columns:repeat(auto-fit,minmax(26rem,1fr));
   margin-top:.6rem}
