@@ -1,0 +1,19 @@
+# The report side: everything from 02_collect_metrics.py onwards runs here.
+pandas
+numpy
+scipy
+scikit-learn
+lightgbm
+pyarrow
+matplotlib
+seaborn
+pingouin
+statsmodels
+rdkit
+Pillow
+joblib
+tabulate
+
+# The PT-GIN arm itself (01_run_ptgin.py) needs the authors' package and its
+# torch stack, which pins differently. See the README: it runs in its own
+# environment, with torch 2.8, torch-geometric and rdkit 2024.09.3.

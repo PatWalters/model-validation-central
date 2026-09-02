@@ -1,0 +1,31 @@
+# Versions this analysis was run with. Python 3.12.
+pandas==3.0.5
+numpy==2.5.2
+scipy==1.18.1
+scikit-learn==1.9.0
+statsmodels==0.14.6
+pyarrow==24.0.0
+
+rdkit==2026.3.5
+lightgbm==4.7.0
+shap==0.52.0
+
+# The GNN modality and the graph meta-learner. AttentiveFP comes from PyTorch
+# Geometric rather than the DeepChem-on-DGL stack the paper's code uses: the
+# architecture is the same, and dgl pins a torch too old to share an environment
+# with anything else here.
+torch==2.9.1+cu130
+torch-geometric==2.8.0.post1
+
+# Only needed by 02_modality_cache.py, to read the pre-trained Mol2Vec model.
+# The `mol2vec` package itself is not used -- it is unmaintained and pins a
+# gensim old enough to conflict with scipy; featurize.py reimplements the twenty
+# lines of it that matter.
+gensim==4.4.0
+
+matplotlib==3.11.1
+seaborn==0.13.2
+pillow==11.4.0
+
+# Only needed by 00_cluster.py, which regenerates the cluster column.
+bblean==0.10.3

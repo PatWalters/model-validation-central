@@ -1,0 +1,6 @@
+# Every study directory carries its own .gitignore for what its own pipeline
+# regenerates. This file is only for things that turn up anywhere.
+__pycache__/
+*.pyc
+.DS_Store
+.ipynb_checkpoints/

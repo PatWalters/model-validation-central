@@ -1,0 +1,13 @@
+left,right,n_endpoints,mean_diff,median_diff,right_wins,p_value,p_holm,significant,left_label,right_label,metric
+fus_GR_early_lgbm,fus_GR_late_lgbm,9,0.021115518790402805,0.008836761873017046,3,0.12890625,0.78125,False,LGBM | Early | GNN + RDKit,LGBM | Late | GNN + RDKit,mae
+fus_GR_early_rf,fus_GR_late_rf,9,0.01824613785220955,0.008742317670092314,2,0.12890625,0.78125,False,RF | Early | GNN + RDKit,RF | Late | GNN + RDKit,mae
+fus_GR_early_attfp,fus_GR_late_attfp,9,-0.03616507826830458,-0.038703354803157786,9,0.00390625,0.046875,True,AttentiveFP | Early | GNN + RDKit,AttentiveFP | Late | GNN + RDKit,mae
+fus_GRM_early_lgbm,fus_GRM_late_lgbm,9,0.024173652356986458,0.0007897287489700422,4,0.359375,0.78125,False,LGBM | Early | GNN + RDKit + Mol2Vec,LGBM | Late | GNN + RDKit + Mol2Vec,mae
+fus_GRM_early_rf,fus_GRM_late_rf,9,0.023202405250739872,0.00991991976299067,3,0.1640625,0.78125,False,RF | Early | GNN + RDKit + Mol2Vec,RF | Late | GNN + RDKit + Mol2Vec,mae
+fus_GRM_early_attfp,fus_GRM_late_attfp,9,-0.039924624263306195,-0.03807020243367737,9,0.00390625,0.046875,True,AttentiveFP | Early | GNN + RDKit + Mol2Vec,AttentiveFP | Late | GNN + RDKit + Mol2Vec,mae
+fus_GRS_early_lgbm,fus_GRS_late_lgbm,9,0.01962452614051378,0.015771237678586403,2,0.09765625,0.78125,False,LGBM | Early | GNN + RDKit + SMILES,LGBM | Late | GNN + RDKit + SMILES,mae
+fus_GRS_early_rf,fus_GRS_late_rf,9,0.014807834328086614,0.011851733660495578,2,0.1640625,0.78125,False,RF | Early | GNN + RDKit + SMILES,RF | Late | GNN + RDKit + SMILES,mae
+fus_GRS_early_attfp,fus_GRS_late_attfp,9,-0.0667661009425207,-0.06959708425807776,9,0.00390625,0.046875,True,AttentiveFP | Early | GNN + RDKit + SMILES,AttentiveFP | Late | GNN + RDKit + SMILES,mae
+fus_GRMS_early_lgbm,fus_GRMS_late_lgbm,9,0.020960369614100062,0.006322249755494891,4,0.203125,0.78125,False,LGBM | Early | GNN + RDKit + Mol2Vec + SMILES,LGBM | Late | GNN + RDKit + Mol2Vec + SMILES,mae
+fus_GRMS_early_rf,fus_GRMS_late_rf,9,0.01698882979334409,0.013063558100121109,2,0.09765625,0.78125,False,RF | Early | GNN + RDKit + Mol2Vec + SMILES,RF | Late | GNN + RDKit + Mol2Vec + SMILES,mae
+fus_GRMS_early_attfp,fus_GRMS_late_attfp,9,-0.06633032057723051,-0.06631428558669861,9,0.00390625,0.046875,True,AttentiveFP | Early | GNN + RDKit + Mol2Vec + SMILES,AttentiveFP | Late | GNN + RDKit + Mol2Vec + SMILES,mae

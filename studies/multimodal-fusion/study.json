@@ -1,0 +1,31 @@
+{
+  "slug": "multimodal-fusion",
+  "name": "multimodal-fusion",
+  "order": 2,
+  "datasets": ["ExpansionRx", "Biogen ADME"],
+  "endpoints": 15,
+  "protocol": "5 x 5 GroupKFold over chemical clusters, one fixed holdout, Wilcoxon with Holm correction across endpoints and Tukey HSD within them",
+  "updated": "2026-08-31",
+  "reports": [
+    {
+      "slug": "multimodal-fusion",
+      "title": "Does multimodal fusion help?",
+      "eyebrow": "Fusion strategies",
+      "question": "Unimodal versus multimodal, on ADME data",
+      "summary": "Thirty-three ways of combining four molecular representations — RDKit descriptors, Mol2Vec, a supervised GNN's graph embedding and a character BiGRU's SMILES embedding — crossed with early and late fusion and three final learners, over the same fifteen endpoints. 12,375 fitted configurations and 6,375 more for the two controls.",
+      "finding": "The paper's central finding replicates: fusing modalities moves accuracy very little, and none of it survives a correction for multiple comparisons. What fusion buys is calibration. Two things the paper could not see from inside its own design also show up — a single well-initialised graph network beats all thirty-three configurations on both data sets, and when the GNN modality is actually a learned representation, which in the released code it is not, the ranking of which modality matters inverts.",
+      "facts": [
+        {"n": "33", "label": "configurations"},
+        {"n": "15", "label": "endpoints"},
+        {"n": "18,750", "label": "fits"},
+        {"n": "4", "label": "modalities"}
+      ],
+      "validates": [
+        {"name": "Wasswa, Kajjumba & Ramsundar 2026", "url": "https://doi.org/10.1021/acs.jcim.6c01878"}
+      ],
+      "caveat": "A reimplementation. The authors' MIT-licensed release is a set of Colab dumps that cannot be run, so this is written from that source read as a specification alongside the paper's Supporting Information.",
+      "source": "results/report.html",
+      "builder": "12_build_page.py"
+    }
+  ]
+}
