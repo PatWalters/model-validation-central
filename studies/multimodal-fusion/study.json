@@ -1,7 +1,6 @@
 {
   "slug": "multimodal-fusion",
   "name": "multimodal-fusion",
-  "order": 2,
   "datasets": [
     "ExpansionRx",
     "Biogen ADME"
@@ -12,6 +11,7 @@
   "reports": [
     {
       "slug": "multimodal-fusion",
+      "date": "2026-08-31",
       "title": "Does multimodal fusion help?",
       "eyebrow": "Fusion strategies",
       "question": "Unimodal versus multimodal, on ADME data",

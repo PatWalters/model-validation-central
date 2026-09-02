@@ -1,7 +1,6 @@
 {
   "slug": "expansion-ml-comparison",
   "name": "expansion-ml-comparison",
-  "order": 1,
   "datasets": [
     "ExpansionRx",
     "Biogen ADME"
@@ -12,6 +11,7 @@
   "reports": [
     {
       "slug": "expansion-ml-comparison",
+      "date": "2026-08-31",
       "title": "Seven ways to model ADME",
       "eyebrow": "Foundation models",
       "question": "Which foundation model, and does it replicate?",
@@ -74,6 +74,7 @@
     },
     {
       "slug": "trimole-hybrid",
+      "date": "2026-08-29",
       "title": "Sixty models per fold",
       "eyebrow": "Model selection",
       "question": "Is picking a model per endpoint worth it?",

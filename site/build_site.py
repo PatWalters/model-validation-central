@@ -65,6 +65,7 @@ class Report:
     finding: str
     source: str
     study: "Study" = field(repr=False, default=None)
+    date: str = ""
     eyebrow: str = ""
     caveat: str = ""
     builder: str = ""
@@ -83,6 +84,11 @@ class Report:
     def href(self) -> str:
         return f"reports/{self.slug}.html"
 
+    @property
+    def when(self) -> str:
+        """The date to sort and label by, falling back to the study's."""
+        return self.date or self.study.updated
+
 
 @dataclass
 class Study:
@@ -91,7 +97,6 @@ class Study:
     path: Path
     slug: str
     name: str = ""
-    order: int = 999
     datasets: list = field(default_factory=list)
     endpoints: int = 0
     protocol: str = ""
@@ -104,10 +109,10 @@ class Study:
 
 
 def load_studies() -> list[Study]:
-    """Every study.json under studies/, by `order` and then by slug.
+    """Every study.json under studies/, by slug.
 
-    A study without an `order` sorts after every study that has one, so a new
-    directory can be dropped in without renumbering the others.
+    This is only the load order. What the page and the README are ordered by is
+    `all_reports`, newest report first.
     """
     studies = []
     for path in sorted(STUDY_DIR.glob("*/study.json")):
@@ -129,12 +134,25 @@ def load_studies() -> list[Study]:
         studies.append(study)
     if not studies:
         raise SystemExit(f"no study.json found under {STUDY_DIR}")
-    studies.sort(key=lambda s: (s.order, s.slug))
+    studies.sort(key=lambda s: s.slug)
     return studies
 
 
 def all_reports(studies) -> list[Report]:
-    return [report for study in studies for report in study.reports]
+    """Every report from every study, newest first.
+
+    The index reads as a feed rather than as a directory listing, so a study
+    added later lands at the top on its own and nothing has to be renumbered.
+    Two reports built the same day are separated by their study's slug, which
+    only keeps the order stable; it carries no meaning. A report with no date
+    sorts last rather than crashing the build.
+    """
+    reports = [report for study in studies for report in study.reports]
+    # Two passes rather than one reversed key: `reverse=True` would flip the
+    # tiebreak as well, ordering same-day reports by slug backwards.
+    reports.sort(key=lambda r: r.study.slug)
+    reports.sort(key=lambda r: r.when or "", reverse=True)
+    return reports
 
 
 # ------------------------------------------------------------- copying pages
@@ -227,7 +245,7 @@ def card(report: Report) -> str:
         '<span class="sep">|</span>'
         f'<a href="{REPO}/tree/main/{study.rel}">'
         f"{e(study.name)}</a>"
-        + (f'<span class="sep">|</span><span>{e(study.updated)}</span>' if study.updated else "")
+        + (f'<span class="sep">|</span><span>{e(report.when)}</span>' if report.when else "")
         + "</p>"
     )
     return '<article class="card">' + "".join(parts) + "</article>"
@@ -307,38 +325,39 @@ def render_index(studies) -> str:
 
 # ---------------------------------------------------------------- the README
 def render_readme_block(studies) -> str:
+    """The card block for the README, in the same order as the index page."""
     lines = []
-    for study in studies:
-        for report in study.reports:
-            lines.append(f"### [{report.title}]({SITE}/reports/{report.slug}.html)")
+    for report in all_reports(studies):
+        study = report.study
+        lines.append(f"### [{report.title}]({SITE}/reports/{report.slug}.html)")
+        lines.append("")
+        lines.append(f"*{report.question}*")
+        lines.append("")
+        lines.append(report.summary)
+        lines.append("")
+        lines.append(f"> **What came out.** {report.finding}")
+        lines.append("")
+        if report.validates:
+            lines.append("**Puts to the test**")
             lines.append("")
-            lines.append(f"*{report.question}*")
+            for p in report.validates:
+                cite = f"**{p.get('title', p.get('name'))}.**"
+                if p.get("authors"):
+                    cite = f"{p['authors']} {cite}"
+                if p.get("venue"):
+                    cite += f" *{p['venue']}.*"
+                if p.get("url"):
+                    cite += f" [{p.get('label', p['url'])}]({p['url']})"
+                lines.append(f"- {cite}")
             lines.append("")
-            lines.append(report.summary)
+        if report.caveat:
+            lines.append(f"*{report.caveat}*")
             lines.append("")
-            lines.append(f"> **What came out.** {report.finding}")
-            lines.append("")
-            if report.validates:
-                lines.append("**Puts to the test**")
-                lines.append("")
-                for p in report.validates:
-                    cite = f"**{p.get('title', p.get('name'))}.**"
-                    if p.get("authors"):
-                        cite = f"{p['authors']} {cite}"
-                    if p.get("venue"):
-                        cite += f" *{p['venue']}.*"
-                    if p.get("url"):
-                        cite += f" [{p.get('label', p['url'])}]({p['url']})"
-                    lines.append(f"- {cite}")
-                lines.append("")
-            if report.caveat:
-                lines.append(f"*{report.caveat}*")
-                lines.append("")
-            facts = " · ".join(f"{f['n']} {f['label']}" for f in report.facts)
-            code = f"[`{study.rel}`]({study.rel}/)"
-            lines.append(f"{facts}  \nCode: {code}"
-                         + (f" · Report builder: `{report.builder}`" if report.builder else ""))
-            lines.append("")
+        facts = " · ".join(f"{f['n']} {f['label']}" for f in report.facts)
+        code = f"[`{study.rel}`]({study.rel}/)"
+        lines.append(f"{facts}  \nCode: {code}"
+                     + (f" · Report builder: `{report.builder}`" if report.builder else ""))
+        lines.append("")
     return "\n".join(lines).rstrip()
 
 

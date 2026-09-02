@@ -1,7 +1,6 @@
 {
   "slug": "ecfp-pretrain",
   "name": "ecfp-pretrain-comparison",
-  "order": 3,
   "datasets": [
     "ExpansionRx",
     "Biogen ADME"
@@ -12,6 +11,7 @@
   "reports": [
     {
       "slug": "ecfp-pretrain",
+      "date": "2026-09-01",
       "title": "Pre-training on fingerprints",
       "eyebrow": "Self-supervised pre-training",
       "question": "A graph network taught to predict fingerprints, against the fingerprints",
