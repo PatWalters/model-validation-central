@@ -388,6 +388,15 @@ def summary_facts(studies) -> list[dict]:
     ]
 
 
+WORDS = ("zero", "one", "two", "three", "four", "five",
+         "six", "seven", "eight", "nine", "ten")
+
+
+def spell(n: int) -> str:
+    """Small counts as words, the way the rest of the prose writes them."""
+    return WORDS[n] if n < len(WORDS) else str(n)
+
+
 def report_count_note(studies) -> str:
     """Say so when a study answers more than one question.
 
@@ -399,11 +408,15 @@ def report_count_note(studies) -> str:
     if len(reports) == len(studies):
         return ""
     plural = [s for s in studies if len(s.reports) > 1]
-    names = ", ".join(f"<code>{e(s.slug)}</code>" for s in plural)
-    verb = "produces" if len(plural) == 1 else "produce"
-    return (f"<p>{len(reports)} reports from {len(studies)} studies: {names} {verb} "
-            "more than one, asking different questions of the same folds. Each card "
-            "links to the directory it came from.</p>")
+    phrases = [f"<code>{e(s.slug)}</code> produces {spell(len(s.reports))}" for s in plural]
+    if len(phrases) == 1:
+        names = phrases[0]
+    else:
+        names = ", ".join(phrases[:-1]) + " and " + phrases[-1]
+    n_r = f"{len(reports)} report{'' if len(reports) == 1 else 's'}"
+    n_s = f"{len(studies)} " + ("study" if len(studies) == 1 else "studies")
+    return (f"<p>{n_r} from {n_s}: {names}, asking different questions of the same "
+            "folds. Each card links to the directory it came from.</p>")
 
 
 def render_index(studies) -> str:
