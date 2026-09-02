@@ -186,16 +186,18 @@
       "label": "ExpansionRx",
       "endpoints": 9,
       "combinations": 27,
-      "figure": "assets/tukey_r2_expansion.png",
+      "figure": "assets/tukey_mae_expansion.png",
       "folds_per_method": 225
     },
     "biogen": {
       "label": "Biogen ADME",
       "endpoints": 6,
       "combinations": 18,
-      "figure": "assets/tukey_r2_biogen.png",
+      "figure": "assets/tukey_mae_biogen.png",
       "folds_per_method": 150
     }
   },
+  "metric": "mae",
+  "metric_label": "MAE",
   "note": "One Tukey HSD per endpoint and metric over the 25 folds. A method is counted as being on top whenever the correction cannot separate it from the leading mean, so a combination with several methods on top gives each of them a tie rather than crowning one."
 }

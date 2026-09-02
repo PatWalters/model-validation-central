@@ -8,11 +8,12 @@ checked here rather than assumed. It means the per-fold metrics from all three
 studies can be put into one Tukey HSD without any of the usual objections to
 pooling results across papers.
 
-    python site/overview.py
+    python site/overview.py                 # MAE, the default
+    python site/overview.py --metric r2     # or any of the three
 
 Writes, for `site/build_site.py` to embed:
 
-    docs/assets/tukey_r2_<dataset>.png   one panel per endpoint, as the studies draw them
+    docs/assets/tukey_<metric>_<dataset>.png  one panel per endpoint, as the studies draw them
     docs/overview.json                   the tally table, and what went into it
 
 Unlike `build_site.py`, this needs the scientific stack -- pandas, statsmodels,
@@ -31,6 +32,7 @@ reports use, and it is the reason no cell here is a bolded maximum.
 
 from __future__ import annotations
 
+import argparse
 import json
 import sys
 from pathlib import Path
@@ -91,6 +93,11 @@ ORDER = list(LABELS)
 DATASETS = {"expansion": "ExpansionRx", "biogen": "Biogen ADME"}
 METRICS = {"r2": ("R²", True), "spearman": ("Spearman ρ", True), "mae": ("MAE", False)}
 N_COLS = 3
+
+# The metric the front page draws. The tally table counts all three regardless;
+# this only chooses which one gets a figure. MAE is the default because it is in
+# the units of the endpoint, so a reader can tell what a difference costs.
+HEADLINE_METRIC = "mae"
 
 
 # ------------------------------------------------------------------ loading
@@ -236,9 +243,17 @@ def figure(metrics: pd.DataFrame, dataset: str, metric: str = "r2") -> Path:
 
 # ------------------------------------------------------------------- driver
 def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("--metric", choices=list(METRICS), default=HEADLINE_METRIC,
+                    help=f"which metric the figure draws (default {HEADLINE_METRIC})")
+    args = ap.parse_args()
+    metric_label, _ = METRICS[args.metric]
+
     payload = {
         "methods": [],
         "datasets": {},
+        "metric": args.metric,
+        "metric_label": metric_label,
         "note": ("One Tukey HSD per endpoint and metric over the 25 folds. A method is "
                  "counted as being on top whenever the correction cannot separate it "
                  "from the leading mean, so a combination with several methods on top "
@@ -250,7 +265,7 @@ def main() -> int:
         metrics = load(dataset)
         counts, combos = tally(metrics)
         tallies[dataset] = counts
-        out = figure(metrics, dataset)
+        out = figure(metrics, dataset, metric=args.metric)
         payload["datasets"][dataset] = {
             "label": DATASETS[dataset],
             "endpoints": int(metrics["endpoint"].nunique()),

@@ -266,15 +266,32 @@ def overview_block() -> str:
                 cells.append(f'<td class="{cls}">{n}</td>')
         rows.append("<tr>" + "".join(cells) + "</tr>")
 
+    metric = d.get("metric", "r2")
+    label = d.get("metric_label", "R²")
     figures = "".join(
         f'<figure class="overfig"><img src="{sets[k]["figure"]}" '
-        f'alt="Tukey HSD on R squared, {e(sets[k]["label"])}, one panel per endpoint">'
-        f'<figcaption>{e(sets[k]["label"])}: one panel per endpoint, Tukey HSD on R² over '
-        f'the {sets[k]["folds_per_method"] // sets[k]["endpoints"]} folds. Blue is the best '
-        f'mean, grey cannot be separated from it, red is significantly worse.</figcaption>'
+        f'alt="Tukey HSD on {e(label)}, {e(sets[k]["label"])}, one panel per endpoint">'
+        f'<figcaption>{e(sets[k]["label"])}: one panel per endpoint, Tukey HSD on {e(label)} '
+        f'over the {sets[k]["folds_per_method"] // sets[k]["endpoints"]} folds. Blue is the '
+        f'best mean, grey cannot be separated from it, red is significantly worse.</figcaption>'
         "</figure>"
         for k in keys
     )
+    # MAE is in the units of the endpoint, which the panels' shared axis invites a
+    # reader to forget, and on ExpansionRx those units are a log transform with an
+    # offset. Both are worth saying where the figure is rather than in a study README.
+    caveat = ""
+    if metric == "mae":
+        caveat = (
+            '<p class="footnote">Lower is better, and the panels share an axis so a '
+            "difference is the same length everywhere. Read down a panel rather than "
+            "across them: MAE carries the units of its endpoint, and the endpoints "
+            "differ in how hard they are. On ExpansionRx they are also on a "
+            "<code>log10(x + 1)</code> scale, which is nearly linear below x = 1, so an "
+            "MAE there is not a clean fold-error — every method shares the target, so "
+            "the comparison holds, but the number does not convert. The Biogen "
+            "endpoints arrive log-transformed at source.</p>"
+        )
 
     return (
         '<h2 id="overview">Every method, on the same folds</h2>'
@@ -298,6 +315,7 @@ def overview_block() -> str:
         "individual reports: Tukey's correction widens with the number of methods, so "
         "pooling ten of them turns some outright wins into ties.</p>"
         f'<div class="bleed">{figures}</div>'
+        + caveat
     )
 
 

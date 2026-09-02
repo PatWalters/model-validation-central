@@ -155,6 +155,11 @@ python site/overview.py              # -> docs/overview.json, docs/assets/*.png
 python site/build_site.py            # embeds what it wrote
 ```
 
+The tally counts every endpoint × metric combination — R², Spearman ρ and MAE
+alike — while the figure draws one metric. That is MAE by default, since it is in
+the units of the endpoint; `--metric r2` or `--metric spearman` draws either of
+the others instead.
+
 Run it when a study's `fold_metrics.csv` changes. It refuses to pool anything
 unless the four reference arms are identical across the studies that carry them,
 and it asserts the tie rule on every endpoint × metric combination before
