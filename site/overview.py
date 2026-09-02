@@ -169,33 +169,35 @@ def check_combination(endpoint, metric, groups, on_top, n_methods) -> None:
         raise SystemExit(f"{where}: {len(leaders)} methods labelled 'best', expected exactly one")
 
 
-def tally(metrics: pd.DataFrame) -> tuple[pd.DataFrame, int]:
+def tally(metrics: pd.DataFrame, metric: str) -> tuple[pd.DataFrame, int]:
     """Per method: alone at the top, sharing it, or significantly worse.
 
-    One Tukey HSD per endpoint and metric over the 25 folds, then counted the way
-    the module docstring describes: ties are shared, not broken.
+    One Tukey HSD per endpoint over the 25 folds, on the same metric the figure
+    draws, then counted the way the module docstring describes: ties are shared,
+    not broken. Table and figure move together, so a row and the panel above it
+    can never disagree about who won.
     """
+    _, higher = METRICS[metric]
     endpoints = sorted(metrics["endpoint"].unique())
     n_methods = metrics["method"].nunique()
     rows = []
     for endpoint in endpoints:
         sub = metrics[metrics["endpoint"] == endpoint]
-        for metric, (_, higher) in METRICS.items():
-            groups = tukey_groups(sub, metric, higher_is_better=higher)
-            on_top = groups[groups.isin(("best", "equivalent"))].index
-            for method in groups.index:
-                if method not in on_top:
-                    kind = "worse"
-                else:
-                    kind = "tied" if len(on_top) > 1 else "alone"
-                rows.append({"endpoint": endpoint, "metric": metric,
-                             "method": method, "kind": kind})
-            check_combination(endpoint, metric, groups, on_top, n_methods)
+        groups = tukey_groups(sub, metric, higher_is_better=higher)
+        on_top = groups[groups.isin(("best", "equivalent"))].index
+        for method in groups.index:
+            if method not in on_top:
+                kind = "worse"
+            else:
+                kind = "tied" if len(on_top) > 1 else "alone"
+            rows.append({"endpoint": endpoint, "metric": metric,
+                         "method": method, "kind": kind})
+        check_combination(endpoint, metric, groups, on_top, n_methods)
     counts = pd.crosstab(pd.DataFrame(rows)["method"], pd.DataFrame(rows)["kind"])
     for col in ("alone", "tied", "worse"):
         if col not in counts:
             counts[col] = 0
-    return counts, len(endpoints) * len(METRICS)
+    return counts, len(endpoints)
 
 
 # ----------------------------------------------------------------- the figure
@@ -254,16 +256,17 @@ def main() -> int:
         "datasets": {},
         "metric": args.metric,
         "metric_label": metric_label,
-        "note": ("One Tukey HSD per endpoint and metric over the 25 folds. A method is "
-                 "counted as being on top whenever the correction cannot separate it "
-                 "from the leading mean, so a combination with several methods on top "
-                 "gives each of them a tie rather than crowning one."),
+        "note": ("One Tukey HSD per endpoint over the 25 folds, on the metric the "
+                 "figures draw. A method is counted as being on top whenever the "
+                 "correction cannot separate it from the leading mean, so an endpoint "
+                 "with several methods on top gives each of them a tie rather than "
+                 "crowning one."),
     }
     study_of = {m: s for s, ms in SOURCES.items() for m in ms}
     tallies = {}
     for dataset in DATASETS:
         metrics = load(dataset)
-        counts, combos = tally(metrics)
+        counts, combos = tally(metrics, args.metric)
         tallies[dataset] = counts
         out = figure(metrics, dataset, metric=args.metric)
         payload["datasets"][dataset] = {

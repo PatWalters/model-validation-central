@@ -9,12 +9,12 @@
         "expansion": {
           "alone": 0,
           "tied": 0,
-          "worse": 27
+          "worse": 9
         },
         "biogen": {
           "alone": 0,
           "tied": 0,
-          "worse": 18
+          "worse": 6
         }
       }
     },
@@ -26,13 +26,13 @@
       "counts": {
         "expansion": {
           "alone": 0,
-          "tied": 4,
-          "worse": 23
+          "tied": 1,
+          "worse": 8
         },
         "biogen": {
           "alone": 0,
           "tied": 0,
-          "worse": 18
+          "worse": 6
         }
       }
     },
@@ -44,13 +44,13 @@
       "counts": {
         "expansion": {
           "alone": 0,
-          "tied": 7,
-          "worse": 20
+          "tied": 1,
+          "worse": 8
         },
         "biogen": {
           "alone": 0,
           "tied": 0,
-          "worse": 18
+          "worse": 6
         }
       }
     },
@@ -61,14 +61,14 @@
       "study": "expansion-ml-comparison",
       "counts": {
         "expansion": {
-          "alone": 6,
-          "tied": 8,
-          "worse": 13
+          "alone": 3,
+          "tied": 1,
+          "worse": 5
         },
         "biogen": {
           "alone": 0,
           "tied": 0,
-          "worse": 18
+          "worse": 6
         }
       }
     },
@@ -81,12 +81,12 @@
         "expansion": {
           "alone": 0,
           "tied": 0,
-          "worse": 27
+          "worse": 9
         },
         "biogen": {
           "alone": 0,
           "tied": 0,
-          "worse": 18
+          "worse": 6
         }
       }
     },
@@ -97,12 +97,12 @@
       "study": "expansion-ml-comparison",
       "counts": {
         "expansion": {
-          "alone": 10,
-          "tied": 9,
-          "worse": 8
+          "alone": 3,
+          "tied": 2,
+          "worse": 4
         },
         "biogen": {
-          "alone": 18,
+          "alone": 6,
           "tied": 0,
           "worse": 0
         }
@@ -117,12 +117,12 @@
         "expansion": {
           "alone": 0,
           "tied": 0,
-          "worse": 27
+          "worse": 9
         },
         "biogen": {
           "alone": 0,
           "tied": 0,
-          "worse": 18
+          "worse": 6
         }
       }
     },
@@ -134,13 +134,13 @@
       "counts": {
         "expansion": {
           "alone": 0,
-          "tied": 2,
-          "worse": 25
+          "tied": 1,
+          "worse": 8
         },
         "biogen": {
           "alone": 0,
           "tied": 0,
-          "worse": 18
+          "worse": 6
         }
       }
     },
@@ -153,12 +153,12 @@
         "expansion": {
           "alone": 0,
           "tied": 0,
-          "worse": 27
+          "worse": 9
         },
         "biogen": {
           "alone": 0,
           "tied": 0,
-          "worse": 18
+          "worse": 6
         }
       }
     },
@@ -171,12 +171,12 @@
         "expansion": {
           "alone": 0,
           "tied": 0,
-          "worse": 27
+          "worse": 9
         },
         "biogen": {
           "alone": 0,
           "tied": 0,
-          "worse": 18
+          "worse": 6
         }
       }
     }
@@ -185,19 +185,19 @@
     "expansion": {
       "label": "ExpansionRx",
       "endpoints": 9,
-      "combinations": 27,
+      "combinations": 9,
       "figure": "assets/tukey_mae_expansion.png",
       "folds_per_method": 225
     },
     "biogen": {
       "label": "Biogen ADME",
       "endpoints": 6,
-      "combinations": 18,
+      "combinations": 6,
       "figure": "assets/tukey_mae_biogen.png",
       "folds_per_method": 150
     }
   },
   "metric": "mae",
   "metric_label": "MAE",
-  "note": "One Tukey HSD per endpoint and metric over the 25 folds. A method is counted as being on top whenever the correction cannot separate it from the leading mean, so a combination with several methods on top gives each of them a tie rather than crowning one."
+  "note": "One Tukey HSD per endpoint over the 25 folds, on the metric the figures draw. A method is counted as being on top whenever the correction cannot separate it from the leading mean, so an endpoint with several methods on top gives each of them a tie rather than crowning one."
 }

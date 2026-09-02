@@ -155,10 +155,10 @@ python site/overview.py              # -> docs/overview.json, docs/assets/*.png
 python site/build_site.py            # embeds what it wrote
 ```
 
-The tally counts every endpoint × metric combination — R², Spearman ρ and MAE
-alike — while the figure draws one metric. That is MAE by default, since it is in
-the units of the endpoint; `--metric r2` or `--metric spearman` draws either of
-the others instead.
+The table and the figures use the same metric, so a row and its panel can never
+disagree about who won: one Tukey HSD per endpoint, counted best alone / tied /
+worse. That metric is MAE by default, since it is in the units of the endpoint;
+`--metric r2` or `--metric spearman` rebuilds both against either of the others.
 
 Run it when a study's `fold_metrics.csv` changes. It refuses to pool anything
 unless the four reference arms are identical across the studies that carry them,

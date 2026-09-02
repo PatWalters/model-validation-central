@@ -242,11 +242,13 @@ def overview_block() -> str:
     d = json.loads(path.read_text(encoding="utf-8"))
     sets = d["datasets"]
     keys = list(sets)
+    metric = d.get("metric", "r2")
+    label = d.get("metric_label", "R²")
 
     head = (
         "<tr><th scope='col'></th><th scope='col'>From</th>"
         + "".join(f"<th scope='col' colspan='3'>{e(sets[k]['label'])}, "
-                  f"of {sets[k]['combinations']}</th>" for k in keys)
+                  f"of {sets[k]['combinations']} endpoints</th>" for k in keys)
         + "</tr><tr><th></th><th></th>"
         + "".join("<th>best alone</th><th>tied</th><th>worse</th>" for _ in keys)
         + "</tr>"
@@ -266,8 +268,6 @@ def overview_block() -> str:
                 cells.append(f'<td class="{cls}">{n}</td>')
         rows.append("<tr>" + "".join(cells) + "</tr>")
 
-    metric = d.get("metric", "r2")
-    label = d.get("metric_label", "R²")
     figures = "".join(
         f'<figure class="overfig"><img src="{sets[k]["figure"]}" '
         f'alt="Tukey HSD on {e(label)}, {e(sets[k]["label"])}, one panel per endpoint">'
@@ -300,12 +300,13 @@ def overview_block() -> str:
         "the last bit. That is checked before anything is pooled, and it means every "
         "method below can go into one comparison — which is the whole reason for "
         "collecting them.</p>"
-        "<p>One Tukey HSD per endpoint and metric, over the 25 folds. A method counts "
-        "as being on top whenever the correction cannot separate it from the leading "
-        "mean, so a combination with several methods on top gives <b>each of them a "
-        "tie</b> rather than crowning whichever had the higher mean. Only a "
-        "combination with exactly one method on top awards a <b>best alone</b>. "
-        "There are no bold maxima.</p>"
+        f"<p>One Tukey HSD per endpoint, over the 25 folds, on {e(label)} — the same "
+        "metric the panels below draw, so a row and its panel can never disagree "
+        "about who won. A method counts as being on top whenever the correction "
+        "cannot separate it from the leading mean, so an endpoint with several "
+        "methods on top gives <b>each of them a tie</b> rather than crowning "
+        "whichever had the better mean. Only an endpoint with exactly one method on "
+        "top awards a <b>best alone</b>. There are no bold maxima.</p>"
         f'<div class="tablewrap bleed"><table class="overview">{head}{"".join(rows)}</table></div>'
         '<p class="footnote">multimodal-fusion\'s 33 configurations would swamp a '
         "ten-way comparison and widen the correction for everyone, so it is "
