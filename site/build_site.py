@@ -230,6 +230,25 @@ def papers_block(papers) -> str:
             f'<ul class="paperlist">{"".join(items)}</ul></div>')
 
 
+def references_block(references) -> str:
+    """The papers behind the table's rows, numbered by first appearance in it.
+
+    A row names a published method, and the citation is what lets a reader go and
+    check it, so the numbers live in the table and the list sits directly under
+    it rather than at the bottom of the page.
+    """
+    if not references:
+        return ""
+    items = "".join(
+        f'<li id="ovref-{r["n"]}">{e(r["authors"])} <b>{e(r["title"])}.</b> '
+        f'<span class="venue">{e(r["venue"])}.</span> '
+        f'<a href="{r["url"]}">{e(r["label"])}</a></li>'
+        for r in references
+    )
+    return ('<div class="refsblock"><p class="eyebrow">The methods in print</p>'
+            f'<ol class="refs">{items}</ol></div>')
+
+
 def overview_block() -> str:
     """The cross-study comparison, from what `site/overview.py` left behind.
 
@@ -255,9 +274,13 @@ def overview_block() -> str:
     )
     rows = []
     for m in d["methods"]:
+        marks = ""
+        if m.get("refs"):
+            links = ", ".join(f'<a href="#ovref-{n}">{n}</a>' for n in m["refs"])
+            marks = f'<sup class="ref">{links}</sup>'
         cells = [
             f'<th scope="row"><span class="swatch" style="background:{m["color"]}"></span>'
-            f'{e(m["label"])}</th>',
+            f'{e(m["label"])}{marks}</th>',
             f'<td class="from">{e(m["study"])}</td>',
         ]
         for k in keys:
@@ -308,7 +331,8 @@ def overview_block() -> str:
         "whichever had the better mean. Only an endpoint with exactly one method on "
         "top awards a <b>best alone</b>. There are no bold maxima.</p>"
         f'<div class="tablewrap bleed"><table class="overview">{head}{"".join(rows)}</table></div>'
-        '<p class="footnote">multimodal-fusion\'s 33 configurations would swamp a '
+        + references_block(d.get("references", []))
+        + '<p class="footnote">multimodal-fusion\'s 33 configurations would swamp a '
         "ten-way comparison and widen the correction for everyone, so it is "
         "represented by one cell of its grid chosen in advance rather than on the "
         "results: all four modalities, early fusion, LightGBM. Its own report ranks "

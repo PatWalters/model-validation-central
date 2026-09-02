@@ -94,10 +94,119 @@ DATASETS = {"expansion": "ExpansionRx", "biogen": "Biogen ADME"}
 METRICS = {"r2": ("R²", True), "spearman": ("Spearman ρ", True), "mae": ("MAE", False)}
 N_COLS = 3
 
-# The metric the front page draws. The tally table counts all three regardless;
-# this only chooses which one gets a figure. MAE is the default because it is in
-# the units of the endpoint, so a reader can tell what a difference costs.
+# The metric the front page runs on. Both the table and the figures use it, so
+# they cannot disagree. MAE is the default because it is in the units of the
+# endpoint, so a reader can tell what a difference costs.
 HEADLINE_METRIC = "mae"
+
+
+# --- what each arm actually is, in print ---------------------------------
+#
+# A method in the table is a published thing, and the table is where a reader
+# decides whether to believe it, so the citation belongs there rather than three
+# clicks away in a study README. A method that is a pairing -- a frozen encoder
+# plus a tabular predictor -- cites both halves.
+PAPERS = {
+    "chemprop": dict(
+        authors="Graff, D. E.; Morgan, N. K.; Burns, J. W.; et al.",
+        title="Chemprop v2: An Efficient, Modular Machine Learning Package for "
+              "Chemical Property Prediction",
+        venue="J. Chem. Inf. Model. 2026, 66 (1), 28-33",
+        label="doi:10.1021/acs.jcim.5c02332",
+        url="https://doi.org/10.1021/acs.jcim.5c02332"),
+    "chemeleon": dict(
+        authors="Burns, J. W.; Zalte, A. S.; Abreu, C. R. A.; et al.",
+        title="Deep Learning Foundation Models for Low-Data Regimes from Classical "
+              "Molecular Descriptors",
+        venue="J. Chem. Inf. Model. 2026, articles ASAP",
+        label="doi:10.1021/acs.jcim.6c01546",
+        url="https://doi.org/10.1021/acs.jcim.6c01546"),
+    "megacl": dict(
+        authors="Jin, T.; Jin, K.; Li, Y.; et al.",
+        title="MEGA-CL: A Molecular Foundation Model for Generalizable ADMET Prediction "
+              "through Graph External Attention and Contrastive Learning",
+        venue="Preprint, 2026",
+        label="arXiv:2607.24314", url="https://arxiv.org/abs/2607.24314"),
+    "monroe": dict(
+        authors="Banaszewski, B.; Fitzgibbon, A. W.",
+        title="Monroe: A Molecular Foundation Model for In-Context Probabilistic Inference",
+        venue="Preprint, 2026",
+        label="arXiv:2608.18982", url="https://arxiv.org/abs/2608.18982"),
+    "moljepa": dict(
+        authors="Rottach, F.; Schieferdecker, S.; Rudman, W.; et al.",
+        title="Mol-JEPA: A Multimodal Joint Embedding Predictive Architecture for Molecules",
+        venue="Preprint, 2026",
+        label="arXiv:2608.22642", url="https://arxiv.org/abs/2608.22642"),
+    "trimole": dict(
+        authors="Luo, Z.; Huang, D.; Shao, Y.; Yu, Q.; Li, Y.",
+        title="A Multimodal Representation Learning Platform for Accurate Molecular "
+              "ADMET Prediction",
+        venue="Bioinformatics 2026, in review",
+        label="doi:10.1101/2026.08.24.746660",
+        url="https://doi.org/10.1101/2026.08.24.746660"),
+    "ptgin": dict(
+        authors="Money-Kyrle, S.; Dablander, M.; Hanser, T.; Werner, S.; Deane, C. M.; "
+                "Morris, G. M.",
+        title="On Improving Graph Neural Networks for QSAR by Pre-training on "
+              "Extended-Connectivity Fingerprints",
+        venue="Preprint, 2026",
+        label="arXiv:2605.10722", url="https://arxiv.org/abs/2605.10722"),
+    "fusion": dict(
+        authors="Wasswa, J.; Kajjumba, G. W.; Ramsundar, B.",
+        title="Unimodal vs Multimodal Learning: A Systematic Evaluation of Fusion "
+              "Strategies and Model Design for Molecular Property Prediction and "
+              "Uncertainty Quantification",
+        venue="J. Chem. Inf. Model. 2026",
+        label="doi:10.1021/acs.jcim.6c01878",
+        url="https://doi.org/10.1021/acs.jcim.6c01878"),
+    "lightgbm": dict(
+        authors="Ke, G.; Meng, Q.; Finley, T.; et al.",
+        title="LightGBM: A Highly Efficient Gradient Boosting Decision Tree",
+        venue="NeurIPS 2017", label="NeurIPS 2017",
+        url="https://papers.nips.cc/paper_files/paper/2017/hash/"
+            "6449f44a102fde848669bdd9eb6b76fa-Abstract.html"),
+    "ecfp": dict(
+        authors="Rogers, D.; Hahn, M.",
+        title="Extended-Connectivity Fingerprints",
+        venue="J. Chem. Inf. Model. 2010, 50 (5), 742-754",
+        label="doi:10.1021/ci100050t", url="https://doi.org/10.1021/ci100050t"),
+    "tabpfn": dict(
+        authors="Hollmann, N.; Müller, S.; Purucker, L.; et al.",
+        title="Accurate Predictions on Small Data with a Tabular Foundation Model",
+        venue="Nature 2025, 637 (8045), 319-326",
+        label="doi:10.1038/s41586-024-08328-6",
+        url="https://doi.org/10.1038/s41586-024-08328-6"),
+    "tabicl": dict(
+        authors="Qu, J.; Holzmüller, D.; Varoquaux, G.; Le Morvan, M.",
+        title="TabICL: A Tabular Foundation Model for In-Context Learning on Large Data",
+        venue="Preprint, 2025",
+        label="arXiv:2502.05564", url="https://arxiv.org/abs/2502.05564"),
+}
+
+# Which of those each row cites. Order matters only in that it fixes the numbers.
+CITES = {
+    "lgbm": ["lightgbm", "ecfp"],
+    "chemprop_st": ["chemprop"],
+    "chemprop": ["chemprop"],
+    "chemeleon": ["chemeleon", "chemprop"],
+    "megacl": ["megacl"],
+    "monroe": ["monroe", "tabpfn"],
+    "moljepa": ["moljepa", "tabicl"],
+    "trimole": ["trimole"],
+    "ptgin": ["ptgin", "lightgbm"],
+    "fus_GRMS_early_lgbm": ["fusion", "lightgbm"],
+}
+
+
+def numbered_references() -> tuple[list, dict]:
+    """The reference list, numbered by first appearance down the table."""
+    order, seen = [], {}
+    for method in ORDER:
+        for key in CITES.get(method, []):
+            if key not in seen:
+                seen[key] = len(order) + 1
+                order.append(dict(key=key, n=seen[key], **PAPERS[key]))
+    return order, seen
 
 
 # ------------------------------------------------------------------ loading
@@ -279,9 +388,12 @@ def main() -> int:
         print(f"{dataset}: {metrics['method'].nunique()} methods, {combos} combinations, "
               f"{out.relative_to(ROOT)}")
 
+    references, numbers = numbered_references()
+    payload["references"] = references
     for method in ORDER:
         row = {"method": method, "label": LABELS[method], "color": COLORS[method],
-               "study": study_of[method], "counts": {}}
+               "study": study_of[method], "counts": {},
+               "refs": [numbers[k] for k in CITES.get(method, [])]}
         for dataset, counts in tallies.items():
             c = counts.loc[method] if method in counts.index else {}
             row["counts"][dataset] = {k: int(c.get(k, 0)) for k in ("alone", "tied", "worse")}

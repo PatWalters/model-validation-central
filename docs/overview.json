@@ -16,7 +16,11 @@
           "tied": 0,
           "worse": 6
         }
-      }
+      },
+      "refs": [
+        1,
+        2
+      ]
     },
     {
       "method": "chemprop_st",
@@ -34,7 +38,10 @@
           "tied": 0,
           "worse": 6
         }
-      }
+      },
+      "refs": [
+        3
+      ]
     },
     {
       "method": "chemprop",
@@ -52,7 +59,10 @@
           "tied": 0,
           "worse": 6
         }
-      }
+      },
+      "refs": [
+        3
+      ]
     },
     {
       "method": "chemeleon",
@@ -70,7 +80,11 @@
           "tied": 0,
           "worse": 6
         }
-      }
+      },
+      "refs": [
+        4,
+        3
+      ]
     },
     {
       "method": "megacl",
@@ -88,7 +102,10 @@
           "tied": 0,
           "worse": 6
         }
-      }
+      },
+      "refs": [
+        5
+      ]
     },
     {
       "method": "monroe",
@@ -106,7 +123,11 @@
           "tied": 0,
           "worse": 0
         }
-      }
+      },
+      "refs": [
+        6,
+        7
+      ]
     },
     {
       "method": "moljepa",
@@ -124,7 +145,11 @@
           "tied": 0,
           "worse": 6
         }
-      }
+      },
+      "refs": [
+        8,
+        9
+      ]
     },
     {
       "method": "trimole",
@@ -142,7 +167,10 @@
           "tied": 0,
           "worse": 6
         }
-      }
+      },
+      "refs": [
+        10
+      ]
     },
     {
       "method": "ptgin",
@@ -160,7 +188,11 @@
           "tied": 0,
           "worse": 6
         }
-      }
+      },
+      "refs": [
+        11,
+        1
+      ]
     },
     {
       "method": "fus_GRMS_early_lgbm",
@@ -178,7 +210,11 @@
           "tied": 0,
           "worse": 6
         }
-      }
+      },
+      "refs": [
+        12,
+        1
+      ]
     }
   ],
   "datasets": {
@@ -199,5 +235,115 @@
   },
   "metric": "mae",
   "metric_label": "MAE",
-  "note": "One Tukey HSD per endpoint over the 25 folds, on the metric the figures draw. A method is counted as being on top whenever the correction cannot separate it from the leading mean, so an endpoint with several methods on top gives each of them a tie rather than crowning one."
+  "note": "One Tukey HSD per endpoint over the 25 folds, on the metric the figures draw. A method is counted as being on top whenever the correction cannot separate it from the leading mean, so an endpoint with several methods on top gives each of them a tie rather than crowning one.",
+  "references": [
+    {
+      "key": "lightgbm",
+      "n": 1,
+      "authors": "Ke, G.; Meng, Q.; Finley, T.; et al.",
+      "title": "LightGBM: A Highly Efficient Gradient Boosting Decision Tree",
+      "venue": "NeurIPS 2017",
+      "label": "NeurIPS 2017",
+      "url": "https://papers.nips.cc/paper_files/paper/2017/hash/6449f44a102fde848669bdd9eb6b76fa-Abstract.html"
+    },
+    {
+      "key": "ecfp",
+      "n": 2,
+      "authors": "Rogers, D.; Hahn, M.",
+      "title": "Extended-Connectivity Fingerprints",
+      "venue": "J. Chem. Inf. Model. 2010, 50 (5), 742-754",
+      "label": "doi:10.1021/ci100050t",
+      "url": "https://doi.org/10.1021/ci100050t"
+    },
+    {
+      "key": "chemprop",
+      "n": 3,
+      "authors": "Graff, D. E.; Morgan, N. K.; Burns, J. W.; et al.",
+      "title": "Chemprop v2: An Efficient, Modular Machine Learning Package for Chemical Property Prediction",
+      "venue": "J. Chem. Inf. Model. 2026, 66 (1), 28-33",
+      "label": "doi:10.1021/acs.jcim.5c02332",
+      "url": "https://doi.org/10.1021/acs.jcim.5c02332"
+    },
+    {
+      "key": "chemeleon",
+      "n": 4,
+      "authors": "Burns, J. W.; Zalte, A. S.; Abreu, C. R. A.; et al.",
+      "title": "Deep Learning Foundation Models for Low-Data Regimes from Classical Molecular Descriptors",
+      "venue": "J. Chem. Inf. Model. 2026, articles ASAP",
+      "label": "doi:10.1021/acs.jcim.6c01546",
+      "url": "https://doi.org/10.1021/acs.jcim.6c01546"
+    },
+    {
+      "key": "megacl",
+      "n": 5,
+      "authors": "Jin, T.; Jin, K.; Li, Y.; et al.",
+      "title": "MEGA-CL: A Molecular Foundation Model for Generalizable ADMET Prediction through Graph External Attention and Contrastive Learning",
+      "venue": "Preprint, 2026",
+      "label": "arXiv:2607.24314",
+      "url": "https://arxiv.org/abs/2607.24314"
+    },
+    {
+      "key": "monroe",
+      "n": 6,
+      "authors": "Banaszewski, B.; Fitzgibbon, A. W.",
+      "title": "Monroe: A Molecular Foundation Model for In-Context Probabilistic Inference",
+      "venue": "Preprint, 2026",
+      "label": "arXiv:2608.18982",
+      "url": "https://arxiv.org/abs/2608.18982"
+    },
+    {
+      "key": "tabpfn",
+      "n": 7,
+      "authors": "Hollmann, N.; M\u00fcller, S.; Purucker, L.; et al.",
+      "title": "Accurate Predictions on Small Data with a Tabular Foundation Model",
+      "venue": "Nature 2025, 637 (8045), 319-326",
+      "label": "doi:10.1038/s41586-024-08328-6",
+      "url": "https://doi.org/10.1038/s41586-024-08328-6"
+    },
+    {
+      "key": "moljepa",
+      "n": 8,
+      "authors": "Rottach, F.; Schieferdecker, S.; Rudman, W.; et al.",
+      "title": "Mol-JEPA: A Multimodal Joint Embedding Predictive Architecture for Molecules",
+      "venue": "Preprint, 2026",
+      "label": "arXiv:2608.22642",
+      "url": "https://arxiv.org/abs/2608.22642"
+    },
+    {
+      "key": "tabicl",
+      "n": 9,
+      "authors": "Qu, J.; Holzm\u00fcller, D.; Varoquaux, G.; Le Morvan, M.",
+      "title": "TabICL: A Tabular Foundation Model for In-Context Learning on Large Data",
+      "venue": "Preprint, 2025",
+      "label": "arXiv:2502.05564",
+      "url": "https://arxiv.org/abs/2502.05564"
+    },
+    {
+      "key": "trimole",
+      "n": 10,
+      "authors": "Luo, Z.; Huang, D.; Shao, Y.; Yu, Q.; Li, Y.",
+      "title": "A Multimodal Representation Learning Platform for Accurate Molecular ADMET Prediction",
+      "venue": "Bioinformatics 2026, in review",
+      "label": "doi:10.1101/2026.08.24.746660",
+      "url": "https://doi.org/10.1101/2026.08.24.746660"
+    },
+    {
+      "key": "ptgin",
+      "n": 11,
+      "authors": "Money-Kyrle, S.; Dablander, M.; Hanser, T.; Werner, S.; Deane, C. M.; Morris, G. M.",
+      "title": "On Improving Graph Neural Networks for QSAR by Pre-training on Extended-Connectivity Fingerprints",
+      "venue": "Preprint, 2026",
+      "label": "arXiv:2605.10722",
+      "url": "https://arxiv.org/abs/2605.10722"
+    },
+    {
+      "key": "fusion",
+      "n": 12,
+      "authors": "Wasswa, J.; Kajjumba, G. W.; Ramsundar, B.",
+      "title": "Unimodal vs Multimodal Learning: A Systematic Evaluation of Fusion Strategies and Model Design for Molecular Property Prediction and Uncertainty Quantification",
+      "venue": "J. Chem. Inf. Model. 2026",
+      "label": "doi:10.1021/acs.jcim.6c01878",
+      "url": "https://doi.org/10.1021/acs.jcim.6c01878"
+    }
+  ]
 }

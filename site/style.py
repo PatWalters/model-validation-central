@@ -91,6 +91,25 @@ table.overview td.from{text-align:left;font-size:.76rem;color:var(--muted);
 table.overview td.num{font-family:ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
 table.overview td.zero{color:var(--muted);opacity:.55}
 table.overview tbody tr:hover,table.overview tr:hover{background:var(--accent-soft)}
+/* Reference markers in the table, and the list they point at. Same shape as the
+   numbered references in the study reports, so the two read as one series. */
+sup.ref{font-size:.62em;line-height:0;vertical-align:super;margin-left:.12em;
+  font-variant-numeric:normal;font-feature-settings:normal}
+sup.ref a{text-decoration:none;font-weight:600;color:var(--accent)}
+sup.ref a:hover,sup.ref a:focus-visible{text-decoration:underline}
+.refsblock{margin:.9rem 0 .3rem}
+.refsblock .eyebrow{margin-bottom:.6rem}
+ol.refs{list-style:none;counter-reset:ref;padding:0;font-size:.86rem;
+  display:grid;gap:.55rem;margin:0}
+ol.refs li{counter-increment:ref;position:relative;padding-left:2rem;margin:0;
+  color:var(--muted);text-wrap:pretty}
+ol.refs li::before{content:counter(ref);position:absolute;left:0;top:.05em;
+  width:1.35rem;text-align:right;font-family:ui-monospace,Menlo,monospace;
+  font-size:.78rem;font-weight:600;color:var(--accent)}
+ol.refs li b{color:var(--ink);font-weight:600}
+ol.refs li:target::before{color:var(--ink)}
+ol.refs li:target{background:var(--accent-soft);border-radius:3px}
+ol.refs .venue{font-style:italic}
 .overfig{margin:1.4rem 0 .4rem;display:flex;flex-direction:column;gap:.5rem}
 .overfig img{display:block;width:100%;height:auto;border:1px solid var(--rule);
   border-radius:3px;background:#fff}
