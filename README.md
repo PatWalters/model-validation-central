@@ -52,7 +52,12 @@ Seven modelling approaches over fifteen ADME and physicochemical endpoints on tw
 
 > **What came out.** Monroe's frozen encoder with TabPFN is best alone on 12 of 27 ExpansionRx combinations and on all 18 Biogen ones; MEGA-CL and Mol-JEPA are best on nothing, anywhere. The benefit belongs to a particular pre-trained model, not to pre-training as an idea.
 
-Puts to the test: [Monroe](https://arxiv.org/abs/2608.18982), [Mol-JEPA](https://arxiv.org/abs/2608.22642), [MEGA-CL](https://arxiv.org/abs/2607.24314), [CheMeleon](https://doi.org/10.1021/acs.jcim.6c01546)
+**Puts to the test**
+
+- Banaszewski, B.; Fitzgibbon, A. W. **Monroe: A Molecular Foundation Model for In-Context Probabilistic Inference.** *Preprint, 2026.* [arXiv:2608.18982](https://arxiv.org/abs/2608.18982)
+- Rottach, F.; Schieferdecker, S.; Rudman, W.; et al. **Mol-JEPA: A Multimodal Joint Embedding Predictive Architecture for Molecules.** *Preprint, 2026.* [arXiv:2608.22642](https://arxiv.org/abs/2608.22642)
+- Jin, T.; Jin, K.; Li, Y.; et al. **MEGA-CL: A Molecular Foundation Model for Generalizable ADMET Prediction through Graph External Attention and Contrastive Learning.** *Preprint, 2026.* [arXiv:2607.24314](https://arxiv.org/abs/2607.24314)
+- Burns, J. W.; Zalte, A. S.; Abreu, C. R. A.; et al. **Deep Learning Foundation Models for Low-Data Regimes from Classical Molecular Descriptors.** *J. Chem. Inf. Model. 2026, articles ASAP.* [doi:10.1021/acs.jcim.6c01546](https://doi.org/10.1021/acs.jcim.6c01546)
 
 7 methods · 15 endpoints · 2,175 fold models · 2.48M predictions kept  
 Code: [`studies/expansion-ml-comparison`](studies/expansion-ml-comparison/) · Report builder: `06_build_page.py`
@@ -65,7 +70,9 @@ Trimole-Hybrid is not a model but a selection procedure. For every endpoint and 
 
 > **What came out.** It loses to a single well-initialised graph network on both data sets, for two reasons only visible in what it selected: nothing in its pool learns a representation, and on ExpansionRx the split it selects on does not resemble the split it is scored on. What it chose does not replicate either.
 
-Puts to the test: [Trimole-Hybrid](https://doi.org/10.1101/2026.08.24.746660)
+**Puts to the test**
+
+- Luo, Z.; Huang, D.; Shao, Y.; Yu, Q.; Li, Y. **A Multimodal Representation Learning Platform for Accurate Molecular ADMET Prediction.** *Bioinformatics 2026, in review.* [doi:10.1101/2026.08.24.746660](https://doi.org/10.1101/2026.08.24.746660)
 
 *A reimplementation. The authors' release describes itself as not runnable, so this reproduces the method, not the paper's numbers.*
 
@@ -80,7 +87,9 @@ Thirty-three ways of combining four molecular representations — RDKit descript
 
 > **What came out.** The paper's central finding replicates: fusing modalities moves accuracy very little, and none of it survives a correction for multiple comparisons. What fusion buys is calibration. Two things the paper could not see from inside its own design also show up — a single well-initialised graph network beats all thirty-three configurations on both data sets, and when the GNN modality is actually a learned representation, which in the released code it is not, the ranking of which modality matters inverts.
 
-Puts to the test: [Wasswa, Kajjumba & Ramsundar 2026](https://doi.org/10.1021/acs.jcim.6c01878)
+**Puts to the test**
+
+- Wasswa, J.; Kajjumba, G. W.; Ramsundar, B. **Unimodal vs Multimodal Learning: A Systematic Evaluation of Fusion Strategies and Model Design for Molecular Property Prediction and Uncertainty Quantification.** *J. Chem. Inf. Model. 2026.* [doi:10.1021/acs.jcim.6c01878](https://doi.org/10.1021/acs.jcim.6c01878)
 
 *A reimplementation. The authors' MIT-licensed release is a set of Colab dumps that cannot be run, so this is written from that source read as a specification alongside the paper's Supporting Information.*
 
@@ -95,7 +104,9 @@ PT-GIN is a Graph Isomorphism Network pre-trained on 462,189 QMugs molecules to 
 
 > **What came out.** It wins six endpoints of fifteen and loses six; on Biogen, its own benchmark, it wins one and loses three. Which six it wins is not about how much data an endpoint has — it is about how well the fingerprints were already doing. PT-GIN helps where the baseline was weak and hurts where it was strong, Spearman ρ = −0.65 with the baseline R².
 
-Puts to the test: [Money-Kyrle et al. 2026 (PT-GIN)](https://arxiv.org/abs/2605.10722)
+**Puts to the test**
+
+- Money-Kyrle, S.; Dablander, M.; Hanser, T.; Werner, S.; Deane, C. M.; Morris, G. M. **On Improving Graph Neural Networks for QSAR by Pre-training on Extended-Connectivity Fingerprints.** *Preprint, 2026.* [arXiv:2605.10722](https://arxiv.org/abs/2605.10722)
 
 5 methods · 15 endpoints · 1,425 fold models · 10 released checkpoints  
 Code: [`studies/ecfp-pretrain`](studies/ecfp-pretrain/) · Report builder: `06_build_page.py`

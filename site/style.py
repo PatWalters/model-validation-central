@@ -93,6 +93,22 @@ code{font-family:ui-monospace,Menlo,monospace;font-size:.86em;
   border-radius:0 3px 3px 0;padding:.7rem .9rem;text-wrap:pretty}
 .card .finding b{color:var(--win)}
 .card .caveat{font-size:.84rem;color:var(--muted);text-wrap:pretty}
+
+/* The paper the study puts to the test: cited in full, not as a bare link. */
+.papers{border:1px solid var(--rule);border-radius:3px;background:var(--ground);
+  padding:.85rem 1rem .9rem}
+.papers .plabel{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);font-weight:700;margin-bottom:.5rem}
+.paperlist{list-style:none;padding:0;margin:0;display:grid;gap:.75rem}
+.paperlist .paper{margin:0}
+.paperlist .paper + .paper{border-top:1px solid var(--rule);padding-top:.75rem}
+.paper .ptitle{font-family:"Newsreader","Iowan Old Style",Charter,Georgia,serif;
+  font-size:1.02rem;font-weight:600;line-height:1.3;text-wrap:pretty;color:var(--ink)}
+.paper .pauthors{font-size:.82rem;color:var(--muted);margin-top:.15rem;text-wrap:pretty}
+.paper .pwhere{font-size:.82rem;margin-top:.2rem}
+.paper .pvenue{font-style:italic;color:var(--muted)}
+.paper .pdoi{font-family:ui-monospace,Menlo,monospace;font-size:.76rem;
+  position:relative;z-index:1}
 .card .cardfacts{display:grid;grid-template-columns:repeat(auto-fit,minmax(6.5rem,1fr));
   gap:.6rem;padding:.85rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
 .card .cardfacts b{font-family:ui-monospace,Menlo,monospace;font-size:1.05rem;font-weight:600;

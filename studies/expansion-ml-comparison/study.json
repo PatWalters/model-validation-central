@@ -2,7 +2,10 @@
   "slug": "expansion-ml-comparison",
   "name": "expansion-ml-comparison",
   "order": 1,
-  "datasets": ["ExpansionRx", "Biogen ADME"],
+  "datasets": [
+    "ExpansionRx",
+    "Biogen ADME"
+  ],
   "endpoints": 15,
   "protocol": "5 x 5 GroupKFold over chemical clusters, one fixed holdout, Tukey HSD",
   "updated": "2026-08-31",
@@ -15,16 +18,56 @@
       "summary": "Seven modelling approaches over fifteen ADME and physicochemical endpoints on two unrelated data sets, 25 replicate models each, every one scored on a held-out test set it never saw. Four of the seven are pre-trained foundation models. Only two of those four win anything at all, and the one that wins most does no downstream training whatsoever — it freezes a pre-trained encoder and predicts each endpoint in context.",
       "finding": "Monroe's frozen encoder with TabPFN is best alone on 12 of 27 ExpansionRx combinations and on all 18 Biogen ones; MEGA-CL and Mol-JEPA are best on nothing, anywhere. The benefit belongs to a particular pre-trained model, not to pre-training as an idea.",
       "facts": [
-        {"n": "7", "label": "methods"},
-        {"n": "15", "label": "endpoints"},
-        {"n": "2,175", "label": "fold models"},
-        {"n": "2.48M", "label": "predictions kept"}
+        {
+          "n": "7",
+          "label": "methods"
+        },
+        {
+          "n": "15",
+          "label": "endpoints"
+        },
+        {
+          "n": "2,175",
+          "label": "fold models"
+        },
+        {
+          "n": "2.48M",
+          "label": "predictions kept"
+        }
       ],
       "validates": [
-        {"name": "Monroe", "url": "https://arxiv.org/abs/2608.18982"},
-        {"name": "Mol-JEPA", "url": "https://arxiv.org/abs/2608.22642"},
-        {"name": "MEGA-CL", "url": "https://arxiv.org/abs/2607.24314"},
-        {"name": "CheMeleon", "url": "https://doi.org/10.1021/acs.jcim.6c01546"}
+        {
+          "name": "Monroe",
+          "authors": "Banaszewski, B.; Fitzgibbon, A. W.",
+          "title": "Monroe: A Molecular Foundation Model for In-Context Probabilistic Inference",
+          "venue": "Preprint, 2026",
+          "label": "arXiv:2608.18982",
+          "url": "https://arxiv.org/abs/2608.18982"
+        },
+        {
+          "name": "Mol-JEPA",
+          "authors": "Rottach, F.; Schieferdecker, S.; Rudman, W.; et al.",
+          "title": "Mol-JEPA: A Multimodal Joint Embedding Predictive Architecture for Molecules",
+          "venue": "Preprint, 2026",
+          "label": "arXiv:2608.22642",
+          "url": "https://arxiv.org/abs/2608.22642"
+        },
+        {
+          "name": "MEGA-CL",
+          "authors": "Jin, T.; Jin, K.; Li, Y.; et al.",
+          "title": "MEGA-CL: A Molecular Foundation Model for Generalizable ADMET Prediction through Graph External Attention and Contrastive Learning",
+          "venue": "Preprint, 2026",
+          "label": "arXiv:2607.24314",
+          "url": "https://arxiv.org/abs/2607.24314"
+        },
+        {
+          "name": "CheMeleon",
+          "authors": "Burns, J. W.; Zalte, A. S.; Abreu, C. R. A.; et al.",
+          "title": "Deep Learning Foundation Models for Low-Data Regimes from Classical Molecular Descriptors",
+          "venue": "J. Chem. Inf. Model. 2026, articles ASAP",
+          "label": "doi:10.1021/acs.jcim.6c01546",
+          "url": "https://doi.org/10.1021/acs.jcim.6c01546"
+        }
       ],
       "source": "results/report.html",
       "builder": "06_build_page.py"
@@ -37,13 +80,32 @@
       "summary": "Trimole-Hybrid is not a model but a selection procedure. For every endpoint and every fold it builds sixty candidate predictors — five molecular views crossed with three blocks of chemistry priors crossed with four backends — fits all of them, scores them on the held-out validation fifth, and keeps exactly one to predict the test set. It is put against four fixed architectures on the same fifteen endpoints.",
       "finding": "It loses to a single well-initialised graph network on both data sets, for two reasons only visible in what it selected: nothing in its pool learns a representation, and on ExpansionRx the split it selects on does not resemble the split it is scored on. What it chose does not replicate either.",
       "facts": [
-        {"n": "5", "label": "methods"},
-        {"n": "60", "label": "candidates per fold"},
-        {"n": "22k", "label": "candidate fits"},
-        {"n": "1,425", "label": "fold models"}
+        {
+          "n": "5",
+          "label": "methods"
+        },
+        {
+          "n": "60",
+          "label": "candidates per fold"
+        },
+        {
+          "n": "22k",
+          "label": "candidate fits"
+        },
+        {
+          "n": "1,425",
+          "label": "fold models"
+        }
       ],
       "validates": [
-        {"name": "Trimole-Hybrid", "url": "https://doi.org/10.1101/2026.08.24.746660"}
+        {
+          "name": "Trimole-Hybrid",
+          "authors": "Luo, Z.; Huang, D.; Shao, Y.; Yu, Q.; Li, Y.",
+          "title": "A Multimodal Representation Learning Platform for Accurate Molecular ADMET Prediction",
+          "venue": "Bioinformatics 2026, in review",
+          "label": "doi:10.1101/2026.08.24.746660",
+          "url": "https://doi.org/10.1101/2026.08.24.746660"
+        }
       ],
       "caveat": "A reimplementation. The authors' release describes itself as not runnable, so this reproduces the method, not the paper's numbers.",
       "source": "results/trimole_report.html",

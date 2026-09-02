@@ -177,6 +177,34 @@ def fact_block(facts, css_class="facts") -> str:
     return f'<div class="{css_class}">{cells}</div>'
 
 
+def papers_block(papers) -> str:
+    """The papers a study puts to the test, cited in full.
+
+    The claim being tested is the point of the card, so the reference is part of
+    the argument rather than a footnote to it: title first, then who wrote it and
+    where it appeared, and the identifier as the link.
+    """
+    if not papers:
+        return ""
+    items = []
+    for p in papers:
+        title = e(p.get("title", p.get("name", "")))
+        line = f'<p class="ptitle">{title}</p>'
+        if p.get("authors"):
+            line += f'<p class="pauthors">{e(p["authors"])}</p>'
+        bits = []
+        if p.get("venue"):
+            bits.append(f'<span class="pvenue">{e(p["venue"])}</span>')
+        if p.get("url"):
+            bits.append(f'<a class="pdoi" href="{p["url"]}">{e(p.get("label", p["url"]))}</a>')
+        if bits:
+            line += '<p class="pwhere">' + " · ".join(bits) + "</p>"
+        items.append(f'<li class="paper">{line}</li>')
+    label = "The paper put to the test" if len(papers) == 1 else "The papers put to the test"
+    return (f'<div class="papers"><p class="plabel">{label}</p>'
+            f'<ul class="paperlist">{"".join(items)}</ul></div>')
+
+
 def card(report: Report) -> str:
     study = report.study
     eyebrow = " · ".join(x for x in (report.eyebrow, ", ".join(study.datasets)) if x)
@@ -184,12 +212,12 @@ def card(report: Report) -> str:
         f'<p class="eyebrow">{e(eyebrow)}</p>',
         f'<h3><a href="{report.href}">{e(report.title)}</a></h3>',
         f'<p class="q">{e(report.question)}</p>',
+        # The paper is what the study is about, so it is cited before the study
+        # is described rather than after it.
+        papers_block(report.validates),
         f"<p>{e(report.summary)}</p>",
         f'<p class="finding">{e(report.finding)}</p>',
     ]
-    if report.validates:
-        links = ", ".join(f'<a href="{v["url"]}">{e(v["name"])}</a>' for v in report.validates)
-        parts.append(f'<p class="validates">Puts to the test: {links}</p>')
     if report.caveat:
         parts.append(f'<p class="caveat">{e(report.caveat)}</p>')
     parts.append(fact_block(report.facts, "cardfacts"))
@@ -291,8 +319,17 @@ def render_readme_block(studies) -> str:
             lines.append(f"> **What came out.** {report.finding}")
             lines.append("")
             if report.validates:
-                links = ", ".join(f"[{v['name']}]({v['url']})" for v in report.validates)
-                lines.append(f"Puts to the test: {links}")
+                lines.append("**Puts to the test**")
+                lines.append("")
+                for p in report.validates:
+                    cite = f"**{p.get('title', p.get('name'))}.**"
+                    if p.get("authors"):
+                        cite = f"{p['authors']} {cite}"
+                    if p.get("venue"):
+                        cite += f" *{p['venue']}.*"
+                    if p.get("url"):
+                        cite += f" [{p.get('label', p['url'])}]({p['url']})"
+                    lines.append(f"- {cite}")
                 lines.append("")
             if report.caveat:
                 lines.append(f"*{report.caveat}*")
