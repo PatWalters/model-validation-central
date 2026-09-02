@@ -4,3 +4,17 @@ __pycache__/
 *.pyc
 .DS_Store
 .ipynb_checkpoints/
+
+# Reference material that is not ours to redistribute. Each study keeps the
+# papers it was built from next to its code; none of them belong in the
+# repository. Repeated here as well as in each study so a study directory
+# dropped in without its own rule is still covered.
+*.pdf
+*.epub
+
+# Third-party pre-trained weights, likewise. Each study's README says where its
+# checkpoints come from and under what licence.
+*.pt
+*.pth
+*.ckpt
+*.safetensors
