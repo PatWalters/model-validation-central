@@ -18,3 +18,11 @@ __pycache__/
 *.pth
 *.ckpt
 *.safetensors
+
+# Credentials. Nothing here needs any — the only network call in the repository
+# fetches a public data set — so anything matching these turned up by accident
+# and should not be committed.
+.env
+.env.*
+*.pem
+*.key
