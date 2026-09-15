@@ -94,6 +94,13 @@ COLORS = {
 ORDER = list(LABELS)
 
 DATASETS = {"expansion": "ExpansionRx", "biogen": "Biogen ADME"}
+
+# One Tukey panel's width, and its height as a fixed allowance for the title and
+# x axis plus a row for every method. The same shape the studies' own reports use.
+PANEL_W_IN = 4.6
+PANEL_PAD_IN = 1.17
+PANEL_ROW_H_IN = 0.5
+SUPTITLE_IN = 0.5
 METRICS = {"r2": ("R²", True), "spearman": ("Spearman ρ", True), "mae": ("MAE", False)}
 N_COLS = 3
 
@@ -325,7 +332,14 @@ def figure(metrics: pd.DataFrame, dataset: str, metric: str = "r2") -> Path:
     label, higher = METRICS[metric]
     endpoints = sorted(metrics["endpoint"].unique())
     rows = -(-len(endpoints) // N_COLS)
-    fig, axes = plt.subplots(rows, N_COLS, figsize=(4.6 * N_COLS, 3.5 * rows), squeeze=False)
+    # Sized after the panels are drawn, not here: statsmodels' `plot_simultaneous`
+    # calls `set_size_inches((10, 6))` on whatever figure its axes belong to, even
+    # when handed a single `ax`, so the last panel drawn resets whatever this asks
+    # for. The height has to grow with the number of methods too -- every one of
+    # them is a labelled row, and this figure carries more of them than any single
+    # study's does.
+    panel_h = PANEL_PAD_IN + PANEL_ROW_H_IN * len(ORDER)
+    fig, axes = plt.subplots(rows, N_COLS, squeeze=False)
     axes = axes.ravel()
 
     xlims = []
@@ -354,7 +368,8 @@ def figure(metrics: pd.DataFrame, dataset: str, metric: str = "r2") -> Path:
         "Blue: best. Grey: indistinguishable from it. Red: significantly worse.",
         fontsize=13,
     )
-    fig.tight_layout(rect=(0, 0, 1, 0.97))
+    fig.set_size_inches(PANEL_W_IN * N_COLS, panel_h * rows)
+    fig.tight_layout(rect=(0, 0, 1, 1 - SUPTITLE_IN / fig.get_size_inches()[1]))
     ASSETS.mkdir(parents=True, exist_ok=True)
     out = ASSETS / f"tukey_{metric}_{dataset}.png"
     fig.savefig(out, dpi=110)

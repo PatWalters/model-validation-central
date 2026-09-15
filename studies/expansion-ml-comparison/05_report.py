@@ -87,6 +87,20 @@ PALETTE = {
 N_COLS = 3
 PANEL_SIZE = (17 / 3, 14 / 3)  # what one ExpansionRx panel came out at
 
+# The Tukey panels are the one figure that lists every method down the y axis, so
+# their height has to grow as methods are added or the labels close up on each
+# other. The boxplots put methods on the x axis and the paired plots do not show
+# them at all, so both keep PANEL_SIZE as it is.
+#
+# These two reproduce PANEL_SIZE's height exactly at the seven methods it was
+# written for, and grow by one row's worth for every method after that.
+TUKEY_PAD_IN = PANEL_SIZE[1] - 0.5 * 7  # title, x axis and the margins
+TUKEY_ROW_H_IN = 0.5                    # one method row
+
+
+def tukey_panel_size() -> tuple[float, float]:
+    return PANEL_SIZE[0], TUKEY_PAD_IN + TUKEY_ROW_H_IN * len(cfg.METHODS)
+
 
 def grid_shape(n: int) -> tuple[int, int]:
     return (n + N_COLS - 1) // N_COLS, N_COLS
@@ -151,8 +165,14 @@ def panel_grid(endpoints: list[str], figsize=None):
     return fig, flat
 
 
-def save(fig, name: str) -> None:
-    fig.tight_layout()
+# How much of the figure's height to keep clear for the suptitle. `tight_layout`
+# does not know about one, so on a tall figure it lays the panels out over it.
+SUPTITLE_IN = 0.5
+
+
+def save(fig, name: str, reserve_title: bool = False) -> None:
+    top = 1 - SUPTITLE_IN / fig.get_size_inches()[1] if reserve_title else 1
+    fig.tight_layout(rect=(0, 0, 1, top))
     for suffix in ("png", "svg"):
         fig.savefig(cfg.FIGURE_DIR / f"{name}.{suffix}", dpi=200, bbox_inches="tight")
     plt.close(fig)
@@ -195,6 +215,8 @@ def tukey_figures(metrics: pd.DataFrame, endpoints: list[str]) -> None:
     column, since every panel lists the same methods in the same order.
     """
     n_cols = N_COLS
+    rows, cols = grid_shape(len(endpoints))
+    panel_w, panel_h = tukey_panel_size()
     for metric in cfg.METRICS:
         higher = cfg.METRIC_HIGHER_IS_BETTER[metric]
         fig, axes = panel_grid(endpoints)
@@ -226,7 +248,13 @@ def tukey_figures(metrics: pd.DataFrame, endpoints: list[str]) -> None:
             "red: significantly worse",
             fontsize=14,
         )
-        save(fig, f"tukey_{metric}")
+        # Sized here rather than at creation because statsmodels'
+        # `plot_simultaneous` calls `set_size_inches((10, 6))` on whatever figure
+        # its axes belong to, even when it is handed an `ax` and is drawing one
+        # panel of nine. Whatever size the grid is created at, the last panel
+        # drawn resets it, so the size has to be set after the panels are.
+        fig.set_size_inches(panel_w * cols, panel_h * rows)
+        save(fig, f"tukey_{metric}", reserve_title=True)
 
 
 def paired_figures(metrics: pd.DataFrame, endpoints: list[str]) -> None:
