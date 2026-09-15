@@ -25,6 +25,9 @@ results/.*_done
 # The control run behind the Mol-JEPA section -- 225 more prediction files. The
 # two overlap CSVs next to it are evidence, not bulk, so they stay tracked.
 results/*/sensitivity/moljepa_tabpfn/
+# Likewise the temperature control behind the TabPFN 3.5 arm: the per-fold files
+# are bulk, and monroe35_temperature.csv beside them is the evidence.
+results/*/sensitivity/monroe35_t*/
 
 # Local notes and reference material that is not ours to redistribute.
 writing.md

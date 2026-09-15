@@ -28,6 +28,7 @@ METHOD_COLOR = {
     "chemeleon": "#55A868",
     "megacl": "#8172B3",
     "monroe": "#937860",
+    "monroe35": "#61483A",
     "moljepa": "#DA8BC3",
     "trimole": "#CCB974",
 }
@@ -38,7 +39,8 @@ SHORT = {
     "chemprop": "ChemProp MT",
     "chemeleon": "CheMeleon",
     "megacl": "MEGA-CL",
-    "monroe": "Monroe",
+    "monroe": "Monroe/PFN3",
+    "monroe35": "Monroe/PFN3.5",
     "moljepa": "Mol-JEPA",
     "trimole": "Trimole",
 }

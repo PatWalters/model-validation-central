@@ -21,7 +21,12 @@ bblean==0.10.3
 # The MEGA-CL, Monroe and Mol-JEPA arms each run in their own environment. See
 # the matching "Reproducing the ... arm" sections in the README.
 #   Monroe    Python 3.12, torch==2.9.1+cu130, torch-geometric, the monroe
-#             package installed from its checkout, tabpfn==8.3.0.
+#             package installed from its checkout, tabpfn==8.3.0, which loads
+#             TabPFN 3.
+#   Monroe 3.5 the same environment with tabpfn==9.0.0, which makes TabPFN 3.5
+#             the default checkpoint. The two cannot share an environment, since
+#             the head is chosen by the installed version, so the 3.5 arm gets
+#             its own and 09_run_monroe.py refuses to run in the wrong one.
 #   Mol-JEPA  the same, with transformers==4.57.6 (transformers 5 builds the
 #             model on the meta device and fails), molfeat and tabicl==2.1.1
 #             in place of the monroe package.

@@ -330,15 +330,20 @@ def overview_block() -> str:
         "methods on top gives <b>each of them a tie</b> rather than crowning "
         "whichever had the better mean. Only an endpoint with exactly one method on "
         "top awards a <b>best alone</b>. There are no bold maxima.</p>"
+        "<p>That rule is also why the two Monroe rows are almost never alone at the "
+        "top. They differ only in which TabPFN checkpoint reads the same frozen "
+        "embeddings, and two methods the correction cannot separate take each other "
+        "out of the <b>best alone</b> column wherever both are on top. Read the pair "
+        "as one method with a footnote, not as two that beat each other.</p>"
         f'<div class="tablewrap bleed"><table class="overview">{head}{"".join(rows)}</table></div>'
         + references_block(d.get("references", []))
         + '<p class="footnote">multimodal-fusion\'s 33 configurations would swamp a '
-        "ten-way comparison and widen the correction for everyone, so it is "
+        "wide comparison and widen the correction for everyone, so it is "
         "represented by one cell of its grid chosen in advance rather than on the "
         "results: all four modalities, early fusion, LightGBM. Its own report ranks "
         "the whole grid. Counts here are also stricter than the ones in the "
         "individual reports: Tukey's correction widens with the number of methods, so "
-        "pooling ten of them turns some outright wins into ties.</p>"
+        "pooling this many of them turns some outright wins into ties.</p>"
         f'<div class="bleed">{figures}</div>'
         + caveat
     )

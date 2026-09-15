@@ -7,19 +7,19 @@
   ],
   "endpoints": 15,
   "protocol": "5 x 5 GroupKFold over chemical clusters, one fixed holdout, Tukey HSD",
-  "updated": "2026-08-31",
+  "updated": "2026-09-15",
   "reports": [
     {
       "slug": "expansion-ml-comparison",
-      "date": "2026-08-31",
-      "title": "Seven ways to model ADME",
+      "date": "2026-09-15",
+      "title": "Eight ways to model ADME",
       "eyebrow": "Foundation models",
       "question": "Which foundation model, and does it replicate?",
-      "summary": "Seven modelling approaches over fifteen ADME and physicochemical endpoints on two unrelated data sets, 25 replicate models each, every one scored on a held-out test set it never saw. Four of the seven are pre-trained foundation models. Only two of those four win anything at all, and the one that wins most does no downstream training whatsoever — it freezes a pre-trained encoder and predicts each endpoint in context.",
-      "finding": "Monroe's frozen encoder with TabPFN is best alone on 12 of 27 ExpansionRx combinations and on all 18 Biogen ones; MEGA-CL and Mol-JEPA are best on nothing, anywhere. The benefit belongs to a particular pre-trained model, not to pre-training as an idea.",
+      "summary": "Eight modelling approaches over fifteen ADME and physicochemical endpoints on two unrelated data sets, 25 replicate models each, every one scored on a held-out test set it never saw. Four of the eight are pre-trained molecular foundation models, and only one of those four wins anything at all. The one that wins does no downstream training whatsoever — it freezes a pre-trained encoder and predicts each endpoint in context — and it appears twice, under two versions of the tabular model that does the predicting.",
+      "finding": "Monroe's frozen encoder is at the top of 21 of 27 ExpansionRx combinations and all 18 Biogen ones; MEGA-CL and Mol-JEPA are best on nothing, anywhere. The benefit belongs to a particular pre-trained model, not to pre-training as an idea. Swapping its in-context head from TabPFN 3 to TabPFN 3.5, released the day this was rerun, never costs it a top-group place and gains it four of 45, for four and a half times the inference.",
       "facts": [
         {
-          "n": "7",
+          "n": "8",
           "label": "methods"
         },
         {
@@ -27,11 +27,11 @@
           "label": "endpoints"
         },
         {
-          "n": "2,175",
+          "n": "2,550",
           "label": "fold models"
         },
         {
-          "n": "2.48M",
+          "n": "2.84M",
           "label": "predictions kept"
         }
       ],

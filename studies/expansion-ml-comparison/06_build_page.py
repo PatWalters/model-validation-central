@@ -293,6 +293,15 @@ REFERENCES = [
         "10.1038/s41586-024-08328-6",
     ),
     (
+        "tabpfn35",
+        "Prior Labs. ",
+        "TabPFN-3.5.",
+        "Technical report, 15 September 2026. The default checkpoint from "
+        "<code>tabpfn</code> 9.0.0, and the head of the second Monroe arm here.",
+        "https://priorlabs.ai/technical-reports/tabpfn-3-5",
+        "priorlabs.ai/technical-reports/tabpfn-3-5",
+    ),
+    (
         "megacl",
         "Jin, T.; Jin, K.; Li, Y.; <i>et al.</i> ",
         "MEGA-CL: A Molecular Foundation Model for Generalizable ADMET Prediction "
@@ -335,8 +344,8 @@ def load(ds: str) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """One data set's summary, head-to-head and per-fold tables.
 
     fold_metrics.csv is shared between the reports, so it carries every method
-    that has predictions on this data set. This page is about seven of them, and
-    the counts in its facts strip are counts of those seven.
+    that has predictions on this data set. This page is about eight of them, and
+    the counts in its facts strip are counts of those eight.
     """
     paths = cfg.paths(ds)
     metrics = pd.read_csv(paths.fold_metrics)
@@ -386,18 +395,19 @@ def build() -> str:
     css = page_kit.CSS
 
     parts = [
-        "<title>Seven ways to model ADME</title>",
+        "<title>Eight ways to model ADME</title>",
         f"<style>{css}</style>",
         '<div class="wrap">',
         '<p class="eyebrow">5×5 cross validation · two data sets</p>',
         "<h1>Which foundation model, and does it replicate?</h1>",
-        '<p class="lede">Seven modelling approaches, fifteen ADME and physicochemical '
+        '<p class="lede">Eight modelling approaches, fifteen ADME and physicochemical '
         "endpoints across two unrelated data sets, 25 replicate models each, every one "
-        "scored on a held-out test set it never saw. Four of the seven are pre-trained "
-        "foundation models, and only two of those four win anything at all. The model that "
-        "wins most does no downstream training whatsoever — it freezes its encoder and "
-        "predicts in context. And the neatest pattern in the first data set does not "
-        "survive the second.</p>",
+        "scored on a held-out test set it never saw. Four of the eight are pre-trained "
+        "molecular foundation models, and only one of those four wins anything at all. "
+        "The method that wins most does no downstream training whatsoever — it freezes "
+        "its encoder and predicts in context. It appears twice, under two versions of the "
+        "tabular model that does the predicting, which turns out to be the cheapest way "
+        "to buy accuracy on this page and the one with the least to show for it.</p>",
         '<div class="facts">'
         f'<div class="fact"><b>{n_methods}</b><span>methods</span></div>'
         f'<div class="fact"><b>{n_datasets}</b><span>data sets</span></div>'
@@ -411,13 +421,28 @@ def build() -> str:
         "combination. <em>Tied</em> means the method could not be distinguished from the "
         "best one at α = 0.05 — a distinction a bolded maximum would hide.</p>",
         '<div class="panel">' + tukey_tally(summary) + "</div>",
-        "<p>Of the 27 combinations, 19 have a single method at the top and 8 have two or "
-        "three that cannot be told apart. Monroe is alone at the top on 12 and shares it "
-        "on 6, CheMeleon alone on 7 and shares on 5. Nothing else is ever at the top, "
-        "alone or otherwise. The split between those two is not noise and it does not "
+        "<p>Of the 27 combinations, CheMeleon is alone at the top on 5 and shares it on "
+        "6. The two Monroe arms are never alone, because almost everywhere either is at "
+        "the top the other is there with it: Monroe with TabPFN 3.5 shares the top on 21 "
+        "combinations, Monroe with TabPFN 3 on 18. Nothing else is ever at the top, alone "
+        "or otherwise. The split between Monroe and CheMeleon is not noise and it does not "
         "follow data volume — it follows the assay. Monroe leads on LogD, both microsomal "
         "stability endpoints and both Caco-2 endpoints. CheMeleon leads on all three "
         "tissue-binding endpoints, plus LogS.</p>",
+        '<div class="panel howto">'
+        "<h3>Why neither Monroe arm is ever alone</h3>"
+        "<p>On the seven-method version of this page, before TabPFN 3.5 existed, Monroe "
+        "was alone at the top of 12 of these 27 combinations. It has not got worse. A "
+        "second arm was added that differs from it only in which TabPFN checkpoint reads "
+        "its embeddings, and the tally counts <i>alone</i> and <i>tied</i> symmetrically, "
+        "so two arms that cannot be told apart take each other out of the <i>alone</i> "
+        "column wherever they are both on top. That is the count behaving correctly. It is "
+        "also a warning about reading these tallies as a league table: adding a near "
+        "duplicate of a method moves that method's numbers without changing a single "
+        "prediction it makes.</p>"
+        "<p>The question the two arms exist to answer is asked directly further "
+        "down, and it is a paired question, not a tally.</p>"
+        "</div>",
         "<p>The one place a from-scratch model keeps up is <b>LogD</b>, the endpoint with "
         "the most measurements, where single-task ChemProp shares the top with Monroe on "
         "all three metrics. Given enough data, the model learns a representation as "
@@ -437,7 +462,7 @@ def build() -> str:
         "<h3>How to read the Tukey plots</h3>"
         "<p>Each bar is one method's mean over its 25 folds. The whiskers are a "
         "confidence interval widened to cover every pairwise comparison in the panel "
-        "at once, which is what stops seven methods and three metrics from "
+        "at once, which is what stops eight methods and three metrics from "
         "manufacturing a winner by chance.</p>"
         "<ul>"
         '<li><b class="k-best">Blue</b> is the method with the best mean. Two dashed '
@@ -519,6 +544,10 @@ def build() -> str:
         "Embedding all 7,608 molecules took 32 seconds on one GPU and the 225 fold "
         "predictions took 14 minutes. On the same card the CheMeleon arm took about six "
         "hours and MEGA-CL took twenty-one.</p>",
+        "<p>Which TabPFN matters, and the page carries two arms because of it. This "
+        "section is the one the Monroe paper was written against, TabPFN 3. The next "
+        "section is the same encoder, the same embeddings and the same folds with TabPFN "
+        "3.5, released while this study was already built.</p>",
         h2h_table(h2h, "chemeleon", "monroe"),
         figure("paired_chemeleon_vs_monroe_r2",
                "Monroe against CheMeleon, paired by fold. The two split the endpoints "
@@ -534,7 +563,8 @@ def build() -> str:
         "turnover, it does not capture what fraction of a compound stays unbound in "
         "plasma — and there, fine-tuning the representation on the assay still wins.</p>",
         "<p>One more thing separates it. Monroe's fold-to-fold standard deviation is the "
-        "smallest of the six on all three metrics: 0.052 against CheMeleon's 0.088 on R², "
+        "smallest on the page on R² and on Spearman ρ, and within 0.0001 of Mol-JEPA's "
+        "on MAE: 0.052 against CheMeleon's 0.088 on R², "
         "averaged over the endpoints. That follows from the design. With no training loop "
         "there is no initialisation, no early-stopping epoch and no optimiser trajectory to "
         "vary. The only thing that changes between folds is which molecules are in the "
@@ -565,7 +595,68 @@ def build() -> str:
         "transform and the test set here are ours, and no Monroe hyperparameter was tuned "
         "on them.</p>"
         "</div>",
-        "<h2>Question 6 — does adding modalities beat adding scale?</h2>",
+        "<h2>Question 6 — what is a newer tabular model worth?</h2>",
+        f'<p>TabPFN 3.5{ref("tabpfn35")} was released on 15 September 2026, after '
+        "everything above had been "
+        "run. It reads the same frozen embeddings out of the same cache, on the same folds, "
+        "through the same wrapper at the same ensemble settings. The checkpoint that does "
+        "the in-context prediction is the only thing that differs between this arm and the "
+        "last one, which makes it the cleanest question on the page: what does a year of "
+        "tabular foundation model buy a molecular one?</p>",
+        "<p>Less than the release notes would suggest, and more than nothing. Across the "
+        "45 endpoint × metric combinations on both collections, the newer head never costs "
+        "Monroe a place in the top group and gains it four: Spearman ρ on mouse brain "
+        "binding and R² and MAE on solubility in the ExpansionRx set, and MAE on MDR1 "
+        "efflux in the Biogen set, which is the one combination anywhere on this page where "
+        "a Monroe arm stands alone at the top. Everywhere else the two heads are "
+        "statistically indistinguishable.</p>",
+        h2h_table(h2h, "monroe", "monroe35"),
+        figure("paired_monroe_vs_monroe35_r2",
+               "TabPFN 3.5 against TabPFN 3 on Monroe's embeddings, paired by fold. The "
+               "same encoder and the same folds throughout; only the head changes."),
+        "<p>The per-fold pairing is sharper than the Tukey correction, and it shows a "
+        "real but small effect with a direction rather than a uniform lift. On ExpansionRx "
+        "the newer head raises mean R² on seven of the nine endpoints and lowers it on "
+        "two; four of those gains and both of the losses survive a paired test over the "
+        "folds. The largest gains are on mouse plasma protein binding (+0.044) and human "
+        "microsomal stability (+0.040), the largest loss on Caco-2 permeability (−0.026), "
+        "and mouse microsomal stability is the one endpoint it loses on all three metrics. "
+        "On Biogen it improves three of six — human microsomal stability, human plasma "
+        "protein binding and MDR1 efflux — and the other three do not move enough to "
+        "separate from zero. Median movement across both collections is about a hundredth "
+        "of an R², which is detectable over 25 folds and invisible next to the gap between "
+        "Monroe and anything that is not Monroe.</p>",
+        "<p>It is not free. The 225 ExpansionRx folds took 63 minutes against TabPFN 3's "
+        "14, and the 150 Biogen folds 23 minutes more, so the newer head costs about four "
+        "and a half times the inference for a hundredth of an R². That is still the "
+        "cheapest arm on the page by a wide margin — CheMeleon takes six hours on the same "
+        "card and MEGA-CL twenty-one — but it is the one place in this study where a clear "
+        "accuracy gain and a clear cost sit next to each other, and the gain is the smaller "
+        "of the two.</p>",
+        '<div class="panel howto">'
+        "<h3>One thing that is not the checkpoint</h3>"
+        "<p>From <code>tabpfn</code> 9.0.0 a checkpoint can declare the softmax "
+        "temperature it was trained for, and the TabPFN 3.5 regression checkpoint "
+        "declares 1.0. Monroe's wrapper passes 0.9 to every model, which is what TabPFN "
+        "applied before checkpoints could ask for one. Both arms here run at that 0.9, "
+        "so that they differ in the checkpoint and nothing else — which leaves the newer "
+        "one a shade off its own default, and that is worth measuring rather than "
+        "waving at.</p>"
+        "<p>So the same 375 folds were run again at the temperature the checkpoint asks "
+        "for. It is a coin flip: of the 45 combinations, 22 come out better at 1.0 and "
+        "23 at 0.9. The movements are an order of magnitude smaller than the change of "
+        "head — the largest is 0.013 on LogS MAE and the median is 0.0007, against R² "
+        "gains up to 0.044 for the checkpoint itself. Holding the temperature at "
+        "Monroe's 0.9 neither flatters the newer head nor handicaps it.</p>"
+        "<p>That run is a control, not an arm. It never enters the figures, and it is "
+        "<code>results/&lt;dataset&gt;/sensitivity/monroe35_temperature.csv</code> in the "
+        "repository.</p>"
+        "</div>",
+        "<p>The conclusion the rest of the page reaches is untouched by which head is "
+        "used. Every statement below about Monroe against CheMeleon, against Mol-JEPA, "
+        "against LightGBM or against MEGA-CL holds for both arms, with the same sign and "
+        "very nearly the same margin.</p>",
+        "<h2>Question 7 — does adding modalities beat adding scale?</h2>",
         f'<p>Mol-JEPA{ref("moljepa")} is the same shape of arm as Monroe and a different bet '
         "about what a molecule is. Instead of augmenting a structure and asking for matching "
         "views, it collects fourteen <i>modalities</i> of the same molecule — graph, ECFP, MOE "
@@ -622,9 +713,9 @@ def build() -> str:
         "<p>MAE is the metric a chemist reads closest to directly: it is in log units of the "
         "measurement, and it does not depend on how the test set happens to be spread. "
         "That makes it the fairest of the three here, because it is unmoved by the label "
-        "shift that drags R² below zero. The ordering barely changes. Monroe has the "
-        "lowest error on five of nine endpoints and CheMeleon on the other four, split the "
-        "same way as before: metabolism and permeability against binding. LightGBM, "
+        "shift that drags R² below zero. The ordering barely changes. A Monroe arm has "
+        "the lowest error on five of nine endpoints and CheMeleon on the other four, split "
+        "the same way as before: metabolism and permeability against binding. LightGBM, "
         "MEGA-CL and Mol-JEPA are significantly worse than the best on all nine.</p>",
         '<div class="panel howto">'
         "<h3>What a log10(x+1) MAE is worth</h3>"
@@ -649,14 +740,14 @@ def build() -> str:
                             "furthest left."),
         "<p>The gaps are worth reading in absolute terms rather than as ranks. On LOG_MGMB "
         "CheMeleon is at 0.175 against LightGBM's 0.302, so the fingerprint model is wrong "
-        "by roughly 73% more per compound. On LOG_HLM the six methods span 0.293 to 0.377, "
-        "a spread of 0.084 log units, narrow enough that the assay noise probably matters "
-        "more than the choice.</p>",
+        "by roughly 73% more per compound. On LOG_HLM the eight methods span 0.285 to "
+        "0.377, a spread of 0.093 log units, narrow enough that the assay noise probably "
+        "matters more than the choice.</p>",
         figure("boxplot_mae", "Fold-level MAE distributions."),
         '<hr class="rule">',
         "<h2>Does any of it replicate?</h2>",
         "<p>Everything above is one data set. A comparison run once is a hypothesis, so "
-        "the same seven methods, the same protocol and the same statistics were run again "
+        "the same eight methods, the same protocol and the same statistics were run again "
         f'on Biogen\'s public ADME set{ref("biogen")}: 3,521 commercially sourced compounds '
         "on six endpoints, unrelated to the first collection in chemistry, in provenance "
         "and in who measured it.</p>",
@@ -674,9 +765,11 @@ def build() -> str:
                            "significantly worse.", ds="biogen"),
         '<div class="panel">' + tukey_tally(bio_summary) + "</div>",
         "<p>Eighteen combinations this time, six endpoints by three metrics. <b>Monroe "
-        "takes all eighteen.</b> Nothing else is best on one, and nothing else is so much "
-        "as tied with the best on one. Against CheMeleon it wins every fold of every "
-        "endpoint on every metric — 450 out of 450.</p>",
+        "takes all eighteen</b>, on both heads. Nothing that is not Monroe is best on one, "
+        "and nothing that is not Monroe is so much as tied with the best on one. Against "
+        "CheMeleon either arm wins every fold of every endpoint on every metric — 450 out "
+        "of 450. The two heads are on top together on 17 of the 18; the exception is MAE "
+        "on MDR1 efflux, where TabPFN 3.5 separates from TabPFN 3 and stands alone.</p>",
         metric_table(bio_summary, "r2", ds="biogen"),
         "<p>So the headline replicates and the interesting part does not. On ExpansionRx "
         "the wins split by assay, with CheMeleon taking the three tissue-binding "
@@ -696,7 +789,8 @@ def build() -> str:
         h2h_table(bio_h2h, "chemeleon", "moljepa", ds="biogen"),
         "<p>Three things do carry across. Monroe is the most accurate method on both "
         "collections and also the steadiest, with the smallest fold-to-fold standard "
-        "deviation on all three metrics in both. MEGA-CL is the worst on both. And a "
+        "deviation on all three metrics in both, and its two heads are indistinguishable "
+        "on that too. MEGA-CL is the worst on both. And a "
         "from-scratch D-MPNN is still not reliably better than a fingerprint baseline: on "
         "Biogen, single-task ChemProp beats LightGBM on the four larger endpoints and "
         "loses to it on the two smallest.</p>",
@@ -704,8 +798,8 @@ def build() -> str:
         "<p>MAE says the same thing, which is worth checking rather than assuming: R² is "
         "sensitive to how the test set happens to be spread, and a verdict that held on "
         "only one metric would be a verdict about the split. Monroe has the lowest error "
-        "on all six endpoints, by 0.029 log units on rat microsomal stability at the "
-        "narrowest and 0.091 on rat protein binding at the widest. The runner-up changes "
+        "on all six endpoints, on either head, by 0.029 log units on rat microsomal "
+        "stability at the narrowest and 0.091 on rat protein binding at the widest. The runner-up changes "
         "with the amount of data, and splits the six endpoints the same way R² did: "
         "CheMeleon is second on the three with the most training molecules, Mol-JEPA on "
         "the three with the least.</p>",
@@ -772,17 +866,23 @@ def build() -> str:
         f'<li><b>MEGA-CL</b>{ref("megacl")} — the authors\' pre-trained checkpoint and their own '
         "fine-tuning recipe (100 epochs, batch 32), one model per endpoint. Only the "
         "split was overridden, so it reads the same folds as everything else.</li>"
-        f'<li><b>Monroe + TabPFN</b>{ref("monroe")} — the authors\' pre-trained encoder, frozen. '
+        f'<li><b>Monroe + TabPFN 3</b>{ref("monroe")} — the authors\' pre-trained encoder, frozen. '
         "Every molecule becomes one 720-d embedding, computed once for the whole data set, "
         f'and TabPFN{ref("tabpfn")} predicts each endpoint in context from that fold\'s training '
         "embeddings. Nothing is fitted by gradient descent, so the held-out fifth goes "
         "unused, exactly as it does for LightGBM.</li>"
+        "<li><b>Monroe + TabPFN 3.5</b> — the same encoder, the same cached embeddings, the "
+        "same folds and the same wrapper at the same ensemble settings, with TabPFN 3.5 in "
+        "place of TabPFN 3. The checkpoint is the only difference between the two arms. It "
+        "is chosen by the installed library rather than by anything in the script, so each "
+        "arm runs in its own environment and the runner checks which checkpoint it is about "
+        "to load before the first fold.</li>"
         f'<li><b>Mol-JEPA + TabICL</b>{ref("moljepa")} — the authors\' pre-trained encoder, '
         "frozen. One 512-d CLS token per molecule, then "
         f'TabICL{ref("tabicl")} in context, which is what their model card recommends. '
         "A TabPFN head was run over the same embeddings as a control.</li>"
         "</ul>",
-        '<p class="repo">Every script, the data set and all 2,483,250 predictions '
+        '<p class="repo">Every script, the data set and all 2,838,000 predictions '
         'are at <a href="https://github.com/PatWalters/model-validation-central/tree/main/studies/expansion-ml-comparison">'
         'model-validation-central/studies/expansion-ml-comparison</a>. The figures and tables '
         'on this page rebuild from the stored predictions in about a minute, with '

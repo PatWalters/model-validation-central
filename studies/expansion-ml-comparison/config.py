@@ -301,6 +301,13 @@ MEGACL_METHOD = "megacl"
 # exactly rather than the st_ fold files, which amounts to the same molecules.
 MONROE_METHOD = "monroe"
 
+# The same arm with TabPFN 3.5 (Prior Labs, released 15 September 2026) as the
+# in-context head. Nothing else differs: the same frozen encoder, the same cached
+# 720-d embeddings, the same folds, the same `fit_predict_tabpfn` at the same
+# ensemble settings. Only the checkpoint that reads them changes, so the gap
+# between this arm and `monroe` is the head and nothing else.
+MONROE35_METHOD = "monroe35"
+
 # Mol-JEPA (arXiv 2608.22642) is the same shape of arm as Monroe: a frozen
 # multimodal encoder, one 512-d CLS token per molecule, and a tabular in-context
 # model on top. The head is TabICL, which is what the authors recommend on their
@@ -330,7 +337,8 @@ METHOD_LABELS = {
     "chemprop": VARIANTS["chemprop"]["label"],
     "chemeleon": VARIANTS["chemeleon"]["label"],
     MEGACL_METHOD: "MEGA-CL",
-    MONROE_METHOD: "Monroe + TabPFN",
+    MONROE_METHOD: "Monroe + TabPFN 3",
+    MONROE35_METHOD: "Monroe + TabPFN 3.5",
     MOLJEPA_METHOD: "Mol-JEPA + TabICL",
     TRIMOLE_METHOD: "Trimole-Hybrid",
 }
@@ -346,7 +354,7 @@ ALL_METHODS = list(METHOD_LABELS)
 COMPARISONS = {
     "foundation": [
         LGBM_METHOD, "chemprop_st", "chemprop", "chemeleon",
-        MEGACL_METHOD, MONROE_METHOD, MOLJEPA_METHOD,
+        MEGACL_METHOD, MONROE_METHOD, MONROE35_METHOD, MOLJEPA_METHOD,
     ],
     "trimole": [
         LGBM_METHOD, "chemprop_st", "chemprop", "chemeleon", TRIMOLE_METHOD,

@@ -62,7 +62,8 @@ from model_comparison import make_tukey_plot, tukey_groups   # noqa: E402
 # results: all four modalities, early fusion, LightGBM.
 SOURCES = {
     "expansion-ml-comparison": ["lgbm", "chemprop_st", "chemprop", "chemeleon",
-                                "megacl", "monroe", "moljepa", "trimole"],
+                                "megacl", "monroe", "monroe35", "moljepa",
+                                "trimole"],
     "ecfp-pretrain": ["ptgin"],
     "multimodal-fusion": ["fus_GRMS_early_lgbm"],
 }
@@ -74,7 +75,8 @@ LABELS = {
     "chemprop": "ChemProp multi-task",
     "chemeleon": "ChemProp + CheMeleon",
     "megacl": "MEGA-CL",
-    "monroe": "Monroe + TabPFN",
+    "monroe": "Monroe + TabPFN 3",
+    "monroe35": "Monroe + TabPFN 3.5",
     "moljepa": "Mol-JEPA + TabICL",
     "trimole": "Trimole-Hybrid",
     "ptgin": "PT-GIN + LightGBM",
@@ -85,6 +87,7 @@ LABELS = {
 COLORS = {
     "lgbm": "#4C72B0", "chemprop_st": "#C44E52", "chemprop": "#DD8452",
     "chemeleon": "#55A868", "megacl": "#8172B3", "monroe": "#937860",
+    "monroe35": "#61483A",
     "moljepa": "#DA8BC3", "trimole": "#CCB974", "ptgin": "#4878CF",
     "fus_GRMS_early_lgbm": "#6ACC64",
 }
@@ -176,6 +179,12 @@ PAPERS = {
         venue="Nature 2025, 637 (8045), 319-326",
         label="doi:10.1038/s41586-024-08328-6",
         url="https://doi.org/10.1038/s41586-024-08328-6"),
+    "tabpfn35": dict(
+        authors="Prior Labs",
+        title="TabPFN-3.5",
+        venue="Technical report, 2026",
+        label="priorlabs.ai/technical-reports/tabpfn-3-5",
+        url="https://priorlabs.ai/technical-reports/tabpfn-3-5"),
     "tabicl": dict(
         authors="Qu, J.; Holzmüller, D.; Varoquaux, G.; Le Morvan, M.",
         title="TabICL: A Tabular Foundation Model for In-Context Learning on Large Data",
@@ -191,6 +200,7 @@ CITES = {
     "chemeleon": ["chemeleon", "chemprop"],
     "megacl": ["megacl"],
     "monroe": ["monroe", "tabpfn"],
+    "monroe35": ["monroe", "tabpfn35"],
     "moljepa": ["moljepa", "tabicl"],
     "trimole": ["trimole"],
     "ptgin": ["ptgin", "lightgbm"],
@@ -369,7 +379,10 @@ def main() -> int:
                  "figures draw. A method is counted as being on top whenever the "
                  "correction cannot separate it from the leading mean, so an endpoint "
                  "with several methods on top gives each of them a tie rather than "
-                 "crowning one."),
+                 "crowning one. That is also why the two Monroe arms are almost never "
+                 "alone at the top: they differ only in which TabPFN checkpoint reads "
+                 "the same frozen embeddings, and two methods that cannot be told apart "
+                 "take each other out of the alone column wherever both are on top."),
     }
     study_of = {m: s for s, ms in SOURCES.items() for m in ms}
     tallies = {}

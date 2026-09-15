@@ -1,13 +1,15 @@
 # expansion-ml-comparison
 
-Seven machine learning methods, fifteen ADME and physicochemical endpoints
+Eight machine learning methods, fifteen ADME and physicochemical endpoints
 across two unrelated data sets, 25 replicate models each, every one scored on a
 held-out test set it never saw.
 
-Four of the seven are pre-trained foundation models, and only two of those four
-win anything at all. The method that wins most does no downstream training
-whatsoever. It freezes a pre-trained encoder and predicts each endpoint in
-context.
+Four of the eight are pre-trained molecular foundation models, and only one of
+those four wins anything at all. The method that wins does no downstream
+training whatsoever. It freezes a pre-trained encoder and predicts each endpoint
+in context. It appears twice, under the two versions of the tabular model that
+does the predicting: TabPFN 3, which the Monroe paper was written against, and
+TabPFN 3.5, released on 15 September 2026.
 
 A plain graph network is not reliably better than a fingerprint baseline either.
 What makes it win is pre-training or multi-task transfer.
@@ -16,7 +18,7 @@ The second data set is there because a comparison run once is a hypothesis. The
 headline survives it. The most interesting pattern in the first data set does
 not.
 
-Two reports come out of this directory: the seven-method comparison, at
+Two reports come out of this directory: the eight-method comparison, at
 [docs/reports/expansion-ml-comparison.html](../../docs/reports/expansion-ml-comparison.html)
 or on the [web](https://patwalters.github.io/model-validation-central/reports/expansion-ml-comparison.html), and the Trimole-Hybrid
 comparison described further down, at
@@ -47,7 +49,8 @@ panel for that reason.
 | `chemprop` | the same D-MPNN, trained from scratch | one model per assay family |
 | `chemeleon` | the same D-MPNN, message passing initialised from CheMeleon | one model per assay family |
 | `megacl` | MEGA-CL, fine-tuned from the authors' pre-trained checkpoint | one model per endpoint |
-| `monroe` | Monroe's frozen encoder plus TabPFN, no downstream training | one in-context fit per endpoint |
+| `monroe` | Monroe's frozen encoder plus TabPFN 3, no downstream training | one in-context fit per endpoint |
+| `monroe35` | the same encoder and embeddings, with TabPFN 3.5 as the head | one in-context fit per endpoint |
 | `moljepa` | Mol-JEPA's frozen multimodal encoder plus TabICL, likewise | one in-context fit per endpoint |
 
 The three assay families are physicochemical and tissue binding (LogD, LogS,
@@ -66,17 +69,26 @@ costume.
 
 | Method | Best alone | Tied for best | Worse |
 | --- | ---: | ---: | ---: |
-| Monroe + TabPFN | 12 | 6 | 9 |
-| ChemProp + CheMeleon | 7 | 5 | 15 |
-| ChemProp single-task | 0 | 4 | 23 |
+| Monroe + TabPFN 3.5 | 0 | 21 | 6 |
+| Monroe + TabPFN 3 | 0 | 18 | 9 |
+| ChemProp + CheMeleon | 5 | 6 | 16 |
 | ChemProp multi-task | 0 | 4 | 23 |
+| ChemProp single-task | 0 | 3 | 24 |
 | LightGBM + Morgan | 0 | 0 | 27 |
 | MEGA-CL | 0 | 0 | 27 |
 | Mol-JEPA + TabICL | 0 | 0 | 27 |
 
-Nineteen of the 27 combinations have a single method at the top. The other eight
-have two or three that cannot be told apart. Monroe is at the top of 18 of them
-and CheMeleon 12, and nothing else is ever at the top.
+A Monroe arm is at the top of 21 of the 27 combinations and CheMeleon 11, and
+nothing else is ever at the top.
+
+Neither Monroe arm is ever alone there, and that is an artefact of counting
+rather than a result. The two differ only in which TabPFN checkpoint reads the
+same frozen embeddings, the tally counts *alone* and *tied* symmetrically, and
+so two arms that cannot be told apart remove each other from the *alone* column
+wherever both are on top. On the seven-method version of this table Monroe was
+alone on 12. Not one of its predictions has changed. What the two arms are
+actually worth against each other is a paired question, and it is asked
+[below](#what-the-newer-head-is-worth).
 
 The split between those two follows the assay, not the amount of data. Monroe
 leads on LogD, both microsomal stability endpoints, and both Caco-2 endpoints.
@@ -103,11 +115,15 @@ Eighteen combinations, from six endpoints and three metrics.
 
 | Method | Best alone | Tied for best | Worse |
 | --- | ---: | ---: | ---: |
-| Monroe + TabPFN | 18 | 0 | 0 |
+| Monroe + TabPFN 3.5 | 1 | 17 | 0 |
+| Monroe + TabPFN 3 | 0 | 17 | 1 |
 | every other method | 0 | 0 | 18 |
 
-Monroe takes all eighteen. Nothing else is best on one, and nothing else is even
-tied with the best on one. Against CheMeleon it wins 450 folds out of 450.
+Monroe takes all eighteen, on either head. Nothing that is not Monroe is best on
+one, and nothing that is not Monroe is even tied with the best on one. Against
+CheMeleon either arm wins 450 folds out of 450. The two heads are on top
+together on 17 of the 18; the exception is MAE on MDR1 efflux, the one
+combination in the whole study where a single Monroe arm stands alone.
 
 The assay split does not replicate. On ExpansionRx, CheMeleon took the three
 tissue binding endpoints. Biogen's two plasma protein binding endpoints are
@@ -123,8 +139,62 @@ squared of -0.064 and -0.005, worse than predicting the training mean, and
 MEGA-CL scores -0.292 and -0.426.
 
 Three things carry across both sets. Monroe is the most accurate and the least
-variable. MEGA-CL is the worst. And a from-scratch D-MPNN is still not reliably
-better than a fingerprint baseline.
+variable, on either head. MEGA-CL is the worst. And a from-scratch D-MPNN is
+still not reliably better than a fingerprint baseline.
+
+### What the newer head is worth
+
+TabPFN 3.5 was released on 15 September 2026, after the rest of this study had
+been run, and `tabpfn` 9.0.0 makes it the default checkpoint. It is here as a
+second arm rather than as a replacement, because the interesting quantity is not
+how Monroe scores but what a year of tabular foundation model counts for when
+nothing else moves. Same frozen encoder, same cached embeddings, same folds,
+same fit and test masks, same wrapper at the same ensemble settings. The
+checkpoint is the only difference.
+
+Across the 45 endpoint and metric combinations on both collections, the newer
+head never costs Monroe a place in the top group and gains it four:
+
+| Combination | Data set | What changed |
+| --- | --- | --- |
+| `LOG_MBPB`, Spearman | ExpansionRx | 3.5 reaches the top group, 3 does not |
+| `LogS`, R squared | ExpansionRx | 3.5 reaches the top group, 3 does not |
+| `LogS`, MAE | ExpansionRx | 3.5 reaches the top group, 3 does not |
+| `LOG_MDR1_ER`, MAE | Biogen | 3.5 alone at the top, 3 significantly worse |
+
+Everywhere else the two heads are statistically indistinguishable. The paired
+tests over folds, which are sharper than the Tukey correction, show a real
+effect with a direction rather than a uniform lift. On ExpansionRx the newer
+head raises mean R squared on seven of the nine endpoints and lowers it on two,
+the largest gains on mouse plasma protein binding (+0.044) and human microsomal
+stability (+0.040), the largest loss on Caco-2 permeability (-0.026). Mouse
+microsomal stability is the one endpoint it loses on all three metrics. On
+Biogen it improves three of six and the other three do not move enough to
+separate from zero. The median movement is about a hundredth of an R squared.
+
+It is not free. On the same RTX 5070 Ti the 225 ExpansionRx folds took 63
+minutes against TabPFN 3's 14, and the 150 Biogen folds 23 minutes more. That is
+about four and a half times the inference for a hundredth of an R squared, and
+it is still the cheapest arm here by a wide margin.
+
+One thing in that comparison is not the checkpoint. From `tabpfn` 9.0.0 a
+checkpoint can declare the softmax temperature it was trained for, and the
+TabPFN 3.5 regression checkpoint declares 1.0, where Monroe's wrapper passes 0.9
+to every model. Both arms run at that 0.9, so they differ in the checkpoint and
+nothing else, which leaves the newer one a shade off its own default. The same
+375 folds were therefore run again at the temperature the checkpoint asks for,
+as a control rather than an arm.
+
+It is a coin flip. Of the 45 combinations, 22 come out better at 1.0 and 23 at
+0.9, and the movements are an order of magnitude smaller than the change of
+head: the largest is 0.013 on LogS MAE, the median 0.0007, against R squared
+gains of up to 0.044 for the checkpoint itself. Holding the temperature at
+Monroe's 0.9 neither flatters the newer head nor handicaps it. The table is
+`results/<dataset>/sensitivity/monroe35_temperature.csv`.
+
+Nothing else in this study depends on which head is used. Every statement above
+about Monroe against CheMeleon, Mol-JEPA, LightGBM or MEGA-CL holds for both
+arms, with the same sign and very nearly the same margin.
 
 ## Evaluation protocol
 
@@ -209,7 +279,7 @@ have a measurement for that assay, from 431 rows for `LOG_MGMB` up to 7,309 for
 
 ### From the stored predictions, about a minute
 
-Every prediction from all 2,175 fold models is kept, 2,483,250 rows across the
+Every prediction from all 2,550 fold models is kept, 2,838,000 rows across the
 two `results/<dataset>/predictions_all.parquet` files. The figures, tables, and
 report rebuild from them without retraining anything.
 
@@ -362,7 +432,8 @@ it.
 export MONROE_HOME=~/software/monroe
 export TABPFN_TOKEN=...                # see below
 python 09_run_monroe.py --embed
-python 09_run_monroe.py
+python 09_run_monroe.py                # TabPFN 3
+python 09_run_monroe.py --head v3.5    # TabPFN 3.5, the same folds
 ```
 
 The encoder is never updated. `--embed` featurizes every molecule once, RDKit
@@ -379,10 +450,45 @@ switches to `"median"` for tasks scored by MAE, which is right when MAE is the
 only metric. Here one set of predictions has to serve R squared, Spearman, and
 MAE together.
 
-TabPFN v3 weights are licence gated. Register at
-[ux.priorlabs.ai](https://ux.priorlabs.ai), accept the `tabpfn-3` licence on the
-Licenses tab, and put the API key in `TABPFN_TOKEN`. TabPFN v2 is not a
-substitute. It caps at 500 features and Monroe hands it 720.
+TabPFN weights are licence gated, and each version is gated on its own. Register
+at [ux.priorlabs.ai](https://ux.priorlabs.ai), accept the licence for the version
+you are running on the Licenses tab, and put the API key in `TABPFN_TOKEN`. A
+token that covers `tabpfn-3` does not cover `tabpfn-3-5`. TabPFN v2 is not a
+substitute for either. It caps at 500 features and Monroe hands it 720.
+
+#### The two heads
+
+TabPFN 3.5 was released on 15 September 2026, after everything above had been
+run, and `tabpfn` 9.0.0 makes it the default checkpoint. It is in the comparison
+as a second arm rather than as a replacement, because the interesting quantity is
+not how Monroe scores but what a year of tabular foundation model counts for when
+nothing else moves. The embedding cache is built once and both heads read it, the
+folds and the fit and test masks are the same objects, and the ensemble settings
+are the same `default_ensemble_specs()`. The checkpoint is the only difference.
+
+The checkpoint is chosen by the installed library, not by anything in the script,
+so each head needs its own environment: `tabpfn==8.3.0` loads TabPFN 3 and
+`tabpfn==9.0.0` loads TabPFN 3.5. Running the wrong one would quietly write one
+head's predictions under the other's name, so `--head` checks
+`settings.tabpfn.model_version` before the first fold and refuses to start when
+the two disagree.
+
+One difference is not the checkpoint and is worth naming. From `tabpfn` 9.0.0 a
+checkpoint can declare the softmax temperature it was trained for, and the 3.5
+regression checkpoint declares 1.0, where Monroe's wrapper passes 0.9 for every
+model. Both arms here run at the wrapper's 0.9, so that the two differ in the
+checkpoint and nothing else. What happens at the temperature the checkpoint asks
+for is a question the numbers below answer separately:
+
+```bash
+python 09_run_monroe.py --head v3.5 --softmax-temperature auto
+```
+
+That run is a control, not an arm. It lands in
+`results/<dataset>/sensitivity/monroe35_tauto/` and never reaches the figures.
+`09b_monroe_temperature.py` reduces it to
+`results/<dataset>/sensitivity/monroe35_temperature.csv`, which is the tracked
+evidence; the per-fold files themselves are bulk and are not.
 
 Monroe cannot have seen these labels. It pre-trains on 1,152 named tasks: 62
 graph-level semi-empirical quantum properties from PM6, 1,089 binary PubChem
@@ -627,7 +733,8 @@ than half-trusted.
 | `02_run_lightgbm.py` | the LightGBM arm |
 | `03_run_chemprop.py` | the three ChemProp arms, including CheMeleon |
 | `08_run_megacl.py` | the MEGA-CL arm |
-| `09_run_monroe.py` | the Monroe arm, embedding cache and in-context fits |
+| `09_run_monroe.py` | both Monroe arms, the shared embedding cache and the in-context fits |
+| `09b_monroe_temperature.py` | the TabPFN 3.5 temperature control, reduced to one table |
 | `10_run_moljepa.py` | the Mol-JEPA arm, both downstream heads |
 | `11_check_pretraining_overlap.py` | joins this test set to Mol-JEPA's pre-training table |
 | `04_collect_metrics.py` | predictions to per-fold R², Spearman ρ, and MAE |
@@ -641,11 +748,11 @@ than half-trusted.
 | `page_kit.py` | stylesheet and page furniture shared by both reports |
 | `model_comparison.py` | Tukey helpers |
 | `PROMPTS.md` | the prompts this analysis was built from |
-| `results/<dataset>/fold_metrics.csv` | 1,575 and 1,050 rows, one per endpoint, method, repeat, and fold |
+| `results/<dataset>/fold_metrics.csv` | 2,025 and 1,350 rows, one per endpoint, method, repeat, and fold |
 | `results/<dataset>/predictions_all.parquet` | every retained prediction |
 | `results/<dataset>/tables/` | summary and head-to-head tables |
 
-Every script here was written by Claude Code from the 17 prompts in
+Every script here was written by Claude Code from the 26 prompts in
 [PROMPTS.md](PROMPTS.md). That file lists them in order, with what each one
 changed.
 
@@ -678,7 +785,11 @@ changed.
    [github.com/blazejba/monroe](https://github.com/blazejba/monroe).
 6. Hollmann, N.; Müller, S.; Purucker, L.; et al. Accurate Predictions on Small
    Data with a Tabular Foundation Model. *Nature* 2025, 637 (8045), 319-326.
-   [doi:10.1038/s41586-024-08328-6](https://doi.org/10.1038/s41586-024-08328-6)
+   [doi:10.1038/s41586-024-08328-6](https://doi.org/10.1038/s41586-024-08328-6).
+   The head of the `monroe` arm is TabPFN 3, and of the `monroe35` arm
+   TabPFN 3.5, released 15 September 2026 as the default checkpoint of
+   `tabpfn` 9.0.0.
+   [Technical report](https://priorlabs.ai/technical-reports/tabpfn-3-5)
 7. Jin, T.; Jin, K.; Li, Y.; et al. MEGA-CL: A Molecular Foundation Model for
    Generalizable ADMET Prediction through Graph External Attention and
    Contrastive Learning. Preprint, 2026.

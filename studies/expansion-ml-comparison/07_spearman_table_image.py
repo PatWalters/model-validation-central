@@ -28,9 +28,16 @@ SUBTITLE = "mean over 25 folds"
 
 # Layout, in axes coordinates.
 LABEL_X = 0.005
-COL_LEFT = 0.34
 ROW_H = 0.062
 HEADER_Y = 0.955
+
+# The figure grows with the number of methods rather than dividing a fixed width
+# between them. At seven methods a fixed 9.4 inches was comfortable; at eight the
+# headings collided, and a table that silently overprints its own column names as
+# a method is added is worse than one that gets wider.
+LABEL_W_IN = 3.2   # the endpoint names on the left
+COL_W_IN = 1.22    # one method column, wide enough for a two-line heading
+FIG_H_IN = 4.6
 
 
 def render(metric: str) -> None:
@@ -49,15 +56,17 @@ def render(metric: str) -> None:
     methods = [m for m in cfg.METHODS if m in wide.columns and wide[m].notna().any()]
     wide = wide[methods]
 
-    fig, ax = plt.subplots(figsize=(9.4, 4.6), dpi=220)
+    fig_w = LABEL_W_IN + COL_W_IN * len(methods)
+    col_left = LABEL_W_IN / fig_w
+    fig, ax = plt.subplots(figsize=(fig_w, FIG_H_IN), dpi=220)
     fig.patch.set_facecolor("white")
     ax.set_facecolor("white")
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
     ax.axis("off")
 
-    col_w = (1.0 - COL_LEFT) / len(methods)
-    col_x = [COL_LEFT + col_w * (i + 0.5) for i in range(len(methods))]
+    col_w = (1.0 - col_left) / len(methods)
+    col_x = [col_left + col_w * (i + 0.5) for i in range(len(methods))]
 
     ax.text(LABEL_X, HEADER_Y + 0.055, TITLES[metric], fontsize=13, fontweight="600",
             va="bottom", ha="left")

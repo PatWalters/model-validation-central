@@ -44,7 +44,9 @@ PAIRED_QUESTIONS = {
         (cfg.LGBM_METHOD, "chemprop_st"),  # GNN vs fingerprints, both single-task
         ("chemprop_st", cfg.MEGACL_METHOD),  # does MEGA-CL pre-training beat a plain single-task GNN?
         (cfg.MEGACL_METHOD, "chemeleon"),  # foundation model against foundation model
+        (cfg.MONROE_METHOD, cfg.MONROE35_METHOD),  # same encoder, same folds: what the head is worth
         ("chemeleon", cfg.MONROE_METHOD),  # the two strongest foundation models, head to head
+        ("chemeleon", cfg.MONROE35_METHOD),  # and against the newer head
         (cfg.LGBM_METHOD, cfg.MONROE_METHOD),  # frozen embeddings in context vs fingerprints
         (cfg.MONROE_METHOD, cfg.MOLJEPA_METHOD),  # two frozen encoders, two in-context heads
         ("chemeleon", cfg.MOLJEPA_METHOD),  # fine-tuned representation vs multimodal frozen one
@@ -74,6 +76,9 @@ PALETTE = {
     "chemeleon": "#55A868",
     cfg.MEGACL_METHOD: "#8172B3",
     cfg.MONROE_METHOD: "#937860",
+    # The same family as Monroe's brown, a shade apart, because the two arms
+    # differ only in the head and the figures should say so at a glance.
+    cfg.MONROE35_METHOD: "#61483A",
     cfg.MOLJEPA_METHOD: "#DA8BC3",
     cfg.TRIMOLE_METHOD: "#CCB974",
 }

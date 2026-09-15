@@ -9,6 +9,15 @@ and TabPFN predicts the endpoint *in context*: it is handed the training
 embeddings together with their labels and produces the test predictions in one
 forward pass, with no weight updates and no per-task hyperparameters.
 
+There are two such arms, differing only in which TabPFN checkpoint reads the
+embeddings. `--head v3` is TabPFN 3, the head the Monroe paper was written
+against; `--head v3.5` is TabPFN 3.5, released 15 September 2026, which the
+`tabpfn` package makes the default from version 9.0.0. The encoder, the cached
+embeddings, the folds, the masks and the ensemble settings are identical across
+the two, so the difference between them is the head and nothing else. Each head
+needs its own environment, because the checkpoint is chosen by the installed
+`tabpfn` version, and a preflight check refuses to run if the two disagree.
+
 So this arm has two phases:
 
   --embed   featurize every molecule in data/master.csv (RDKit ETKDG + MMFF94s
@@ -33,11 +42,15 @@ tuning the point estimate per metric would make the three disagree about what
 the model predicted.
 
     MONROE_HOME=~/software/monroe python 09_run_monroe.py --embed
-    python 09_run_monroe.py                                 # all 225 folds
+    python 09_run_monroe.py                                 # all 225 folds, TabPFN 3
+    python 09_run_monroe.py --head v3.5                     # the same folds, TabPFN 3.5
     python 09_run_monroe.py --endpoint LOG_MGMB --repeat 0 --fold 0   # smoke test
 
-TabPFN's weights are licence-gated. Set TABPFN_TOKEN (and optionally
-TABPFN_MODEL_VERSION=v2, whose weights are not gated) before running.
+The embedding cache is shared: `--embed` is run once and both heads read it.
+
+TabPFN's weights are licence-gated, and each major version is gated separately.
+Set TABPFN_TOKEN, and accept the licence for the version being run -- a token
+that covers TabPFN 3 does not cover TabPFN 3.5.
 """
 
 import argparse
@@ -51,7 +64,14 @@ import pandas as pd
 
 import config as cfg
 
-METHOD = cfg.MONROE_METHOD
+# Which TabPFN checkpoint each head means, the method it is recorded as, and the
+# `tabpfn` releases that can serve it. TabPFN 3 was the default up to tabpfn 8.x
+# and stays reachable afterwards only by naming it; 3.5 became the default in
+# 9.0.0. Neither is installable alongside the other, hence one environment each.
+HEADS = {
+    "v3": {"method": cfg.MONROE_METHOD, "version": "v3", "min_tabpfn": (8, 0)},
+    "v3.5": {"method": cfg.MONROE35_METHOD, "version": "v3.5", "min_tabpfn": (9, 0)},
+}
 
 MONROE_HOME = Path(
     os.environ.get("MONROE_HOME", Path.home() / "software" / "monroe")
@@ -136,11 +156,58 @@ def load_embeddings(df: pd.DataFrame) -> tuple[np.ndarray, np.ndarray]:
     return X, ok
 
 
+def out_dir(method: str, softmax_temperature: str | None):
+    """Where a run's predictions go.
+
+    A run at the wrapper's own temperature is the arm itself. A run at any other
+    temperature is a control, and lands outside `predictions/` so that
+    04_collect_metrics.py does not sweep it up and turn it into another bar in
+    every figure. The same convention 10_run_moljepa.py uses for its TabPFN head.
+    """
+    if softmax_temperature is None:
+        return cfg.PRED_DIR / method
+    return cfg.SENSITIVITY_DIR / f"{method}_t{softmax_temperature}"
+
+
+def check_head(head: str) -> None:
+    """Refuse to run if the installed tabpfn would load a different checkpoint.
+
+    The checkpoint is chosen by the library, not by anything in this script, so a
+    run in the wrong environment would quietly write one head's predictions under
+    the other's name. `settings.tabpfn.model_version` is what a `TabPFNRegressor`
+    built without an explicit `model_path` will load, which is exactly what
+    Monroe's wrapper builds.
+    """
+    import tabpfn
+
+    spec = HEADS[head]
+    installed = tuple(int(part) for part in tabpfn.__version__.split(".")[:2])
+    if installed < spec["min_tabpfn"]:
+        raise SystemExit(
+            f"--head {head} needs tabpfn >= {'.'.join(map(str, spec['min_tabpfn']))}, "
+            f"found {tabpfn.__version__}"
+        )
+
+    from tabpfn.settings import settings
+
+    default = settings.tabpfn.model_version.value
+    if default != spec["version"]:
+        raise SystemExit(
+            f"--head {head} wants TabPFN {spec['version']}, but tabpfn "
+            f"{tabpfn.__version__} would load {default} by default. Run this head in "
+            f"its own environment, or set TABPFN_MODEL_VERSION={spec['version']}."
+        )
+    print(f"tabpfn {tabpfn.__version__} loads TabPFN {default}, "
+          f"recorded as {spec['method']}")
+
+
 def run_fold(
     df: pd.DataFrame,
     X: np.ndarray,
     ok: np.ndarray,
     folds: pd.DataFrame,
+    method: str,
+    predictions: Path,
     endpoint: str,
     repeat: int,
     fold: int,
@@ -148,7 +215,7 @@ def run_fold(
     ensemble_specs: list[dict],
     output_type: str,
 ) -> None:
-    out_path = cfg.pred_csv(METHOD, endpoint, repeat, fold)
+    out_path = predictions / f"{endpoint}_r{repeat}_f{fold}.csv"
     if out_path.exists() and not force:
         return
 
@@ -184,7 +251,7 @@ def run_fold(
     test_df = df.loc[test_mask]
     pd.DataFrame(
         {
-            "method": METHOD,
+            "method": method,
             "endpoint": endpoint,
             "repeat": repeat,
             "fold": fold,
@@ -202,6 +269,9 @@ def main() -> None:
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--embed", action="store_true",
                         help="build the embedding cache and stop")
+    parser.add_argument("--head", default="v3", choices=sorted(HEADS),
+                        help="which TabPFN checkpoint reads the embeddings "
+                             "(default: v3, the head the Monroe paper used)")
     parser.add_argument("--endpoint", nargs="+", default=cfg.TARGET_COLS, choices=cfg.TARGET_COLS)
     parser.add_argument("--repeat", nargs="+", type=int, default=cfg.REPEATS, choices=cfg.REPEATS)
     parser.add_argument("--fold", nargs="+", type=int, default=cfg.FOLDS, choices=cfg.FOLDS)
@@ -213,6 +283,11 @@ def main() -> None:
                         help="conformer-generation processes (default: every core)")
     parser.add_argument("--output-type", default="mean", choices=["mean", "median"],
                         help="TabPFN point estimate (default: mean, as in Monroe's own example)")
+    parser.add_argument("--softmax-temperature", default=None,
+                        help="override the wrapper's temperature; \"auto\" takes the "
+                             "checkpoint's own. Any value here makes the run a control, "
+                             "written to results/<dataset>/sensitivity/ rather than "
+                             "becoming an arm of the comparison")
     args = parser.parse_args()
 
     if not cfg.MASTER_CSV.exists():
@@ -225,21 +300,32 @@ def main() -> None:
         build_embeddings(df, args.batch_size, args.workers)
         return
 
+    method = HEADS[args.head]["method"]
+    check_head(args.head)
+    predictions = out_dir(method, args.softmax_temperature)
+
     monroe_modules()  # puts MONROE_HOME on sys.path for monroe.eval.tabpfn
     from monroe.eval.tabpfn import default_ensemble_specs
 
-    (cfg.PRED_DIR / METHOD).mkdir(parents=True, exist_ok=True)
+    predictions.mkdir(parents=True, exist_ok=True)
     X, ok = load_embeddings(df)
     folds = pd.read_csv(cfg.FOLD_CSV)
     specs = default_ensemble_specs()
+    if args.softmax_temperature is not None:
+        # "auto" is TabPFN's own word for "whatever the checkpoint declares"; anything
+        # else is a temperature, and is passed as the float the estimator expects.
+        value = args.softmax_temperature
+        value = value if value == "auto" else float(value)
+        specs = [{**spec, "softmax_temperature": value} for spec in specs]
+        print(f"control run at softmax_temperature={value!r} -> {predictions}")
 
     for endpoint in args.endpoint:
         start = time.time()
         for repeat in args.repeat:
             for fold in args.fold:
-                run_fold(df, X, ok, folds, endpoint, repeat, fold,
-                         args.force, specs, args.output_type)
-        n = len(list((cfg.PRED_DIR / METHOD).glob(f"{endpoint}_r*_f*.csv")))
+                run_fold(df, X, ok, folds, method, predictions, endpoint, repeat,
+                         fold, args.force, specs, args.output_type)
+        n = len(list(predictions.glob(f"{endpoint}_r*_f*.csv")))
         print(f"{endpoint:<17} {n:>2}/25 folds  ({time.time() - start:.1f}s)", flush=True)
 
 

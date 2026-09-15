@@ -71,8 +71,8 @@
       "study": "expansion-ml-comparison",
       "counts": {
         "expansion": {
-          "alone": 3,
-          "tied": 1,
+          "alone": 2,
+          "tied": 2,
           "worse": 5
         },
         "biogen": {
@@ -109,24 +109,46 @@
     },
     {
       "method": "monroe",
-      "label": "Monroe + TabPFN",
+      "label": "Monroe + TabPFN 3",
       "color": "#937860",
       "study": "expansion-ml-comparison",
       "counts": {
         "expansion": {
-          "alone": 3,
-          "tied": 2,
+          "alone": 0,
+          "tied": 5,
           "worse": 4
         },
         "biogen": {
-          "alone": 6,
-          "tied": 0,
-          "worse": 0
+          "alone": 0,
+          "tied": 5,
+          "worse": 1
         }
       },
       "refs": [
         6,
         7
+      ]
+    },
+    {
+      "method": "monroe35",
+      "label": "Monroe + TabPFN 3.5",
+      "color": "#61483A",
+      "study": "expansion-ml-comparison",
+      "counts": {
+        "expansion": {
+          "alone": 0,
+          "tied": 6,
+          "worse": 3
+        },
+        "biogen": {
+          "alone": 1,
+          "tied": 5,
+          "worse": 0
+        }
+      },
+      "refs": [
+        6,
+        8
       ]
     },
     {
@@ -147,8 +169,8 @@
         }
       },
       "refs": [
-        8,
-        9
+        9,
+        10
       ]
     },
     {
@@ -169,7 +191,7 @@
         }
       },
       "refs": [
-        10
+        11
       ]
     },
     {
@@ -190,7 +212,7 @@
         }
       },
       "refs": [
-        11,
+        12,
         1
       ]
     },
@@ -212,7 +234,7 @@
         }
       },
       "refs": [
-        12,
+        13,
         1
       ]
     }
@@ -235,7 +257,7 @@
   },
   "metric": "mae",
   "metric_label": "MAE",
-  "note": "One Tukey HSD per endpoint over the 25 folds, on the metric the figures draw. A method is counted as being on top whenever the correction cannot separate it from the leading mean, so an endpoint with several methods on top gives each of them a tie rather than crowning one.",
+  "note": "One Tukey HSD per endpoint over the 25 folds, on the metric the figures draw. A method is counted as being on top whenever the correction cannot separate it from the leading mean, so an endpoint with several methods on top gives each of them a tie rather than crowning one. That is also why the two Monroe arms are almost never alone at the top: they differ only in which TabPFN checkpoint reads the same frozen embeddings, and two methods that cannot be told apart take each other out of the alone column wherever both are on top.",
   "references": [
     {
       "key": "lightgbm",
@@ -301,8 +323,17 @@
       "url": "https://doi.org/10.1038/s41586-024-08328-6"
     },
     {
-      "key": "moljepa",
+      "key": "tabpfn35",
       "n": 8,
+      "authors": "Prior Labs",
+      "title": "TabPFN-3.5",
+      "venue": "Technical report, 2026",
+      "label": "priorlabs.ai/technical-reports/tabpfn-3-5",
+      "url": "https://priorlabs.ai/technical-reports/tabpfn-3-5"
+    },
+    {
+      "key": "moljepa",
+      "n": 9,
       "authors": "Rottach, F.; Schieferdecker, S.; Rudman, W.; et al.",
       "title": "Mol-JEPA: A Multimodal Joint Embedding Predictive Architecture for Molecules",
       "venue": "Preprint, 2026",
@@ -311,7 +342,7 @@
     },
     {
       "key": "tabicl",
-      "n": 9,
+      "n": 10,
       "authors": "Qu, J.; Holzm\u00fcller, D.; Varoquaux, G.; Le Morvan, M.",
       "title": "TabICL: A Tabular Foundation Model for In-Context Learning on Large Data",
       "venue": "Preprint, 2025",
@@ -320,7 +351,7 @@
     },
     {
       "key": "trimole",
-      "n": 10,
+      "n": 11,
       "authors": "Luo, Z.; Huang, D.; Shao, Y.; Yu, Q.; Li, Y.",
       "title": "A Multimodal Representation Learning Platform for Accurate Molecular ADMET Prediction",
       "venue": "Bioinformatics 2026, in review",
@@ -329,7 +360,7 @@
     },
     {
       "key": "ptgin",
-      "n": 11,
+      "n": 12,
       "authors": "Money-Kyrle, S.; Dablander, M.; Hanser, T.; Werner, S.; Deane, C. M.; Morris, G. M.",
       "title": "On Improving Graph Neural Networks for QSAR by Pre-training on Extended-Connectivity Fingerprints",
       "venue": "Preprint, 2026",
@@ -338,7 +369,7 @@
     },
     {
       "key": "fusion",
-      "n": 12,
+      "n": 13,
       "authors": "Wasswa, J.; Kajjumba, G. W.; Ramsundar, B.",
       "title": "Unimodal vs Multimodal Learning: A Systematic Evaluation of Fusion Strategies and Model Design for Molecular Property Prediction and Uncertainty Quantification",
       "venue": "J. Chem. Inf. Model. 2026",

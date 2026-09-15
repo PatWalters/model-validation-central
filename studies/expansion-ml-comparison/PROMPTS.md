@@ -2,7 +2,7 @@
 
 The prompts that shaped this analysis and the report that came out of it, in order.
 
-The work ran as one Claude Code session against the project directory, from 15 to 26 August 2026. These 22 prompts are what a human typed. Everything else, the scripts, the fold files, the 2,175 fold models and the report, came out of them.
+The work ran as one Claude Code session against the project directory, from 15 to 26 August 2026, with two later sessions adding an arm each. These 26 prompts are what a human typed. Everything else, the scripts, the fold files, the 2,550 fold models and the report, came out of them.
 
 ## How this list was made
 
@@ -152,6 +152,25 @@ A method that is not an architecture, and could not be run as released.
 > I added a new paper @trimole_hybrid.pdf with antoher method. Let's do a comparison of this one the same way we did with the others. However, in this case, I want to just compare with the 3 ChemProp variants, and LightGBM with Morgan fingerprints. Generate a new report for this. Use the ExpansionRx and Biogen sets again. Run on apollo to speed this up a bit.
 
 
+## A newer head on an existing arm
+
+*15 September 2026*
+
+TabPFN 3.5 was released, and Monroe's arm is the one that reads it.
+
+**24.**
+
+> this directory contains a range of benchmarks including Monroe + TABPFN 3.0 as the best performer. TabPFN 3.0 was released today. I'd like to add Monroe + TABPFN 3.0 to the comparsions. Remember that anything requiring a GPU can be run on apollo.
+
+**25.**
+
+> Sorry TabPFN 3.5 was released today.
+
+**26.**
+
+> I'm assuming you already have the Monroe descriptors calculated so you can just rerun the inference with TabPFN 3.5
+
+
 ## Notes on reading these
 
 A few prompts did more work than their length suggests.
@@ -185,6 +204,19 @@ It also produced the second structural change in the project. `config.py` had
 been built around one report covering every method; a second report covering a
 different subset meant naming the comparisons and namespacing the figures by
 them. The seven-method report was verified byte-identical afterwards.
+
+Prompts 24 to 26 added the second Monroe arm. Two things were settled by asking,
+and both are recorded in the report. The TabPFN 3.5 weights are licence gated
+separately from TabPFN 3, which only the account holder could clear. And from
+`tabpfn` 9.0.0 a checkpoint can declare the softmax temperature it was trained
+for; the 3.5 checkpoint declares 1.0 where Monroe's wrapper passes 0.9 to every
+model. The arm runs at the wrapper's 0.9, so that it differs from the TabPFN 3
+arm in the checkpoint and nothing else, and the temperature the checkpoint asks
+for was run separately as a control.
+
+The embeddings were not recomputed. The encoder never sees a label, so the cache
+built for the first arm is the cache the second one reads, which is what makes
+the two comparable to the bit.
 
 This file was itself asked for, and then revised, by three further prompts. They are not listed above, since they produced the file rather than the analysis.
 
