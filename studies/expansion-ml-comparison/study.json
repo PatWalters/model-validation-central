@@ -7,19 +7,19 @@
   ],
   "endpoints": 15,
   "protocol": "5 x 5 GroupKFold over chemical clusters, one fixed holdout, Tukey HSD",
-  "updated": "2026-09-15",
+  "updated": "2026-09-16",
   "reports": [
     {
       "slug": "expansion-ml-comparison",
-      "date": "2026-09-15",
-      "title": "Eight ways to model ADME",
+      "date": "2026-09-16",
+      "title": "Nine ways to model ADME",
       "eyebrow": "Foundation models",
       "question": "Which foundation model, and does it replicate?",
-      "summary": "Eight modelling approaches over fifteen ADME and physicochemical endpoints on two unrelated data sets, 25 replicate models each, every one scored on a held-out test set it never saw. Four of the eight are pre-trained molecular foundation models, and only one of those four wins anything at all. The one that wins does no downstream training whatsoever — it freezes a pre-trained encoder and predicts each endpoint in context — and it appears twice, under two versions of the tabular model that does the predicting.",
-      "finding": "Monroe's frozen encoder is at the top of 21 of 27 ExpansionRx combinations and all 18 Biogen ones; MEGA-CL and Mol-JEPA are best on nothing, anywhere. The benefit belongs to a particular pre-trained model, not to pre-training as an idea. Swapping its in-context head from TabPFN 3 to TabPFN 3.5, released the day this was rerun, never costs it a top-group place and gains it four of 45, for four and a half times the inference.",
+      "summary": "Nine modelling approaches over fifteen ADME and physicochemical endpoints on two unrelated data sets, 25 replicate models each, every one scored on a held-out test set it never saw. Four of the nine are pre-trained molecular foundation models, and only one of those four wins anything at all. The one that wins does no downstream training whatsoever — it freezes a pre-trained encoder and predicts each endpoint in context — and it appears three times, under three different tabular models, which is what lets the page price the representation against the predictor bolted onto it.",
+      "finding": "Monroe's frozen encoder is at the top of 21 of 27 ExpansionRx combinations and all 18 Biogen ones; MEGA-CL and Mol-JEPA are best on nothing, anywhere. Crossing two frozen representations with two in-context heads settles which half does the work: changing the head moves R² by a median of 0.016 and not even in a consistent direction, while changing the representation moves it by 0.168 on fifteen endpoints out of fifteen. The representation is worth about ten times the head.",
       "facts": [
         {
-          "n": "8",
+          "n": "9",
           "label": "methods"
         },
         {
@@ -27,11 +27,11 @@
           "label": "endpoints"
         },
         {
-          "n": "2,550",
+          "n": "2,925",
           "label": "fold models"
         },
         {
-          "n": "2.84M",
+          "n": "3.19M",
           "label": "predictions kept"
         }
       ],

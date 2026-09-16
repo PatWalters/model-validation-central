@@ -152,6 +152,28 @@
       ]
     },
     {
+      "method": "monroe_tabicl",
+      "label": "Monroe + TabICL",
+      "color": "#C0A08B",
+      "study": "expansion-ml-comparison",
+      "counts": {
+        "expansion": {
+          "alone": 0,
+          "tied": 5,
+          "worse": 4
+        },
+        "biogen": {
+          "alone": 0,
+          "tied": 3,
+          "worse": 3
+        }
+      },
+      "refs": [
+        6,
+        9
+      ]
+    },
+    {
       "method": "moljepa",
       "label": "Mol-JEPA + TabICL",
       "color": "#DA8BC3",
@@ -169,8 +191,8 @@
         }
       },
       "refs": [
-        9,
-        10
+        10,
+        9
       ]
     },
     {
@@ -257,7 +279,7 @@
   },
   "metric": "mae",
   "metric_label": "MAE",
-  "note": "One Tukey HSD per endpoint over the 25 folds, on the metric the figures draw. A method is counted as being on top whenever the correction cannot separate it from the leading mean, so an endpoint with several methods on top gives each of them a tie rather than crowning one. That is also why the two Monroe arms are almost never alone at the top: they differ only in which TabPFN checkpoint reads the same frozen embeddings, and two methods that cannot be told apart take each other out of the alone column wherever both are on top.",
+  "note": "One Tukey HSD per endpoint over the 25 folds, on the metric the figures draw. A method is counted as being on top whenever the correction cannot separate it from the leading mean, so an endpoint with several methods on top gives each of them a tie rather than crowning one. That is also why the three Monroe arms are almost never alone at the top: they differ only in which tabular model reads the same frozen embeddings, and methods that cannot be told apart take each other out of the alone column wherever they are both on top.",
   "references": [
     {
       "key": "lightgbm",
@@ -332,22 +354,22 @@
       "url": "https://priorlabs.ai/technical-reports/tabpfn-3-5"
     },
     {
-      "key": "moljepa",
-      "n": 9,
-      "authors": "Rottach, F.; Schieferdecker, S.; Rudman, W.; et al.",
-      "title": "Mol-JEPA: A Multimodal Joint Embedding Predictive Architecture for Molecules",
-      "venue": "Preprint, 2026",
-      "label": "arXiv:2608.22642",
-      "url": "https://arxiv.org/abs/2608.22642"
-    },
-    {
       "key": "tabicl",
-      "n": 10,
+      "n": 9,
       "authors": "Qu, J.; Holzm\u00fcller, D.; Varoquaux, G.; Le Morvan, M.",
       "title": "TabICL: A Tabular Foundation Model for In-Context Learning on Large Data",
       "venue": "Preprint, 2025",
       "label": "arXiv:2502.05564",
       "url": "https://arxiv.org/abs/2502.05564"
+    },
+    {
+      "key": "moljepa",
+      "n": 10,
+      "authors": "Rottach, F.; Schieferdecker, S.; Rudman, W.; et al.",
+      "title": "Mol-JEPA: A Multimodal Joint Embedding Predictive Architecture for Molecules",
+      "venue": "Preprint, 2026",
+      "label": "arXiv:2608.22642",
+      "url": "https://arxiv.org/abs/2608.22642"
     },
     {
       "key": "trimole",

@@ -29,6 +29,7 @@ METHOD_COLOR = {
     "megacl": "#8172B3",
     "monroe": "#937860",
     "monroe35": "#61483A",
+    "monroe_tabicl": "#C0A08B",
     "moljepa": "#DA8BC3",
     "trimole": "#CCB974",
 }
@@ -41,6 +42,7 @@ SHORT = {
     "megacl": "MEGA-CL",
     "monroe": "Monroe/PFN3",
     "monroe35": "Monroe/PFN3.5",
+    "monroe_tabicl": "Monroe/ICL",
     "moljepa": "Mol-JEPA",
     "trimole": "Trimole",
 }

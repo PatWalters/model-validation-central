@@ -9,14 +9,20 @@ and TabPFN predicts the endpoint *in context*: it is handed the training
 embeddings together with their labels and produces the test predictions in one
 forward pass, with no weight updates and no per-task hyperparameters.
 
-There are two such arms, differing only in which TabPFN checkpoint reads the
+Three arms come out of this, differing only in the tabular model that reads the
 embeddings. `--head v3` is TabPFN 3, the head the Monroe paper was written
 against; `--head v3.5` is TabPFN 3.5, released 15 September 2026, which the
-`tabpfn` package makes the default from version 9.0.0. The encoder, the cached
-embeddings, the folds, the masks and the ensemble settings are identical across
-the two, so the difference between them is the head and nothing else. Each head
-needs its own environment, because the checkpoint is chosen by the installed
-`tabpfn` version, and a preflight check refuses to run if the two disagree.
+`tabpfn` package makes the default from version 9.0.0; `--head tabicl` is
+TabICL, which is not a TabPFN at all but the head Mol-JEPA's authors recommend
+and the one the `moljepa` arm uses. The encoder, the cached embeddings, the
+folds and the masks are identical across all three, so any difference between
+them is the head and nothing else -- and with the TabICL head the two
+representations and the two heads form a full square.
+
+Each head needs its own environment. The TabPFN checkpoint is chosen by the
+installed `tabpfn` version, and a preflight check refuses to run if that and
+`--head` disagree; TabICL wants the Mol-JEPA environment, which is where
+`tabicl` lives.
 
 So this arm has two phases:
 
@@ -44,9 +50,10 @@ the model predicted.
     MONROE_HOME=~/software/monroe python 09_run_monroe.py --embed
     python 09_run_monroe.py                                 # all 225 folds, TabPFN 3
     python 09_run_monroe.py --head v3.5                     # the same folds, TabPFN 3.5
+    python 09_run_monroe.py --head tabicl                   # the same folds, TabICL
     python 09_run_monroe.py --endpoint LOG_MGMB --repeat 0 --fold 0   # smoke test
 
-The embedding cache is shared: `--embed` is run once and both heads read it.
+The embedding cache is shared: `--embed` is run once and every head reads it.
 
 TabPFN's weights are licence-gated, and each major version is gated separately.
 Set TABPFN_TOKEN, and accept the licence for the version being run -- a token
@@ -69,8 +76,14 @@ import config as cfg
 # and stays reachable afterwards only by naming it; 3.5 became the default in
 # 9.0.0. Neither is installable alongside the other, hence one environment each.
 HEADS = {
-    "v3": {"method": cfg.MONROE_METHOD, "version": "v3", "min_tabpfn": (8, 0)},
-    "v3.5": {"method": cfg.MONROE35_METHOD, "version": "v3.5", "min_tabpfn": (9, 0)},
+    "v3": {"method": cfg.MONROE_METHOD, "predictor": "tabpfn",
+           "version": "v3", "min_tabpfn": (8, 0)},
+    "v3.5": {"method": cfg.MONROE35_METHOD, "predictor": "tabpfn",
+             "version": "v3.5", "min_tabpfn": (9, 0)},
+    # Not a TabPFN checkpoint at all: TabICL, the head Mol-JEPA's authors
+    # recommend, over Monroe's embeddings. Runs in the Mol-JEPA environment,
+    # since that is the one with tabicl in it.
+    "tabicl": {"method": cfg.MONROE_TABICL_METHOD, "predictor": "tabicl"},
 }
 
 MONROE_HOME = Path(
@@ -178,9 +191,19 @@ def check_head(head: str) -> None:
     built without an explicit `model_path` will load, which is exactly what
     Monroe's wrapper builds.
     """
+    spec = HEADS[head]
+    if spec["predictor"] == "tabicl":
+        import importlib.metadata
+
+        import tabicl  # noqa: F401  -- imported to fail here rather than mid-sweep
+
+        # tabicl does not carry a __version__, so ask the installed distribution.
+        print(f"tabicl {importlib.metadata.version('tabicl')}, "
+              f"recorded as {spec['method']}")
+        return
+
     import tabpfn
 
-    spec = HEADS[head]
     installed = tuple(int(part) for part in tabpfn.__version__.split(".")[:2])
     if installed < spec["min_tabpfn"]:
         raise SystemExit(
@@ -201,6 +224,41 @@ def check_head(head: str) -> None:
           f"recorded as {spec['method']}")
 
 
+def make_predictor(head: str, ensemble_specs: list[dict], output_type: str):
+    """The function that turns one fold's training rows into test predictions.
+
+    Both heads are in-context: they are handed the fold's training embeddings
+    with their labels and return the test predictions from a single forward
+    pass, with no weight updates. What differs is which tabular model does it.
+    """
+    import torch
+
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+
+    if HEADS[head]["predictor"] == "tabicl":
+        from tabicl import TabICLRegressor
+
+        def predict(X_fit, y_fit, X_test, seed):
+            # The same call 10_run_moljepa.py makes, so the head is identical
+            # across the two representations and only the embeddings differ.
+            model = TabICLRegressor(random_state=seed, device=device)
+            model.fit(X_fit, y_fit)
+            return model.predict(X_test)
+
+        return predict
+
+    monroe_modules()  # puts MONROE_HOME on sys.path for monroe.eval.tabpfn
+    from monroe.eval.tabpfn import fit_predict_tabpfn
+
+    def predict(X_fit, y_fit, X_test, seed):
+        return fit_predict_tabpfn(
+            X_fit, y_fit, X_test, is_classification=False,
+            ensemble_specs=ensemble_specs, seed=seed, output_type=output_type,
+        )
+
+    return predict
+
+
 def run_fold(
     df: pd.DataFrame,
     X: np.ndarray,
@@ -212,14 +270,11 @@ def run_fold(
     repeat: int,
     fold: int,
     force: bool,
-    ensemble_specs: list[dict],
-    output_type: str,
+    predict,
 ) -> None:
     out_path = predictions / f"{endpoint}_r{repeat}_f{fold}.csv"
     if out_path.exists() and not force:
         return
-
-    from monroe.eval.tabpfn import fit_predict_tabpfn
 
     held_out = folds[folds["repeat"] == repeat].set_index(cfg.ID_COL)["fold"]
     fold_of = df[cfg.ID_COL].map(held_out).to_numpy()  # NaN for the test molecules
@@ -238,15 +293,7 @@ def run_fold(
         )
 
     y = df[endpoint].to_numpy()
-    pred = fit_predict_tabpfn(
-        X[fit_mask],
-        y[fit_mask],
-        X[test_mask],
-        is_classification=False,
-        ensemble_specs=ensemble_specs,
-        seed=cfg.fold_seed(repeat, fold),
-        output_type=output_type,
-    )
+    pred = predict(X[fit_mask], y[fit_mask], X[test_mask], cfg.fold_seed(repeat, fold))
 
     test_df = df.loc[test_mask]
     pd.DataFrame(
@@ -270,8 +317,8 @@ def main() -> None:
     parser.add_argument("--embed", action="store_true",
                         help="build the embedding cache and stop")
     parser.add_argument("--head", default="v3", choices=sorted(HEADS),
-                        help="which TabPFN checkpoint reads the embeddings "
-                             "(default: v3, the head the Monroe paper used)")
+                        help="which tabular model reads the embeddings (default: v3, "
+                             "the TabPFN 3 head the Monroe paper used)")
     parser.add_argument("--endpoint", nargs="+", default=cfg.TARGET_COLS, choices=cfg.TARGET_COLS)
     parser.add_argument("--repeat", nargs="+", type=int, default=cfg.REPEATS, choices=cfg.REPEATS)
     parser.add_argument("--fold", nargs="+", type=int, default=cfg.FOLDS, choices=cfg.FOLDS)
@@ -301,16 +348,25 @@ def main() -> None:
         return
 
     method = HEADS[args.head]["method"]
+    is_tabpfn = HEADS[args.head]["predictor"] == "tabpfn"
+    if args.softmax_temperature is not None and not is_tabpfn:
+        raise SystemExit(
+            f"--softmax-temperature is a TabPFN setting and --head {args.head} is not "
+            "a TabPFN head"
+        )
     check_head(args.head)
     predictions = out_dir(method, args.softmax_temperature)
-
-    monroe_modules()  # puts MONROE_HOME on sys.path for monroe.eval.tabpfn
-    from monroe.eval.tabpfn import default_ensemble_specs
 
     predictions.mkdir(parents=True, exist_ok=True)
     X, ok = load_embeddings(df)
     folds = pd.read_csv(cfg.FOLD_CSV)
-    specs = default_ensemble_specs()
+
+    specs: list[dict] = []
+    if is_tabpfn:
+        monroe_modules()  # puts MONROE_HOME on sys.path for monroe.eval.tabpfn
+        from monroe.eval.tabpfn import default_ensemble_specs
+
+        specs = default_ensemble_specs()
     if args.softmax_temperature is not None:
         # "auto" is TabPFN's own word for "whatever the checkpoint declares"; anything
         # else is a temperature, and is passed as the float the estimator expects.
@@ -319,12 +375,14 @@ def main() -> None:
         specs = [{**spec, "softmax_temperature": value} for spec in specs]
         print(f"control run at softmax_temperature={value!r} -> {predictions}")
 
+    predict = make_predictor(args.head, specs, args.output_type)
+
     for endpoint in args.endpoint:
         start = time.time()
         for repeat in args.repeat:
             for fold in args.fold:
                 run_fold(df, X, ok, folds, method, predictions, endpoint, repeat,
-                         fold, args.force, specs, args.output_type)
+                         fold, args.force, predict)
         n = len(list(predictions.glob(f"{endpoint}_r*_f*.csv")))
         print(f"{endpoint:<17} {n:>2}/25 folds  ({time.time() - start:.1f}s)", flush=True)
 

@@ -62,8 +62,8 @@ from model_comparison import make_tukey_plot, tukey_groups   # noqa: E402
 # results: all four modalities, early fusion, LightGBM.
 SOURCES = {
     "expansion-ml-comparison": ["lgbm", "chemprop_st", "chemprop", "chemeleon",
-                                "megacl", "monroe", "monroe35", "moljepa",
-                                "trimole"],
+                                "megacl", "monroe", "monroe35", "monroe_tabicl",
+                                "moljepa", "trimole"],
     "ecfp-pretrain": ["ptgin"],
     "multimodal-fusion": ["fus_GRMS_early_lgbm"],
 }
@@ -77,6 +77,7 @@ LABELS = {
     "megacl": "MEGA-CL",
     "monroe": "Monroe + TabPFN 3",
     "monroe35": "Monroe + TabPFN 3.5",
+    "monroe_tabicl": "Monroe + TabICL",
     "moljepa": "Mol-JEPA + TabICL",
     "trimole": "Trimole-Hybrid",
     "ptgin": "PT-GIN + LightGBM",
@@ -87,7 +88,7 @@ LABELS = {
 COLORS = {
     "lgbm": "#4C72B0", "chemprop_st": "#C44E52", "chemprop": "#DD8452",
     "chemeleon": "#55A868", "megacl": "#8172B3", "monroe": "#937860",
-    "monroe35": "#61483A",
+    "monroe35": "#61483A", "monroe_tabicl": "#C0A08B",
     "moljepa": "#DA8BC3", "trimole": "#CCB974", "ptgin": "#4878CF",
     "fus_GRMS_early_lgbm": "#6ACC64",
 }
@@ -208,6 +209,7 @@ CITES = {
     "megacl": ["megacl"],
     "monroe": ["monroe", "tabpfn"],
     "monroe35": ["monroe", "tabpfn35"],
+    "monroe_tabicl": ["monroe", "tabicl"],
     "moljepa": ["moljepa", "tabicl"],
     "trimole": ["trimole"],
     "ptgin": ["ptgin", "lightgbm"],
@@ -394,10 +396,10 @@ def main() -> int:
                  "figures draw. A method is counted as being on top whenever the "
                  "correction cannot separate it from the leading mean, so an endpoint "
                  "with several methods on top gives each of them a tie rather than "
-                 "crowning one. That is also why the two Monroe arms are almost never "
-                 "alone at the top: they differ only in which TabPFN checkpoint reads "
-                 "the same frozen embeddings, and two methods that cannot be told apart "
-                 "take each other out of the alone column wherever both are on top."),
+                 "crowning one. That is also why the three Monroe arms are almost never "
+                 "alone at the top: they differ only in which tabular model reads the "
+                 "same frozen embeddings, and methods that cannot be told apart take each "
+                 "other out of the alone column wherever they are both on top."),
     }
     study_of = {m: s for s, ms in SOURCES.items() for m in ms}
     tallies = {}

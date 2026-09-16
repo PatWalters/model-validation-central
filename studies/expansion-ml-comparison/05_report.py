@@ -48,6 +48,8 @@ PAIRED_QUESTIONS = {
         ("chemeleon", cfg.MONROE_METHOD),  # the two strongest foundation models, head to head
         ("chemeleon", cfg.MONROE35_METHOD),  # and against the newer head
         (cfg.LGBM_METHOD, cfg.MONROE_METHOD),  # frozen embeddings in context vs fingerprints
+        (cfg.MONROE_METHOD, cfg.MONROE_TABICL_METHOD),  # one representation, two heads
+        (cfg.MONROE_TABICL_METHOD, cfg.MOLJEPA_METHOD),  # one head, two representations
         (cfg.MONROE_METHOD, cfg.MOLJEPA_METHOD),  # two frozen encoders, two in-context heads
         ("chemeleon", cfg.MOLJEPA_METHOD),  # fine-tuned representation vs multimodal frozen one
     ],
@@ -79,6 +81,9 @@ PALETTE = {
     # The same family as Monroe's brown, a shade apart, because the two arms
     # differ only in the head and the figures should say so at a glance.
     cfg.MONROE35_METHOD: "#61483A",
+    # Monroe's brown lightened, because this arm shares Monroe's representation
+    # but not its head; the Mol-JEPA pink is the other end of that comparison.
+    cfg.MONROE_TABICL_METHOD: "#C0A08B",
     cfg.MOLJEPA_METHOD: "#DA8BC3",
     cfg.TRIMOLE_METHOD: "#CCB974",
 }

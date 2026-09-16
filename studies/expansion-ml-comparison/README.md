@@ -1,15 +1,17 @@
 # expansion-ml-comparison
 
-Eight machine learning methods, fifteen ADME and physicochemical endpoints
+Nine machine learning methods, fifteen ADME and physicochemical endpoints
 across two unrelated data sets, 25 replicate models each, every one scored on a
 held-out test set it never saw.
 
-Four of the eight are pre-trained molecular foundation models, and only one of
+Four of the nine are pre-trained molecular foundation models, and only one of
 those four wins anything at all. The method that wins does no downstream
 training whatsoever. It freezes a pre-trained encoder and predicts each endpoint
-in context. It appears twice, under the two versions of the tabular model that
-does the predicting: TabPFN 3, which the Monroe paper was written against, and
-TabPFN 3.5, released on 15 September 2026.
+in context. It appears three times, under three different tabular models:
+TabPFN 3, which the Monroe paper was written against, TabPFN 3.5, released on
+15 September 2026, and TabICL, which is the head the Mol-JEPA arm uses. Those
+three are what let this study price the frozen representation against the
+predictor bolted onto it, and the answer is about ten to one.
 
 A plain graph network is not reliably better than a fingerprint baseline either.
 What makes it win is pre-training or multi-task transfer.
@@ -18,7 +20,7 @@ The second data set is there because a comparison run once is a hypothesis. The
 headline survives it. The most interesting pattern in the first data set does
 not.
 
-Two reports come out of this directory: the eight-method comparison, at
+Two reports come out of this directory: the nine-method comparison, at
 [docs/reports/expansion-ml-comparison.html](../../docs/reports/expansion-ml-comparison.html)
 or on the [web](https://patwalters.github.io/model-validation-central/reports/expansion-ml-comparison.html), and the Trimole-Hybrid
 comparison described further down, at
@@ -51,6 +53,7 @@ panel for that reason.
 | `megacl` | MEGA-CL, fine-tuned from the authors' pre-trained checkpoint | one model per endpoint |
 | `monroe` | Monroe's frozen encoder plus TabPFN 3, no downstream training | one in-context fit per endpoint |
 | `monroe35` | the same encoder and embeddings, with TabPFN 3.5 as the head | one in-context fit per endpoint |
+| `monroe_tabicl` | the same encoder and embeddings again, with TabICL as the head | one in-context fit per endpoint |
 | `moljepa` | Mol-JEPA's frozen multimodal encoder plus TabICL, likewise | one in-context fit per endpoint |
 
 The three assay families are physicochemical and tissue binding (LogD, LogS,
@@ -71,6 +74,7 @@ costume.
 | --- | ---: | ---: | ---: |
 | Monroe + TabPFN 3.5 | 0 | 21 | 6 |
 | Monroe + TabPFN 3 | 0 | 18 | 9 |
+| Monroe + TabICL | 0 | 18 | 9 |
 | ChemProp + CheMeleon | 5 | 6 | 16 |
 | ChemProp multi-task | 0 | 4 | 23 |
 | ChemProp single-task | 0 | 3 | 24 |
@@ -81,14 +85,14 @@ costume.
 A Monroe arm is at the top of 21 of the 27 combinations and CheMeleon 11, and
 nothing else is ever at the top.
 
-Neither Monroe arm is ever alone there, and that is an artefact of counting
-rather than a result. The two differ only in which TabPFN checkpoint reads the
-same frozen embeddings, the tally counts *alone* and *tied* symmetrically, and
-so two arms that cannot be told apart remove each other from the *alone* column
-wherever both are on top. On the seven-method version of this table Monroe was
-alone on 12. Not one of its predictions has changed. What the two arms are
-actually worth against each other is a paired question, and it is asked
-[below](#what-the-newer-head-is-worth).
+No Monroe arm is ever alone there, and that is an artefact of counting rather
+than a result. The three differ only in which tabular model reads the same
+frozen embeddings, the tally counts *alone* and *tied* symmetrically, and so
+arms that cannot be told apart remove each other from the *alone* column
+wherever they are both on top. On the seven-method version of this table, when
+Monroe appeared once, it was alone on 12. Not one of its predictions has
+changed. What the arms are actually worth against each other is a paired
+question, and it is asked [below](#what-the-newer-head-is-worth).
 
 The split between those two follows the assay, not the amount of data. Monroe
 leads on LogD, both microsomal stability endpoints, and both Caco-2 endpoints.
@@ -117,13 +121,19 @@ Eighteen combinations, from six endpoints and three metrics.
 | --- | ---: | ---: | ---: |
 | Monroe + TabPFN 3.5 | 1 | 17 | 0 |
 | Monroe + TabPFN 3 | 0 | 17 | 1 |
+| Monroe + TabICL | 0 | 9 | 9 |
 | every other method | 0 | 0 | 18 |
 
-Monroe takes all eighteen, on either head. Nothing that is not Monroe is best on
-one, and nothing that is not Monroe is even tied with the best on one. Against
-CheMeleon either arm wins 450 folds out of 450. The two heads are on top
-together on 17 of the 18; the exception is MAE on MDR1 efflux, the one
-combination in the whole study where a single Monroe arm stands alone.
+Monroe takes all eighteen. Nothing that is not Monroe is best on one, and
+nothing that is not Monroe is even tied with the best on one. Against CheMeleon
+a Monroe arm wins 450 folds out of 450.
+
+Which Monroe matters more here than it did on ExpansionRx. The two TabPFN arms
+are on top together on 17 of the 18, the exception being MAE on MDR1 efflux, the
+one combination in the whole study where a single Monroe arm stands alone. The
+TabICL arm reaches the top on only 9. Its R squared is never far off, trailing
+TabPFN 3 by between 0.002 and 0.025 on five of the six endpoints, but the folds
+are tightly enough paired that a deficit that small still separates.
 
 The assay split does not replicate. On ExpansionRx, CheMeleon took the three
 tissue binding endpoints. Biogen's two plasma protein binding endpoints are
@@ -139,7 +149,7 @@ squared of -0.064 and -0.005, worse than predicting the training mean, and
 MEGA-CL scores -0.292 and -0.426.
 
 Three things carry across both sets. Monroe is the most accurate and the least
-variable, on either head. MEGA-CL is the worst. And a from-scratch D-MPNN is
+variable, whichever head it is given. MEGA-CL is the worst. And a from-scratch D-MPNN is
 still not reliably better than a fingerprint baseline.
 
 ### What the newer head is worth
@@ -192,9 +202,48 @@ gains of up to 0.044 for the checkpoint itself. Holding the temperature at
 Monroe's 0.9 neither flatters the newer head nor handicaps it. The table is
 `results/<dataset>/sensitivity/monroe35_temperature.csv`.
 
-Nothing else in this study depends on which head is used. Every statement above
-about Monroe against CheMeleon, Mol-JEPA, LightGBM or MEGA-CL holds for both
-arms, with the same sign and very nearly the same margin.
+Nothing else in this study depends on which TabPFN is used. Every statement
+above about Monroe against CheMeleon, Mol-JEPA, LightGBM or MEGA-CL holds for
+both arms, with the same sign and very nearly the same margin.
+
+### Representation against head
+
+The third Monroe arm is not a TabPFN at all. TabICL is the head Mol-JEPA's
+authors recommend and the one the `moljepa` arm uses, so running it over
+Monroe's embeddings closes a square: two frozen representations by two
+in-context heads, all four fitted on identical folds with nothing trained in any
+of them. Reading down a column changes the head and holds the representation.
+Reading across a row does the opposite.
+
+| Frozen representation | TabPFN 3 | TabICL |
+| --- | ---: | ---: |
+| Monroe, 720-d | 0.477 | 0.471 |
+| Mol-JEPA, 512-d | control only | 0.311 |
+
+Mean R squared over all fifteen endpoints and both data sets. The Mol-JEPA row's
+TabPFN cell is the `moljepa_tabpfn` control rather than an arm, so it is not
+scored here; it moves Mol-JEPA by 0.013.
+
+Changing the head moves R squared by a median of 0.016 across the fifteen
+endpoints, and not in a consistent direction: TabICL is the better head on eight
+of the fifteen and the worse one on seven, and which it is depends on the data
+set rather than the endpoint. It wins on eight of the nine ExpansionRx endpoints
+and loses on five of the six Biogen ones. Changing the representation moves R
+squared by a median of 0.168, in the same direction, on fifteen endpoints out of
+fifteen.
+
+**The representation is worth about ten times the head.** That is the claim the
+seven-method version of this study could only make from one side, using the
+Mol-JEPA control; with this arm it is made from both.
+
+The exception is worth naming. Dropping TabPFN costs Monroe 0.100 R squared on
+Caco-2 permeability and 0.048 on mouse microsomal stability, which are two of
+the places where Monroe's lead over everything else is widest. Where a
+representation has the most to say, it matters more which model is listening.
+
+Monroe's authors recommend TabPFN, so this arm is nobody's published method. It
+is in the comparison rather than in `sensitivity/` deliberately, and it is
+named that way wherever it appears.
 
 ## Evaluation protocol
 
@@ -279,7 +328,7 @@ have a measurement for that assay, from 431 rows for `LOG_MGMB` up to 7,309 for
 
 ### From the stored predictions, about a minute
 
-Every prediction from all 2,550 fold models is kept, 2,838,000 rows across the
+Every prediction from all 2,925 fold models is kept, 3,192,750 rows across the
 two `results/<dataset>/predictions_all.parquet` files. The figures, tables, and
 report rebuild from them without retraining anything.
 
@@ -434,6 +483,7 @@ export TABPFN_TOKEN=...                # see below
 python 09_run_monroe.py --embed
 python 09_run_monroe.py                # TabPFN 3
 python 09_run_monroe.py --head v3.5    # TabPFN 3.5, the same folds
+python 09_run_monroe.py --head tabicl  # TabICL, likewise
 ```
 
 The encoder is never updated. `--embed` featurizes every molecule once, RDKit
@@ -456,7 +506,7 @@ you are running on the Licenses tab, and put the API key in `TABPFN_TOKEN`. A
 token that covers `tabpfn-3` does not cover `tabpfn-3-5`. TabPFN v2 is not a
 substitute for either. It caps at 500 features and Monroe hands it 720.
 
-#### The two heads
+#### The three heads
 
 TabPFN 3.5 was released on 15 September 2026, after everything above had been
 run, and `tabpfn` 9.0.0 makes it the default checkpoint. It is in the comparison
@@ -472,6 +522,19 @@ so each head needs its own environment: `tabpfn==8.3.0` loads TabPFN 3 and
 head's predictions under the other's name, so `--head` checks
 `settings.tabpfn.model_version` before the first fold and refuses to start when
 the two disagree.
+
+`--head tabicl` is a third arm and not a TabPFN at all. TabICL is what Mol-JEPA's
+authors recommend and what the `moljepa` arm uses, so running it over Monroe's
+embeddings completes a square: two representations by two in-context heads, with
+the head held constant down one axis and the representation down the other.
+It runs in the Mol-JEPA environment, which is the one with `tabicl` in it, and
+needs no Monroe checkpoint at all -- the embeddings are already cached, and the
+call it makes is the same one `10_run_moljepa.py` makes, so the head really is
+identical across the two representations.
+
+Monroe's authors recommend TabPFN, so this configuration is nobody's published
+method. It is in the comparison rather than in `sensitivity/` as a deliberate
+choice, and the report names it as one.
 
 One difference is not the checkpoint and is worth naming. From `tabpfn` 9.0.0 a
 checkpoint can declare the softmax temperature it was trained for, and the 3.5
@@ -748,11 +811,11 @@ than half-trusted.
 | `page_kit.py` | stylesheet and page furniture shared by both reports |
 | `model_comparison.py` | Tukey helpers |
 | `PROMPTS.md` | the prompts this analysis was built from |
-| `results/<dataset>/fold_metrics.csv` | 2,025 and 1,350 rows, one per endpoint, method, repeat, and fold |
+| `results/<dataset>/fold_metrics.csv` | 2,250 and 1,500 rows, one per endpoint, method, repeat, and fold |
 | `results/<dataset>/predictions_all.parquet` | every retained prediction |
 | `results/<dataset>/tables/` | summary and head-to-head tables |
 
-Every script here was written by Claude Code from the 26 prompts in
+Every script here was written by Claude Code from the 27 prompts in
 [PROMPTS.md](PROMPTS.md). That file lists them in order, with what each one
 changed.
 
@@ -778,7 +841,8 @@ changed.
    [github.com/Boehringer-Ingelheim/mol-jepa](https://github.com/Boehringer-Ingelheim/mol-jepa).
 4. Qu, J.; Holzmüller, D.; Varoquaux, G.; Le Morvan, M. TabICL: A Tabular
    Foundation Model for In-Context Learning on Large Data. Preprint, 2025.
-   [arXiv:2502.05564](https://arxiv.org/abs/2502.05564)
+   [arXiv:2502.05564](https://arxiv.org/abs/2502.05564). The head of the
+   `moljepa` arm, and of `monroe_tabicl`.
 5. Banaszewski, B.; Fitzgibbon, A. W. Monroe: A Molecular Foundation Model for
    In-Context Probabilistic Inference. Preprint, 2026.
    [arXiv:2608.18982](https://arxiv.org/abs/2608.18982). Code and weights at

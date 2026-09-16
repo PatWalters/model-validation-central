@@ -308,6 +308,14 @@ MONROE_METHOD = "monroe"
 # between this arm and `monroe` is the head and nothing else.
 MONROE35_METHOD = "monroe35"
 
+# The same encoder again with TabICL as the in-context head instead of TabPFN.
+# TabICL is what Mol-JEPA's authors recommend and what the `moljepa` arm uses, so
+# with this arm the two representations and the two heads form a full square: any
+# difference down a column is the head, and any difference across a row is the
+# representation. Monroe's own authors recommend TabPFN, so this configuration is
+# nobody's published method, and the report says so where it names it.
+MONROE_TABICL_METHOD = "monroe_tabicl"
+
 # Mol-JEPA (arXiv 2608.22642) is the same shape of arm as Monroe: a frozen
 # multimodal encoder, one 512-d CLS token per molecule, and a tabular in-context
 # model on top. The head is TabICL, which is what the authors recommend on their
@@ -339,6 +347,7 @@ METHOD_LABELS = {
     MEGACL_METHOD: "MEGA-CL",
     MONROE_METHOD: "Monroe + TabPFN 3",
     MONROE35_METHOD: "Monroe + TabPFN 3.5",
+    MONROE_TABICL_METHOD: "Monroe + TabICL",
     MOLJEPA_METHOD: "Mol-JEPA + TabICL",
     TRIMOLE_METHOD: "Trimole-Hybrid",
 }
@@ -354,7 +363,8 @@ ALL_METHODS = list(METHOD_LABELS)
 COMPARISONS = {
     "foundation": [
         LGBM_METHOD, "chemprop_st", "chemprop", "chemeleon",
-        MEGACL_METHOD, MONROE_METHOD, MONROE35_METHOD, MOLJEPA_METHOD,
+        MEGACL_METHOD, MONROE_METHOD, MONROE35_METHOD, MONROE_TABICL_METHOD,
+        MOLJEPA_METHOD,
     ],
     "trimole": [
         LGBM_METHOD, "chemprop_st", "chemprop", "chemeleon", TRIMOLE_METHOD,

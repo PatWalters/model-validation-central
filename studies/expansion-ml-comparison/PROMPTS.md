@@ -2,7 +2,7 @@
 
 The prompts that shaped this analysis and the report that came out of it, in order.
 
-The work ran as one Claude Code session against the project directory, from 15 to 26 August 2026, with two later sessions adding an arm each. These 26 prompts are what a human typed. Everything else, the scripts, the fold files, the 2,550 fold models and the report, came out of them.
+The work ran as one Claude Code session against the project directory, from 15 to 26 August 2026, with later sessions adding an arm each. These 27 prompts are what a human typed. Everything else, the scripts, the fold files, the 2,925 fold models and the report, came out of them.
 
 ## How this list was made
 
@@ -171,6 +171,17 @@ TabPFN 3.5 was released, and Monroe's arm is the one that reads it.
 > I'm assuming you already have the Monroe descriptors calculated so you can just rerun the inference with TabPFN 3.5
 
 
+## A second head on the same embeddings
+
+*16 September 2026*
+
+TabICL over Monroe's vectors, which closes the representation-by-head square.
+
+**27.**
+
+> Let's also add Monroe plus TabICL. Again, please run this on apollo to take advantage of the GPU.
+
+
 ## Notes on reading these
 
 A few prompts did more work than their length suggests.
@@ -217,6 +228,15 @@ for was run separately as a control.
 The embeddings were not recomputed. The encoder never sees a label, so the cache
 built for the first arm is the cache the second one reads, which is what makes
 the two comparable to the bit.
+
+Prompt 27 was typed as "TabCLI" and read as TabICL, the tabular in-context
+model this study already runs as Mol-JEPA's head. It carried one decision, and
+it was settled by asking rather than assumed. Monroe's authors recommend TabPFN,
+so TabICL over Monroe's embeddings is the mirror of the control this study
+already runs for Mol-JEPA, and the convention here would have put it in
+`sensitivity/`. The answer was to make it a full arm instead. That is why a
+configuration nobody published appears in the figures, and why the report says
+so wherever it names it.
 
 This file was itself asked for, and then revised, by three further prompts. They are not listed above, since they produced the file rather than the analysis.
 

@@ -70,6 +70,42 @@ def top_sizes(summary: pd.DataFrame) -> pd.Series:
     return top.groupby(["endpoint", "metric"]).size()
 
 
+def h2h_square(metrics: pd.DataFrame, bio_metrics: pd.DataFrame) -> str:
+    """The representation x head square, as mean R2 over all fifteen endpoints.
+
+    One cell per (representation, head). The two Monroe cells and the Mol-JEPA
+    TabICL cell are arms of the comparison; the Mol-JEPA TabPFN cell is the
+    control run in `sensitivity/`, which is why it is drawn differently -- it is
+    the same crossing, but it never entered the figures.
+
+    Averaging R2 across endpoints is a crude summary and is only used here, to
+    put four numbers side by side. Everything else on this page keeps the
+    endpoints apart.
+    """
+    both = pd.concat([metrics, bio_metrics], ignore_index=True)
+    mean_r2 = both.groupby("method")["r2"].mean()
+
+    def cell(method: str) -> str:
+        if method not in mean_r2.index:
+            return '<td class="missing">not run</td>'
+        return f'<td><span class="num">{mean_r2[method]:.3f}</span></td>'
+
+    return (
+        '<div class="tablewrap"><table>'
+        '<thead><tr><th scope="col">Frozen representation</th>'
+        '<th scope="col">TabPFN 3</th><th scope="col">TabICL</th></tr></thead>'
+        "<tbody>"
+        f'<tr><th scope="row">Monroe, 720-d</th>{cell(cfg.MONROE_METHOD)}'
+        f"{cell(cfg.MONROE_TABICL_METHOD)}</tr>"
+        f'<tr><th scope="row">Mol-JEPA, 512-d</th>'
+        f'<td class="missing">control only</td>{cell(cfg.MOLJEPA_METHOD)}</tr>'
+        "</tbody></table></div>"
+        '<p class="footnote">Mean R² over all fifteen endpoints and both data sets. '
+        "The Mol-JEPA row's TabPFN cell is the control described above rather than an "
+        "arm, so it is not scored here; its effect is quoted in the text.</p>"
+    )
+
+
 def metric_table(summary: pd.DataFrame, metric: str, ds: str = MAIN) -> str:
     """Mean +/- sd per endpoint and method, with the Tukey grouping encoded as a chip."""
     sizes = top_sizes(summary)
@@ -344,8 +380,8 @@ def load(ds: str) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """One data set's summary, head-to-head and per-fold tables.
 
     fold_metrics.csv is shared between the reports, so it carries every method
-    that has predictions on this data set. This page is about eight of them, and
-    the counts in its facts strip are counts of those eight.
+    that has predictions on this data set. This page is about nine of them, and
+    the counts in its facts strip are counts of those nine.
     """
     paths = cfg.paths(ds)
     metrics = pd.read_csv(paths.fold_metrics)
@@ -395,19 +431,20 @@ def build() -> str:
     css = page_kit.CSS
 
     parts = [
-        "<title>Eight ways to model ADME</title>",
+        "<title>Nine ways to model ADME</title>",
         f"<style>{css}</style>",
         '<div class="wrap">',
         '<p class="eyebrow">5×5 cross validation · two data sets</p>',
         "<h1>Which foundation model, and does it replicate?</h1>",
-        '<p class="lede">Eight modelling approaches, fifteen ADME and physicochemical '
+        '<p class="lede">Nine modelling approaches, fifteen ADME and physicochemical '
         "endpoints across two unrelated data sets, 25 replicate models each, every one "
-        "scored on a held-out test set it never saw. Four of the eight are pre-trained "
+        "scored on a held-out test set it never saw. Four of the nine are pre-trained "
         "molecular foundation models, and only one of those four wins anything at all. "
         "The method that wins most does no downstream training whatsoever — it freezes "
-        "its encoder and predicts in context. It appears twice, under two versions of the "
-        "tabular model that does the predicting, which turns out to be the cheapest way "
-        "to buy accuracy on this page and the one with the least to show for it.</p>",
+        "its encoder and predicts in context. It appears three times, under three "
+        "different tabular models, which is what lets the page separate what the frozen "
+        "representation is worth from what the predictor bolted onto it is worth. The "
+        "answer is about ten to one.</p>",
         '<div class="facts">'
         f'<div class="fact"><b>{n_methods}</b><span>methods</span></div>'
         f'<div class="fact"><b>{n_datasets}</b><span>data sets</span></div>'
@@ -422,24 +459,24 @@ def build() -> str:
         "best one at α = 0.05 — a distinction a bolded maximum would hide.</p>",
         '<div class="panel">' + tukey_tally(summary) + "</div>",
         "<p>Of the 27 combinations, CheMeleon is alone at the top on 5 and shares it on "
-        "6. The two Monroe arms are never alone, because almost everywhere either is at "
-        "the top the other is there with it: Monroe with TabPFN 3.5 shares the top on 21 "
-        "combinations, Monroe with TabPFN 3 on 18. Nothing else is ever at the top, alone "
-        "or otherwise. The split between Monroe and CheMeleon is not noise and it does not "
+        "6. The three Monroe arms are never alone, because almost everywhere one of them "
+        "is at the top the others are there with it: Monroe with TabPFN 3.5 shares the top "
+        "on 21 combinations, and Monroe with TabPFN 3 and Monroe with TabICL on 18 each. "
+        "Nothing else is ever at the top, alone or otherwise. The split between Monroe and CheMeleon is not noise and it does not "
         "follow data volume — it follows the assay. Monroe leads on LogD, both microsomal "
         "stability endpoints and both Caco-2 endpoints. CheMeleon leads on all three "
         "tissue-binding endpoints, plus LogS.</p>",
         '<div class="panel howto">'
-        "<h3>Why neither Monroe arm is ever alone</h3>"
-        "<p>On the seven-method version of this page, before TabPFN 3.5 existed, Monroe "
-        "was alone at the top of 12 of these 27 combinations. It has not got worse. A "
-        "second arm was added that differs from it only in which TabPFN checkpoint reads "
-        "its embeddings, and the tally counts <i>alone</i> and <i>tied</i> symmetrically, "
-        "so two arms that cannot be told apart take each other out of the <i>alone</i> "
-        "column wherever they are both on top. That is the count behaving correctly. It is "
-        "also a warning about reading these tallies as a league table: adding a near "
-        "duplicate of a method moves that method's numbers without changing a single "
-        "prediction it makes.</p>"
+        "<h3>Why no Monroe arm is ever alone</h3>"
+        "<p>On the seven-method version of this page, when Monroe appeared once, it was "
+        "alone at the top of 12 of these 27 combinations. It has not got worse. Two more "
+        "arms were added that differ from it only in which tabular model reads its "
+        "embeddings, and the tally counts <i>alone</i> and <i>tied</i> symmetrically, so "
+        "arms that cannot be told apart take each other out of the <i>alone</i> column "
+        "wherever they are both on top. That is the count behaving correctly. It is also a "
+        "warning about reading these tallies as a league table: adding a near duplicate of "
+        "a method moves that method's numbers without changing a single prediction it "
+        "makes.</p>"
         "<p>The question the two arms exist to answer is asked directly further "
         "down, and it is a paired question, not a tally.</p>"
         "</div>",
@@ -462,7 +499,7 @@ def build() -> str:
         "<h3>How to read the Tukey plots</h3>"
         "<p>Each bar is one method's mean over its 25 folds. The whiskers are a "
         "confidence interval widened to cover every pairwise comparison in the panel "
-        "at once, which is what stops eight methods and three metrics from "
+        "at once, which is what stops nine methods and three metrics from "
         "manufacturing a winner by chance.</p>"
         "<ul>"
         '<li><b class="k-best">Blue</b> is the method with the best mean. Two dashed '
@@ -675,10 +712,33 @@ def build() -> str:
                "Monroe against Mol-JEPA, paired by fold. Two frozen encoders, two in-context "
                "heads, one representation clearly ahead."),
         "<p>The obvious objection is the head, since Monroe uses TabPFN and this arm uses "
-        "TabICL. So the same embeddings were run through TabPFN at Monroe's settings. Across "
-        "the 225 folds that moves Mol-JEPA by 0.013 R² and 0.013 Spearman ρ — detectable, at "
-        "p = 0.003 and 3 × 10⁻¹⁰, and about a fourteenth of the distance to Monroe. The gap "
-        "is the representation, not the predictor bolted onto it.</p>",
+        "TabICL. That objection can be answered from both sides, because both crossings "
+        "have been run. Mol-JEPA's embeddings through TabPFN at Monroe's settings move it "
+        "by 0.013 R² and 0.013 Spearman ρ — detectable, at p = 0.003 and 3 × 10⁻¹⁰, and "
+        "about a fourteenth of the distance to Monroe. And Monroe's embeddings through "
+        "TabICL are an arm of this comparison in their own right.</p>",
+        '<div class="panel howto">'
+        "<h3>Representation against head, as a square</h3>"
+        "<p>Two frozen representations and two in-context heads make four combinations, "
+        "and all four are on this page. Reading down a column changes the head and holds "
+        "the representation; reading across a row does the opposite. It is the cleanest "
+        "decomposition the study can offer, because nothing is trained in any of the four "
+        "and the folds are identical throughout.</p>"
+        + h2h_square(metrics, bio_metrics) +
+        "<p>Changing the head moves R² by a median of 0.016 across the fifteen endpoints, "
+        "and it does not even do that in a consistent direction — TabICL is the better "
+        "head on eight of the fifteen and the worse one on seven, and which it is depends "
+        "on the data set rather than the endpoint: it wins on eight of the nine "
+        "ExpansionRx endpoints and loses on five of the six Biogen ones. Changing the "
+        "representation moves R² by a median of 0.168, in the same direction, on "
+        "<b>fifteen endpoints out of fifteen</b>. The representation is worth about ten "
+        "times the head.</p>"
+        "<p>The one place the head is not cheap is Caco-2 permeability, where dropping "
+        "TabPFN costs Monroe 0.100 R², and mouse microsomal stability, where it costs "
+        "0.048. Both are ExpansionRx endpoints, and both are places where Monroe's lead "
+        "over everything else is widest. Where a representation has the most to say, it "
+        "matters more which model is listening.</p>"
+        "</div>",
         "<p>None of which makes it a bad model. On Caco-2 permeability it reaches R² 0.135 "
         "where LightGBM manages −0.014 and MEGA-CL −0.747, and on LOG_MGMB, the smallest "
         "endpoint in the study, it reaches 0.503 against CheMeleon's 0.642. It is a "
@@ -747,7 +807,7 @@ def build() -> str:
         '<hr class="rule">',
         "<h2>Does any of it replicate?</h2>",
         "<p>Everything above is one data set. A comparison run once is a hypothesis, so "
-        "the same eight methods, the same protocol and the same statistics were run again "
+        "the same nine methods, the same protocol and the same statistics were run again "
         f'on Biogen\'s public ADME set{ref("biogen")}: 3,521 commercially sourced compounds '
         "on six endpoints, unrelated to the first collection in chemistry, in provenance "
         "and in who measured it.</p>",
@@ -765,11 +825,18 @@ def build() -> str:
                            "significantly worse.", ds="biogen"),
         '<div class="panel">' + tukey_tally(bio_summary) + "</div>",
         "<p>Eighteen combinations this time, six endpoints by three metrics. <b>Monroe "
-        "takes all eighteen</b>, on both heads. Nothing that is not Monroe is best on one, "
-        "and nothing that is not Monroe is so much as tied with the best on one. Against "
-        "CheMeleon either arm wins every fold of every endpoint on every metric — 450 out "
-        "of 450. The two heads are on top together on 17 of the 18; the exception is MAE "
-        "on MDR1 efflux, where TabPFN 3.5 separates from TabPFN 3 and stands alone.</p>",
+        "takes all eighteen.</b> Nothing that is not Monroe is best on one, and nothing "
+        "that is not Monroe is so much as tied with the best on one. Against CheMeleon a "
+        "Monroe arm wins every fold of every endpoint on every metric — 450 out of "
+        "450.</p>",
+        "<p>Which Monroe matters more here than it did on ExpansionRx. The two TabPFN "
+        "arms are on top together on 17 of the 18, the exception being MAE on MDR1 "
+        "efflux, where TabPFN 3.5 separates from TabPFN 3 and stands alone. The TabICL "
+        "arm reaches the top on only 9. Its R² is never far off — it trails TabPFN 3 by "
+        "between 0.002 and 0.025 on five of the six endpoints — but the folds are tightly "
+        "enough paired that a deficit that small still separates. This is the one place "
+        "in the study where the choice of head is worth arguing about, and it is the "
+        "half that the ExpansionRx result would not have predicted.</p>",
         metric_table(bio_summary, "r2", ds="biogen"),
         "<p>So the headline replicates and the interesting part does not. On ExpansionRx "
         "the wins split by assay, with CheMeleon taking the three tissue-binding "
@@ -877,12 +944,19 @@ def build() -> str:
         "is chosen by the installed library rather than by anything in the script, so each "
         "arm runs in its own environment and the runner checks which checkpoint it is about "
         "to load before the first fold.</li>"
+        f'<li><b>Monroe + TabICL</b>{ref("tabicl")} — the same encoder and the same cached '
+        "embeddings once more, read by TabICL instead of a TabPFN. It is the same call the "
+        "Mol-JEPA arm makes, so the head is identical across the two representations and "
+        "the four combinations of representation and head close into a square. Monroe's "
+        "authors recommend TabPFN, so this configuration is nobody's published method; it "
+        "is here to price the head against the representation, and it is named that way "
+        "wherever it appears.</li>"
         f'<li><b>Mol-JEPA + TabICL</b>{ref("moljepa")} — the authors\' pre-trained encoder, '
         "frozen. One 512-d CLS token per molecule, then "
         f'TabICL{ref("tabicl")} in context, which is what their model card recommends. '
         "A TabPFN head was run over the same embeddings as a control.</li>"
         "</ul>",
-        '<p class="repo">Every script, the data set and all 2,838,000 predictions '
+        '<p class="repo">Every script, the data set and all 3,192,750 predictions '
         'are at <a href="https://github.com/PatWalters/model-validation-central/tree/main/studies/expansion-ml-comparison">'
         'model-validation-central/studies/expansion-ml-comparison</a>. The figures and tables '
         'on this page rebuild from the stored predictions in about a minute, with '

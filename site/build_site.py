@@ -330,11 +330,11 @@ def overview_block() -> str:
         "methods on top gives <b>each of them a tie</b> rather than crowning "
         "whichever had the better mean. Only an endpoint with exactly one method on "
         "top awards a <b>best alone</b>. There are no bold maxima.</p>"
-        "<p>That rule is also why the two Monroe rows are almost never alone at the "
-        "top. They differ only in which TabPFN checkpoint reads the same frozen "
-        "embeddings, and two methods the correction cannot separate take each other "
-        "out of the <b>best alone</b> column wherever both are on top. Read the pair "
-        "as one method with a footnote, not as two that beat each other.</p>"
+        "<p>That rule is also why the three Monroe rows are almost never alone at the "
+        "top. They differ only in which tabular model reads the same frozen "
+        "embeddings, and methods the correction cannot separate take each other "
+        "out of the <b>best alone</b> column wherever they are both on top. Read them "
+        "as one method with a footnote, not as three that beat each other.</p>"
         f'<div class="tablewrap bleed"><table class="overview">{head}{"".join(rows)}</table></div>'
         + references_block(d.get("references", []))
         + '<p class="footnote">multimodal-fusion\'s 33 configurations would swamp a '

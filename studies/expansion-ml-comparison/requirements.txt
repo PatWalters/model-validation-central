@@ -29,4 +29,6 @@ bblean==0.10.3
 #             its own and 09_run_monroe.py refuses to run in the wrong one.
 #   Mol-JEPA  the same, with transformers==4.57.6 (transformers 5 builds the
 #             model on the meta device and fails), molfeat and tabicl==2.1.1
-#             in place of the monroe package.
+#             in place of the monroe package. The Monroe + TabICL arm runs here
+#             too: it reads Monroe's cached embeddings, which needs no monroe
+#             package, and its head is the tabicl this environment already has.
