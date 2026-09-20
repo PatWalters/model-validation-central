@@ -1,0 +1,47 @@
+{
+  "slug": "split-fragility",
+  "name": "split-fragility",
+  "datasets": ["ChEMBL 30, ten potency targets (Lee et al.)"],
+  "endpoints": 10,
+  "protocol": "the paper's own folds: 6 splitting schemes x 5 folds x 10 targets, paired on the fold with Holm correction, Tukey HSD on target-centred metrics, target-level and rank tests as sensitivity checks",
+  "updated": "2026-09-18",
+  "reports": [
+    {
+      "slug": "split-fragility",
+      "date": "2026-09-18",
+      "title": "What survives a hard split",
+      "eyebrow": "Does k-NN really match modern ML?",
+      "question": "A paper says nearest-neighbour lookup matches modern ML under every split, and that all of them collapse to a naive baseline out of distribution. Does that hold against models it did not have?",
+      "summary": "Eleven arms on the ten ChEMBL potency sets and six splitting schemes of Lee, Moldagulov and Grzybowski, run on that paper's own folds: four methods fitted here, the paper's naive baseline, and the paper's own six arms imported at their published per-fold numbers. 1,500 fold models, and a re-implementation of the paper's k-NN that reproduces 250 of 250 of its released folds to 4e-9, which is what licenses putting the two sources on one axis.",
+      "finding": "Half the paper replicates. Error does climb as the splits harden, but so does the naive baseline it is measured against, and reading the gap instead of the raw MAE splits the two claims apart. k-NN is at the top of none of the 18 scheme x metric combinations and Monroe's frozen encoder is at the top of all 18, separating from k-NN on all six schemes and on five of six under a conservative target-level test. On the hardest schemes k-NN takes 0.005 and 0.010 pIC50 off the naive predictor and the paper's own GNN goes negative, while Monroe holds 0.121 and 0.141. The decay rates are nearly identical across arms, 0.81 to 0.98; what differs is the offset, so nothing here is more robust to distance, it is just uniformly better.",
+      "facts": [
+        {"n": "11", "label": "arms"},
+        {"n": "6", "label": "splitting schemes"},
+        {"n": "1,500", "label": "fold models fitted"},
+        {"n": "250/250", "label": "published folds reproduced"},
+        {"n": "0/18", "label": "combinations k-NN leads"}
+      ],
+      "validates": [
+        {
+          "name": "Split fragility",
+          "authors": "Lee, K.; Moldagulov, G.; Grzybowski, B. A.",
+          "title": "The Fragility of Bioactivity Prediction: Rigorous Dataset Splits Expose the Illusion of ML Accuracy",
+          "venue": "Chem. Eur. J. 2026, e71208",
+          "label": "doi:10.1002/chem.71208",
+          "url": "https://doi.org/10.1002/chem.71208"
+        },
+        {
+          "name": "Nearest neighbours match ML",
+          "authors": "Janela, T.; Bajorath, J.",
+          "title": "Simple nearest-neighbour analysis meets the accuracy of compound potency predictions using complex machine learning models",
+          "venue": "Nat. Mach. Intell. 2022, 4, 1246-1255",
+          "label": "doi:10.1038/s42256-022-00581-6",
+          "url": "https://doi.org/10.1038/s42256-022-00581-6"
+        }
+      ],
+      "caveat": "The paper's six arms are its own published per-fold metrics, not re-run, and each had 50 Optuna trials per fold where the four arms fitted here use library defaults. The upstream release ships two disagreeing copies of the splits; the .pkl copy is used, because it reproduces the paper's numbers and the .json copy does not.",
+      "source": "results/report.html",
+      "builder": "09_build_page.py"
+    }
+  ]
+}

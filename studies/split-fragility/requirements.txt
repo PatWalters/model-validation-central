@@ -1,0 +1,23 @@
+# Steps 0 to 2 and 5 to 8: data preparation, k-NN, LightGBM, the naive baseline,
+# collection and the report. One environment covers all of them.
+numpy
+pandas
+pyarrow
+scipy
+scikit-learn
+statsmodels
+lightgbm
+rdkit
+matplotlib
+seaborn
+pillow
+
+# Step 3, the ChemProp + CheMeleon arm, wants its own environment: chemprop
+# pins a torch and CheMeleon's weights are fetched by chemprop itself.
+#   chemprop==2.3.0
+#
+# Step 4, the Monroe + TabPFN 3.5 arm, wants a third. Monroe is a git checkout
+# with LFS weights rather than a package, and tabpfn>=9.0.0 is what makes
+# TabPFN 3.5 the default checkpoint -- 3 and 3.5 cannot be installed together.
+#   tabpfn>=9.0.0
+#   monroe   (github checkout, MONROE_HOME, `git lfs pull`)

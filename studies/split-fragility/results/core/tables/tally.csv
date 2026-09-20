@@ -1,0 +1,6 @@
+method,best_alone,tied,worse
+knn,0,0,18
+lgbm,0,0,18
+chemeleon,0,5,13
+monroe35,13,5,0
+median,0,0,12

@@ -1,0 +1,3 @@
+over,n_folds,spearman_train_vs_similarity,p_value
+all six schemes,300,0.38225014366613935,7.1208157716499746e-12
+the four 72%-train schemes,200,0.09477708993674677,0.1818907160867007

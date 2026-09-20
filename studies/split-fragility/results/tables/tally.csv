@@ -1,0 +1,12 @@
+method,best_alone,tied,worse
+knn,0,0,18
+lgbm,0,0,18
+chemeleon,0,8,10
+monroe35,7,11,0
+median,0,0,12
+pub_knn,0,0,18
+pub_svm,0,8,10
+pub_rf,0,7,11
+pub_xgboost,0,0,18
+pub_mlp,0,1,17
+pub_gnn,0,1,17
