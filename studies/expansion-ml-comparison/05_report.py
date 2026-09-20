@@ -63,6 +63,14 @@ PAIRED_QUESTIONS = {
         ("chemprop_st", "chemprop"),  # what does multitask training buy, on its own?
         (cfg.LGBM_METHOD, "chemprop_st"),  # GNN vs fingerprints, both single-task
     ],
+    # One head, three representations. The first pair is the whole question: a
+    # hand-designed substructure-pair descriptor against a pre-trained frozen
+    # encoder, read by the same TabPFN 3.5 on the same folds.
+    "tdims": [
+        (cfg.TDIMS_METHOD, cfg.MONROE35_METHOD),  # descriptor vs pre-trained encoder
+        (cfg.LGBM_METHOD, cfg.TDIMS_METHOD),  # and against the fingerprint baseline
+        (cfg.LGBM_METHOD, cfg.MONROE35_METHOD),  # the same baseline, for scale
+    ],
 }
 
 COMPARISONS = [
@@ -78,6 +86,7 @@ PALETTE = {
     "chemeleon": "#55A868",
     cfg.MEGACL_METHOD: "#8172B3",
     cfg.MONROE_METHOD: "#937860",
+    cfg.TDIMS_METHOD: "#CCB974",
     # The same family as Monroe's brown, a shade apart, because the two arms
     # differ only in the head and the figures should say so at a glance.
     cfg.MONROE35_METHOD: "#61483A",
