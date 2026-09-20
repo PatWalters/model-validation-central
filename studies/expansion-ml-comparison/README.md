@@ -623,6 +623,179 @@ and neither carries an ADME measurement. The table has columns named for the
 nine ExpansionRx endpoints, and every one of them is empty in all 4.66 million
 rows. The download is about 2 GB and the scan takes a couple of minutes.
 
+## The third comparison: TDiMS
+
+A descriptor against a pre-trained encoder, read by one head.
+
+TDiMS (Hamada et al., *Nat. Comput. Sci.* 2026) enumerates pairs of substructures
+inside a molecule -- heteroatoms, circular substructures from the Morgan
+fingerprint, and optionally a list of CEP ring fragments -- and stores a function
+of the topological distance between the two members of each pair. It is built to
+capture the long-range intramolecular interactions that local fingerprints miss,
+and on chromophores its paper reports it beating Mordred, MolFormer, MolCLR,
+Atom-Pair and MAP4.
+
+This arm asks what it is worth on ADME data, against a representation that is not
+hand-designed at all. `tdims35` and `monroe35` share the head: the same
+`fit_predict_tabpfn`, the same `default_ensemble_specs()`, `output_type="mean"`,
+the same per-fold seed, the same fit and test masks as every other arm. One is a
+descriptor, the other is a 58.5 M-parameter graph transformer pre-trained on 81 M
+molecules and then frozen. Nothing else differs, so the whole difference is the
+representation.
+
+### Headline result
+
+Monroe wins all 45 endpoint x metric combinations, on both data sets.
+
+| | ExpansionRx | Biogen ADME |
+| --- | --- | --- |
+| Endpoints where TDiMS is ahead on mean R² | 0 of 9 | 0 of 6 |
+| Endpoints where Tukey separates them, for Monroe | 8 of 9 | 6 of 6 |
+| Mean R² gap | -0.271 | -0.365 |
+
+Over all fifteen endpoints the mean gap is -0.309 R² and the median -0.301. On
+twelve of the fifteen, Monroe wins all 25 folds individually. The one place the two
+cannot be separated is `LOG_MPPB` on R² and MAE, where TDiMS reaches 0.288
+against 0.344 and the Tukey interval overlaps; on Spearman even that endpoint
+separates.
+
+TDiMS also loses to LightGBM on Morgan counts on 11 of 15 endpoints, and goes
+negative -- worse than predicting the training mean -- on five: both Biogen
+plasma-protein-binding endpoints, ExpansionRx `LOG_HLM`, and both ExpansionRx
+Caco-2 endpoints.
+
+| Data set | Endpoint | Configuration chosen | TDiMS R² | Monroe R² | LightGBM R² |
+| --- | --- | --- | --- | --- | --- |
+| ExpansionRx | LogD | r2_dm1_max_cep | 0.279 | 0.720 | 0.510 |
+| ExpansionRx | LogS | r2_dm2_max_cep | 0.332 | 0.471 | 0.335 |
+| ExpansionRx | LOG_HLM | r1_dm2_max_nofrag | -0.051 | 0.354 | 0.139 |
+| ExpansionRx | LOG_MLM | r2_dm2_max_cep | 0.100 | 0.267 | 0.084 |
+| ExpansionRx | LOG_Caco_AB | r1_dp1_max_cep | -0.059 | 0.445 | -0.014 |
+| ExpansionRx | LOG_Caco_Efflux | r2_dm2_max_cep | -0.287 | 0.294 | -0.135 |
+| ExpansionRx | LOG_MPPB | r2_dm2_max_cep | 0.288 | 0.344 | 0.229 |
+| ExpansionRx | LOG_MBPB | r1_dm2_sum_cep | 0.556 | 0.600 | 0.477 |
+| ExpansionRx | LOG_MGMB | r2_dm2_sum_cep | 0.494 | 0.598 | 0.260 |
+| Biogen | LOG_SOL | r2_dm1_sum_cep | 0.173 | 0.503 | 0.275 |
+| Biogen | LOG_HLM | r1_dp1_sum_nofrag | 0.287 | 0.563 | 0.326 |
+| Biogen | LOG_RLM | r1_dp1_max_nofrag | 0.311 | 0.568 | 0.389 |
+| Biogen | LOG_MDR1_ER | r1_dm2_max_nofrag | 0.351 | 0.651 | 0.449 |
+| Biogen | LOG_HPPB | r2_dp1_max_cep | -0.017 | 0.510 | 0.129 |
+| Biogen | LOG_RPPB | r2_dp1_max_cep | -0.090 | 0.407 | 0.118 |
+
+This is not a claim that TDiMS is a bad descriptor. It is a claim about transfer.
+TDiMS was designed for, and validated on, properties where the distance between
+two substructures is the physics -- absorption maxima and Stokes shifts of
+chromophores, orbital energies of small molecules. Solubility, microsomal
+stability and permeability are not those properties, and the descriptor does not
+carry over. Its own paper says as much in the other direction, reporting that
+TDiMS has "difficulty providing useful features" for molecules as small as QM9's.
+
+### It ranks better than it predicts
+
+The gap is consistently smaller on Spearman than on R². On ExpansionRx
+`LOG_HLM` the R² gap is 0.405 and the Spearman gap 0.084; on `LOG_MLM`, 0.167
+against 0.064. TDiMS orders molecules considerably better than it places them, so
+what it loses is mostly calibration rather than ordering. Any downstream use that
+only needs a ranking would see a much smaller difference than the R² table
+suggests.
+
+### Choosing the configuration, without touching the test set
+
+The configuration is part of the method: the paper searches CEP fragments in or
+out, Morgan radius 1 or 2, f_dis in {x^-2, x^-1, x} and f_dup in {sum, max}, and
+passes the most promising combination to the estimator. `15_run_tdims.py`
+searches the same 24, on the fifth of the training molecules each fold holds out
+and that LightGBM and Monroe never use.
+
+Doing that with the real head over the whole grid costs more than the arm itself,
+so it runs in two stages: a ridge regression screens all 24 on one fold, and the
+best four per endpoint are scored by the actual TabPFN 3.5 head over three folds.
+Both stages live in `results/<dataset>/tdims_screen.csv` and
+`results/<dataset>/tdims_config.csv`.
+
+The screen is the weak link and is worth naming. Ridge ranks configurations
+differently from TabPFN -- `r1_dp1_sum_nofrag` screens near the bottom on Biogen
+`LOG_HLM` at ridge R² 0.023 and is then the best of its shortlist under TabPFN at
+0.307 -- so a shortlist of one would have been wrong. Four is wide enough that
+this case survived, but a configuration TabPFN would have preferred could still
+have been cut.
+
+That cannot account for the result. Among the four configurations actually scored
+with TabPFN, best minus worst is 0.011 to 0.098 on ExpansionRx and 0.063 to 0.321
+on Biogen. The deficit to Monroe is 0.309 on average. The configuration is not
+where this is decided, which is itself worth knowing: the per-endpoint search the
+method calls for buys very little here.
+
+No configuration wins everywhere -- eleven of the fifteen endpoints chose CEP
+fragments in, six chose radius 1, and four of Biogen's six chose the raw-distance
+f_dis = x that ExpansionRx picks exactly once.
+
+### Reproducing the TDiMS arm
+
+`15_run_tdims.py` does not vendor TDiMS. It comes from the authors' release in
+[IBM/materials](https://github.com/IBM/materials) under `models/tdims`, Apache
+2.0; point `TDIMS_HOME` at that checkout. Everything runs in the TabPFN 3.5
+environment, which is also the one with RDKit in it.
+
+```bash
+export TDIMS_HOME=~/software/tdims
+export MONROE_HOME=~/software/monroe      # for the shared fit_predict_tabpfn
+export TABPFN_TOKEN=...
+python 15_run_tdims.py --features         # the descriptor cache, 24 configurations
+python 15_run_tdims.py --select           # the two-stage configuration search
+python 15_run_tdims.py                    # all 225 folds
+ADME_COMPARISON=tdims python 05_report.py
+```
+
+Featurization is cheap and label-free, so it is done once per configuration over
+the whole table and reused: 24 matrices per data set, 26 minutes for both,
+120 MB on disk. The matrices are wide and very sparse -- 6,210 to 168,191
+columns at a density of 0.0008 to 0.024 -- and they are cached sparse and
+expanded to dense on load, because scikit-learn's sparse coordinate descent is
+about 25x slower than its dense path on these shapes.
+
+Everything between the descriptor and the head is the authors' own pipeline from
+`experiments/run_nested_cv_experiment.py`, in their order: zero out feature values
+above a threshold, drop features that are zero across the fold's training
+molecules, scale, and select with a LASSO. Each fitted step is refitted inside
+every fold on that fold's training rows alone.
+
+#### Two things in the release that had to be resolved
+
+The authors ship two entry points that disagree, and both disagreements matter.
+
+The convenience API in `tdims_ext` is not the pipeline behind the paper. The
+pipeline adds `ClipGreaterThanOneToZero`, which *zeroes* rather than clamps any
+feature value above a threshold, and it uses a threshold of 1.0 for f_dis = x^-2
+and x^-1 and 1000.0 for f_dis = x. Without that special case the whole
+raw-distance third of the grid would be silently zeroed, since raw distances are
+all above 1. With it, the clip removes 3.3% of the nonzeros at radius 1, almost
+nothing at radius 2, and empties no molecule's vector.
+
+The LASSO selector's iteration cap differs too: `Lasso(random_state=0)` in the
+experiment script, so scikit-learn's `max_iter=1000`, against `max_iter=100000`
+in `tdims_ext`. For f_dis = x^-2 and x^-1 this is a no-op -- the selector
+converges in 256 iterations and the two settings pick the identical feature set,
+Jaccard 1.0000. For f_dis = x it is not: those features are standardised bond
+counts, strongly collinear, and coordinate descent crawls. At 1000 iterations it
+stops unconverged with 233 features, at 100000 it converges after 7201 with 126,
+and the two sets overlap at Jaccard 0.27. This arm follows the experiment script,
+because that is the code behind the published numbers; `TDIMS_FS_MAX_ITER=100000`
+runs the other answer. On Biogen the experiment-script setting scored slightly
+*higher* on every endpoint, so it is not the cheaper choice dressed up as the
+faithful one.
+
+#### What it costs
+
+The whole arm is about two and a half hours on an RTX 5070 Ti, and almost none of
+that is the GPU. Feature selection dominates: a LASSO over up to 168,000 columns,
+refitted for every endpoint and every fold. That step is memory-bandwidth bound,
+not core bound -- six folds at once take the same wall time as six in sequence,
+1.05x, whether the workers are threads or forked processes, which rules out the
+GIL. So the script does not try to run folds in parallel. It runs the selector
+one fold ahead of the head instead, since selection saturates memory while TabPFN
+sits on the GPU, and those two overlap for free.
+
 ## The second comparison: Trimole-Hybrid
 
 Everything above compares architectures. Trimole-Hybrid asks a different
@@ -804,6 +977,8 @@ than half-trusted.
 | `12_run_trimole.py` | the Trimole-Hybrid arm, its four view caches and the per-fold selection |
 | `12b_extract_kpgt.py` | KPGT graph features, in their own environment |
 | `13_trimole_selection.py` | what the selection actually chose, as a table and a figure |
+| `15_run_tdims.py` | the TDiMS arm, its descriptor cache, the configuration search and the in-context fits |
+| `16_tdims_vs_monroe.py` | the TDiMS/Monroe head-to-head across both data sets, one table |
 | `05_report.py` | Tukey plots, paired plots, boxplots, summary tables |
 | `06_build_page.py` | the standalone HTML report |
 | `14_build_trimole_page.py` | the second report, the Trimole-Hybrid comparison |

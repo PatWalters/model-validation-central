@@ -163,6 +163,14 @@ MONROE_NPZ = DATA_DIR / "monroe_embeddings.npz"
 # One 512-d Mol-JEPA CLS token per molecule, same convention.
 MOLJEPA_NPZ = DATA_DIR / "moljepa_embeddings.npz"
 
+# TDiMS substructure-pair descriptors (Hamada et al., Nat. Comput. Sci. 2026,
+# doi:10.1038/s43588-026-01036-3). Unlike the embeddings above there is not one
+# cache but one per descriptor configuration, because the configuration is part
+# of the method: the paper searches over radius, the distance transform and the
+# duplicate-merge rule and passes the most promising combination to the
+# estimator. One .npz per configuration, sparse, in master.csv row order.
+TDIMS_DIR = DATA_DIR / "tdims"
+
 # Trimole-Hybrid's four molecular views, each cached once per data set in
 # master.csv row order. The three encoders go in one file because they are always
 # read together; the chemistry priors are separate because they are much larger
@@ -316,6 +324,20 @@ MONROE35_METHOD = "monroe35"
 # nobody's published method, and the report says so where it names it.
 MONROE_TABICL_METHOD = "monroe_tabicl"
 
+# TDiMS (Hamada et al., Nat. Comput. Sci. 2026, doi:10.1038/s43588-026-01036-3)
+# with the same TabPFN 3.5 head the `monroe35` arm uses. TDiMS is a descriptor,
+# not a pre-trained model: it enumerates pairs of substructures within a molecule
+# and stores a function of the topological distance between them, so a molecule
+# becomes a long sparse vector over the substructure pairs seen anywhere in the
+# data set. Nothing is pre-trained and nothing is trained downstream.
+#
+# Pairing it with the same head as `monroe35` is what makes the two comparable:
+# same folds, same fit and test masks, same `fit_predict_tabpfn` at the same
+# ensemble settings, same seed. The only thing that differs between the two arms
+# is what a molecule is turned into, which is the question the descriptor paper
+# and the foundation-model paper are both really arguing about.
+TDIMS_METHOD = "tdims35"
+
 # Mol-JEPA (arXiv 2608.22642) is the same shape of arm as Monroe: a frozen
 # multimodal encoder, one 512-d CLS token per molecule, and a tabular in-context
 # model on top. The head is TabICL, which is what the authors recommend on their
@@ -348,6 +370,7 @@ METHOD_LABELS = {
     MONROE_METHOD: "Monroe + TabPFN 3",
     MONROE35_METHOD: "Monroe + TabPFN 3.5",
     MONROE_TABICL_METHOD: "Monroe + TabICL",
+    TDIMS_METHOD: "TDiMS + TabPFN 3.5",
     MOLJEPA_METHOD: "Mol-JEPA + TabICL",
     TRIMOLE_METHOD: "Trimole-Hybrid",
 }
@@ -369,6 +392,10 @@ COMPARISONS = {
     "trimole": [
         LGBM_METHOD, "chemprop_st", "chemprop", "chemeleon", TRIMOLE_METHOD,
     ],
+    # A descriptor against a frozen foundation-model encoder, read through one
+    # head. LightGBM on Morgan counts is carried along as the reference point
+    # both of them are supposed to beat.
+    "tdims": [LGBM_METHOD, TDIMS_METHOD, MONROE35_METHOD],
 }
 DEFAULT_COMPARISON = "foundation"
 
@@ -505,5 +532,5 @@ def pred_csv(method: str, name: str, repeat: int, fold: int) -> Path:
 
 def ensure_dirs() -> None:
     for path in (DATA_DIR, FOLD_DIR, PRED_DIR, RESULTS_DIR, LOG_DIR, FIGURE_DIR, TABLE_DIR,
-                 SENSITIVITY_DIR):
+                 SENSITIVITY_DIR, TDIMS_DIR):
         path.mkdir(parents=True, exist_ok=True)
