@@ -86,7 +86,7 @@ PALETTE = {
     "chemeleon": "#55A868",
     cfg.MEGACL_METHOD: "#8172B3",
     cfg.MONROE_METHOD: "#937860",
-    cfg.TDIMS_METHOD: "#CCB974",
+    cfg.TDIMS_METHOD: "#64B5CD",
     # The same family as Monroe's brown, a shade apart, because the two arms
     # differ only in the head and the figures should say so at a glance.
     cfg.MONROE35_METHOD: "#61483A",

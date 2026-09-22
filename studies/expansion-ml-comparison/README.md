@@ -745,7 +745,14 @@ python 15_run_tdims.py --features         # the descriptor cache, 24 configurati
 python 15_run_tdims.py --select           # the two-stage configuration search
 python 15_run_tdims.py                    # all 225 folds
 ADME_COMPARISON=tdims python 05_report.py
+ADME_COMPARISON=tdims ADME_DATASET=biogen python 05_report.py
+python 16_tdims_vs_monroe.py
+python 17_build_tdims_page.py             # -> results/tdims_report.html
 ```
+
+The page is standalone and deliberately not part of the site: `study.json` does
+not list it, so `site/build_site.py` never sees it and neither published report
+changes. Open `results/tdims_report.html` directly.
 
 Featurization is cheap and label-free, so it is done once per configuration over
 the whole table and reused: 24 matrices per data set, 26 minutes for both,
@@ -979,6 +986,7 @@ than half-trusted.
 | `13_trimole_selection.py` | what the selection actually chose, as a table and a figure |
 | `15_run_tdims.py` | the TDiMS arm, its descriptor cache, the configuration search and the in-context fits |
 | `16_tdims_vs_monroe.py` | the TDiMS/Monroe head-to-head across both data sets, one table |
+| `17_build_tdims_page.py` | the standalone TDiMS report, not wired into the site index |
 | `05_report.py` | Tukey plots, paired plots, boxplots, summary tables |
 | `06_build_page.py` | the standalone HTML report |
 | `14_build_trimole_page.py` | the second report, the Trimole-Hybrid comparison |

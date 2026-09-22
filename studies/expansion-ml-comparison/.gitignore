@@ -12,6 +12,10 @@ results/*/figures/*
 results/report.html
 results/*/report.html
 results/trimole_report.html
+# results/tdims_report.html is deliberately NOT ignored. The two above are
+# copied into docs/reports/ by site/build_site.py, so the build output is
+# tracked there instead. The TDiMS page is not on the site -- study.json does
+# not list it -- so the copy here is the only one there is.
 # The Trimole comparison keeps its figures one level deeper, under
 # results/<data set>/trimole/. Same rule, same two exceptions worth tracking.
 results/*/*/figures/*

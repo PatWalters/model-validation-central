@@ -6,8 +6,9 @@ one another and like the blog they accompany. What differs between them is the
 argument, not the typography, so the stylesheet and the pieces of page assembly
 that carry no argument live here and the narrative stays in the builders.
 
-  06_build_page.py            the seven-method foundation-model comparison
-  13_build_trimole_page.py    the five-method Trimole-Hybrid comparison
+  06_build_page.py            the nine-method foundation-model comparison
+  14_build_trimole_page.py    the five-method Trimole-Hybrid comparison
+  17_build_tdims_page.py      the TDiMS descriptor against a frozen encoder
 """
 
 import base64
@@ -32,6 +33,7 @@ METHOD_COLOR = {
     "monroe_tabicl": "#C0A08B",
     "moljepa": "#DA8BC3",
     "trimole": "#CCB974",
+    "tdims35": "#64B5CD",
 }
 
 SHORT = {
@@ -45,6 +47,7 @@ SHORT = {
     "monroe_tabicl": "Monroe/ICL",
     "moljepa": "Mol-JEPA",
     "trimole": "Trimole",
+    "tdims35": "TDiMS/PFN3.5",
 }
 
 CSS = """
