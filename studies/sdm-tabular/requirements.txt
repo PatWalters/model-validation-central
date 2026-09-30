@@ -1,0 +1,16 @@
+# The report side: everything from 02_collect_metrics.py onwards runs here.
+pandas
+numpy
+scipy
+scikit-learn
+pyarrow
+matplotlib
+seaborn
+pingouin
+statsmodels
+Pillow
+tabulate
+
+# The heads themselves (01_run_sdm.py) run in their own environment on a CUDA
+# machine: torch and NVIDIA's structured-data-models package, installed from
+# its main branch. See the README.
