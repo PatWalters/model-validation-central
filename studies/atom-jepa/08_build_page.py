@@ -300,6 +300,23 @@ def build() -> str:
 
     w_m, t_m, l_m, n_m = tally(FT, MONROE, MAIN)
     w_o, t_o, l_o, n_o = tally(FT, MONROE, OTHER)
+
+    def against_monroe(ds: str, w: int, l: int, n: int) -> str:
+        """Per endpoint first, then per endpoint x metric, so neither count is mistaken
+        for the other: 'ahead on 6 and behind on 3 of the 9 endpoints on all three
+        metrics (18 ahead and 9 behind of 27 endpoint x metric combinations)'."""
+        g = calls[(calls["focus"] == FT) & (calls["other"] == MONROE)
+                  & (calls["dataset"] == LABEL_OF[ds])]
+        by_ep = g.groupby("endpoint")["call"].agg(set)
+        ahead = int((by_ep == {"win"}).sum())
+        behind = int((by_ep == {"loss"}).sum())
+        mixed = len(by_ep) - ahead - behind
+        sides = [f"{side} on {k}" for side, k in (("ahead", ahead), ("behind", behind)) if k]
+        text = f"{' and '.join(sides)} of the {len(by_ep)} endpoints on all three metrics"
+        if mixed:
+            text += f", and split on the other {WORDS.get(mixed, mixed)}"
+        return text + (f" ({w} ahead and {l} behind of {n} endpoint × metric "
+                       "combinations)")
     w_cm, _, l_cm, n_all = tally(FT, CHEMELEON)
     w_lg, _, l_lg, _ = tally(FT, LGBM)
     w_fz, _, l_fz, _ = tally(FT, PFN)
@@ -370,8 +387,8 @@ def build() -> str:
         f"claim replicates: it beats fine-tuned CheMeleon on {w_cm} of {n_all} endpoint × "
         f"metric combinations and LightGBM on {w_lg}. Against Monroe + TabPFN 3"
         + ref("monroe") + ", which the paper did not run, the two data sets disagree. On "
-        f"ExpansionRx fine-tuned Atom-JEPA is ahead on {w_m} of {n_m} and behind on {l_m}; on "
-        f"Biogen it is ahead on {w_o} of {n_o} and behind on {l_o}.</p>",
+        f"ExpansionRx fine-tuned Atom-JEPA is {against_monroe(MAIN, w_m, l_m, n_m)}; on "
+        f"Biogen it is {against_monroe(OTHER, w_o, l_o, n_o)}.</p>",
         '<div class="facts">'
         f'<div class="fact"><b>{len(METHODS)}</b><span>methods compared</span></div>'
         '<div class="fact"><b>15</b><span>endpoints</span></div>'

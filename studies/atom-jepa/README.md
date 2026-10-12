@@ -19,11 +19,18 @@ all 45.
 
 Against Monroe the two data sets disagree:
 
-- **ExpansionRx:** fine-tuned Atom-JEPA is on top of 19 of 27 Tukey combinations
-  to Monroe's 9. In paired tests it is ahead on 18 and behind on 9, all of those
-  9 on Caco-2 A→B, Caco-2 efflux and MLM.
-- **Biogen:** Monroe is on top of 17 of 18 and Atom-JEPA of 5. Atom-JEPA is
-  ahead on 3 and behind on 13.
+Counts of 27 and 18 below are endpoint × metric combinations: 9 or 6
+endpoints, each scored on R², Spearman ρ and MAE.
+
+- **ExpansionRx:** in paired tests fine-tuned Atom-JEPA is ahead of Monroe on 6
+  of the 9 endpoints on all three metrics (LogD, LogS, HLM, MPPB, MBPB, MGMB)
+  and behind on the other 3 on all three (Caco-2 A→B, Caco-2 efflux, MLM): 18
+  ahead and 9 behind of 27 combinations. After Tukey's correction it is on top
+  of 19 of the 27 to Monroe's 9.
+- **Biogen:** it is behind Monroe on 4 of the 6 endpoints on all three metrics
+  (SOL, MDR1 ER, HPPB, RPPB) and split on HLM and RLM: 3 ahead and 13 behind of
+  18 combinations. After Tukey's correction Monroe is on top of 17 of the 18 and
+  Atom-JEPA of 5.
 
 Training-set size does not explain the split. The Spearman correlation between
 molecules per fold and Atom-JEPA's margin over Monroe is −0.04 across the
