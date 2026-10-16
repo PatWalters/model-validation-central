@@ -1,0 +1,17 @@
+# The report side: everything from 03_collect_metrics.py onwards runs here.
+pandas
+numpy
+scipy
+scikit-learn
+pyarrow
+matplotlib
+seaborn
+pingouin
+statsmodels
+Pillow
+tabulate
+
+# The method runs in two environments on a CUDA machine. 01_featurize.py needs
+# chemprop 2.3 and RDKit, for the CheMeleon fingerprint and the descriptors;
+# 02_run_molpair.py needs tabpfn 8.x, which loads TabPFN 3, plus scipy and
+# scikit-learn. See the README.

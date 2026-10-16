@@ -1,0 +1,54 @@
+{
+  "slug": "molpair",
+  "name": "molpair",
+  "datasets": [
+    "ExpansionRx",
+    "Biogen ADME"
+  ],
+  "endpoints": 15,
+  "protocol": "5 x 5 GroupKFold over chemical clusters, one fixed holdout, Tukey HSD",
+  "updated": "2026-10-04",
+  "reports": [
+    {
+      "slug": "molpair",
+      "date": "2026-10-04",
+      "title": "Borrowing errors",
+      "eyebrow": "Error correction",
+      "question": "Does correcting each prediction with the known errors of similar training molecules help?",
+      "takeaway": "The correction works as claimed, ahead of its own uncorrected baseline on 41 of 45 combinations, but it is a small lever, a median +0.024 R². Fine-tuning CheMeleon or reading Monroe's embedding is worth far more, and MolPAIR loses to both.",
+      "summary": "MolPAIR corrects one tabular foundation model with another: a global TabPFN 3 reads a frozen CheMeleon fingerprint, and a second TabPFN 3 learns from pairs of training molecules how the first model's error changes between similar molecules, so each test molecule borrows the errors of up to 32 neighbours. It is put beside LightGBM, fine-tuned CheMeleon and Monroe + TabPFN 3.",
+      "finding": "Against the prediction it corrects, MolPAIR is significantly ahead on 41 of 45 endpoint × metric combinations and behind on 2, and improves 51–66% of individual predictions, close to the paper's 55–57%. The gain holds, at half the size, on the test molecules the paper's own split would have kept. But the correction is worth +0.024 R², fine-tuning CheMeleon +0.047 and Monroe's embedding +0.129: MolPAIR loses to fine-tuned CheMeleon on 30 combinations and to Monroe + TabPFN 3 on 34.",
+      "caveat": "A reimplementation. The paper's code link does not resolve, so this is written from its Section 3 and Appendix A.",
+      "facts": [
+        {
+          "n": "6",
+          "label": "arms"
+        },
+        {
+          "n": "15",
+          "label": "endpoints"
+        },
+        {
+          "n": "375",
+          "label": "fold models"
+        },
+        {
+          "n": "41/45",
+          "label": "ahead of its baseline"
+        }
+      ],
+      "validates": [
+        {
+          "name": "MolPAIR",
+          "authors": "Lee, J.; Lee, D.; Jeong, M.; Yoo, J.",
+          "title": "Molecular Property Prediction under Structural Shift with Tabular Foundation Models",
+          "venue": "Preprint, 2026",
+          "label": "arXiv:2609.38744",
+          "url": "https://arxiv.org/abs/2609.38744"
+        }
+      ],
+      "source": "results/report.html",
+      "builder": "06_build_page.py"
+    }
+  ]
+}

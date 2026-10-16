@@ -1,0 +1,54 @@
+{
+  "slug": "quadmet-former",
+  "name": "quadmet-former",
+  "datasets": [
+    "ExpansionRx",
+    "Biogen ADME"
+  ],
+  "endpoints": 15,
+  "protocol": "5 x 5 GroupKFold over chemical clusters, one fixed holdout, Tukey HSD",
+  "updated": "2026-10-12",
+  "reports": [
+    {
+      "slug": "quadmet-former",
+      "date": "2026-10-12",
+      "title": "Pre-training in 3D on quantum mechanics",
+      "eyebrow": "3D quantum-property pre-training",
+      "question": "Does pre-training a 3D transformer on quantum-mechanical properties help ADMET prediction?",
+      "takeaway": "Quantum pre-training beats training the same transformer from scratch on 14 of 15 endpoints, as the paper says. Against the field it is middling: roughly level with fine-tuned CheMeleon, well behind fine-tuned Atom-JEPA and Monroe + TabPFN 3.",
+      "summary": "QuADMET-Former pre-trains a 1.3M-parameter TorchMD-ET equivariant transformer on PubChemQC quantum properties — total energy, HOMO–LUMO gap, dipole moment, E3FP fingerprints and Löwdin charges — across ten released checkpoints, then adapts it by linear probing followed by fine-tuning. Both a fine-tuned arm and its frozen embedding read by TabPFN 3 are run on the authors' code and weights, against LightGBM, fine-tuned CheMeleon, Monroe + TabPFN 3 and fine-tuned Atom-JEPA.",
+      "finding": "Pre-trained LP-FT beats from-scratch training on 14 of 15 endpoints by a median +0.083 R², and LightGBM on 38 of 45 combinations. Against the pre-trained field it reaches the top Tukey tier on 5 of 27 ExpansionRx combinations, nearly splits with fine-tuned CheMeleon (15 wins, 9 ties, 21 losses over both data sets), and trails fine-tuned Atom-JEPA (2 wins, 35 losses) and Monroe + TabPFN 3 (10 wins, 33 losses).",
+      "caveat": "Six discrepancies between the paper and the authors' repository were found and are documented in the study README; the arms here use the released checkpoints with those issues worked around.",
+      "facts": [
+        {
+          "n": "6",
+          "label": "methods"
+        },
+        {
+          "n": "15",
+          "label": "endpoints"
+        },
+        {
+          "n": "10",
+          "label": "released QM checkpoints"
+        },
+        {
+          "n": "1.2 h",
+          "label": "GPU time"
+        }
+      ],
+      "validates": [
+        {
+          "name": "QuADMET-Former",
+          "authors": "Raja, A.; et al.",
+          "title": "QuADMET-Former: Pre-training on Quantum Mechanical Properties Improves ADMET Prediction",
+          "venue": "ChemRxiv, 2026",
+          "label": "doi:10.26434/chemrxiv.15002429/v3",
+          "url": "https://doi.org/10.26434/chemrxiv.15002429/v3"
+        }
+      ],
+      "source": "results/report.html",
+      "builder": "08_build_page.py"
+    }
+  ]
+}
