@@ -15,6 +15,7 @@
       "title": "Pre-training on fingerprints",
       "eyebrow": "Self-supervised pre-training",
       "question": "A graph network taught to predict fingerprints, against the fingerprints",
+      "takeaway": "Pre-training a GIN to predict ECFP wins six endpoints of fifteen and loses six, and on its own Biogen benchmark wins one and loses three. It helps where fingerprints were weak and hurts where they were strong.",
       "summary": "PT-GIN is a Graph Isomorphism Network pre-trained on 462,189 QMugs molecules to predict each molecule's own 2,048-bit hashed ECFP4, then frozen and handed to LightGBM. Its authors report it beating hashed ECFP on five of six Biogen ADME tasks. Here it is run against those same fingerprints through that same predictor, so the only thing that differs between the two arms is the representation.",
       "finding": "It wins six endpoints of fifteen and loses six; on Biogen, its own benchmark, it wins one and loses three. Which six it wins is not about how much data an endpoint has — it is about how well the fingerprints were already doing. PT-GIN helps where the baseline was weak and hurts where it was strong, Spearman ρ = −0.65 with the baseline R².",
       "facts": [

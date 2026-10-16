@@ -67,6 +67,7 @@ class Report:
     study: "Study" = field(repr=False, default=None)
     date: str = ""
     eyebrow: str = ""
+    takeaway: str = ""
     caveat: str = ""
     builder: str = ""
     facts: list = field(default_factory=list)
@@ -139,27 +140,18 @@ def load_studies() -> list[Study]:
 
 
 def all_reports(studies) -> list[Report]:
-    """Every report, newest study first, with a study's own reports kept together.
+    """Every report, newest first, by its own date.
 
-    A study is placed by its newest report, and its reports then run newest
-    first within that block. So a study added later arrives at the top without
-    anything being renumbered, and the two reports that come out of
-    expansion-ml-comparison still sit next to each other even though they were
-    built eight days apart.
-
-    A report with no date sorts last rather than crashing the build.
+    Strictly reverse chronological, so a report that comes out of a study
+    directory with another in it is placed by when it was written, not pulled up
+    beside its newer sibling. A report with no date sorts last rather than
+    crashing the build.
     """
-    def newest(study) -> str:
-        return max((r.when or "" for r in study.reports), default="")
-
-    ordered = []
-    for study in sorted(studies, key=lambda s: (newest(s), s.slug), reverse=True):
-        # Two passes rather than one reversed key: `reverse=True` would flip the
-        # tiebreak as well, ordering same-day reports by slug backwards.
-        reports = sorted(study.reports, key=lambda r: r.slug)
-        reports.sort(key=lambda r: r.when or "", reverse=True)
-        ordered.extend(reports)
-    return ordered
+    # Two passes rather than one reversed key: `reverse=True` would flip the
+    # tiebreak as well, ordering same-day reports by slug backwards.
+    reports = sorted((r for s in studies for r in s.reports), key=lambda r: r.slug)
+    reports.sort(key=lambda r: r.when or "", reverse=True)
+    return reports
 
 
 # ------------------------------------------------------------- copying pages
@@ -200,34 +192,6 @@ def fact_block(facts, css_class="facts") -> str:
         for f in facts
     )
     return f'<div class="{css_class}">{cells}</div>'
-
-
-def papers_block(papers) -> str:
-    """The papers a study puts to the test, cited in full.
-
-    The claim being tested is the point of the card, so the reference is part of
-    the argument rather than a footnote to it: title first, then who wrote it and
-    where it appeared, and the identifier as the link.
-    """
-    if not papers:
-        return ""
-    items = []
-    for p in papers:
-        title = e(p.get("title", p.get("name", "")))
-        line = f'<p class="ptitle">{title}</p>'
-        if p.get("authors"):
-            line += f'<p class="pauthors">{e(p["authors"])}</p>'
-        bits = []
-        if p.get("venue"):
-            bits.append(f'<span class="pvenue">{e(p["venue"])}</span>')
-        if p.get("url"):
-            bits.append(f'<a class="pdoi" href="{p["url"]}">{e(p.get("label", p["url"]))}</a>')
-        if bits:
-            line += '<p class="pwhere">' + " · ".join(bits) + "</p>"
-        items.append(f'<li class="paper">{line}</li>')
-    label = "The paper put to the test" if len(papers) == 1 else "The papers put to the test"
-    return (f'<div class="papers"><p class="plabel">{label}</p>'
-            f'<ul class="paperlist">{"".join(items)}</ul></div>')
 
 
 def references_block(references) -> str:
@@ -349,32 +313,35 @@ def overview_block() -> str:
     )
 
 
-def card(report: Report) -> str:
+def entry(report: Report) -> str:
+    """One report as a short entry: what it asked and what came out.
+
+    The index is for deciding which report to open, so it carries the question
+    and a sentence or two of answer. The design, the counts and the full
+    citations are one click away in the report itself, and in the README.
+    """
     study = report.study
-    eyebrow = " · ".join(x for x in (report.eyebrow, ", ".join(study.datasets)) if x)
-    parts = [
-        f'<p class="eyebrow">{e(eyebrow)}</p>',
-        f'<h3><a href="{report.href}">{e(report.title)}</a></h3>',
-        f'<p class="q">{e(report.question)}</p>',
-        # The paper is what the study is about, so it is cited before the study
-        # is described rather than after it.
-        papers_block(report.validates),
-        f"<p>{e(report.summary)}</p>",
-        f'<p class="finding">{e(report.finding)}</p>',
-    ]
-    if report.caveat:
-        parts.append(f'<p class="caveat">{e(report.caveat)}</p>')
-    parts.append(fact_block(report.facts, "cardfacts"))
-    parts.append(
-        '<p class="meta">'
-        f'<a class="go" href="{report.href}">Read the report →</a>'
-        '<span class="sep">|</span>'
-        f'<a href="{REPO}/tree/main/{study.rel}">'
-        f"{e(study.name)}</a>"
-        + (f'<span class="sep">|</span><span>{e(report.when)}</span>' if report.when else "")
-        + "</p>"
+    when = (f'<time datetime="{e(report.when)}">{e(report.when)}</time>'
+            if report.when else "<time>undated</time>")
+    tested = ", ".join(
+        f'<a href="{p["url"]}">{e(p["name"])}</a>' if p.get("url") else e(p["name"])
+        for p in report.validates
     )
-    return '<article class="card">' + "".join(parts) + "</article>"
+    meta = []
+    if tested:
+        meta.append(f"Tests {tested}")
+    meta.append(e(", ".join(study.datasets)))
+    meta.append(f'<a href="{REPO}/tree/main/{study.rel}">code</a>')
+    return (
+        '<li class="entry">'
+        f'<div class="when">{when}<span class="eyebrow">{e(report.eyebrow)}</span></div>'
+        '<div class="body">'
+        f'<h3><a href="{report.href}">{e(report.title)}</a></h3>'
+        f'<p class="q">{e(report.question)}</p>'
+        f'<p class="takeaway">{e(report.takeaway or report.finding)}</p>'
+        f'<p class="meta">{" · ".join(meta)}</p>'
+        "</div></li>"
+    )
 
 
 def summary_facts(studies) -> list[dict]:
@@ -421,11 +388,11 @@ def report_count_note(studies) -> str:
     n_r = f"{len(reports)} report{'' if len(reports) == 1 else 's'}"
     n_s = f"{len(studies)} " + ("study" if len(studies) == 1 else "studies")
     return (f"<p>{n_r} from {n_s}: {names}, asking different questions of the same "
-            "folds. Each card links to the directory it came from.</p>")
+            "folds. Each entry links to the directory it came from.</p>")
 
 
 def render_index(studies) -> str:
-    cards = "".join(card(r) for r in all_reports(studies))
+    entries = "".join(entry(r) for r in all_reports(studies))
     protocols = sorted({s.protocol for s in studies if s.protocol})
     shared = (
         "<p>Every study here is scored the same way, which is what makes the cards "
@@ -463,17 +430,17 @@ def render_index(studies) -> str:
   compare itself with.</p>
   {fact_block(summary_facts(studies))}
 
+  <h2 id="reports">The reports, newest first</h2>
+  {report_count_note(studies)}
+  <ol class="entries">{entries}</ol>
+
   {overview_block()}
 
   <h2>What makes these comparable</h2>
   {shared}
 
-  <h2>The reports</h2>
-  {report_count_note(studies)}
-  <div class="cards bleed">{cards}</div>
-
   <hr class="rule">
-  <p class="footnote">Each card links to that study's full report and to the code that
+  <p class="footnote">Each entry links to that study's full report and to the code that
   produced it. Every study directory carries its own README, its own requirements, and
   the per-fold metrics behind its figures, so any of them can be rebuilt on its own.
   Source at

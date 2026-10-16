@@ -15,6 +15,7 @@
       "title": "Does multimodal fusion help?",
       "eyebrow": "Fusion strategies",
       "question": "Unimodal versus multimodal, on ADME data",
+      "takeaway": "As the paper found, fusing four modalities barely moves accuracy, and none of the gain survives a multiple-comparison correction; what fusion buys is calibration. A single well-initialised graph network beats all 33 configurations.",
       "summary": "Thirty-three ways of combining four molecular representations — RDKit descriptors, Mol2Vec, a supervised GNN's graph embedding and a character BiGRU's SMILES embedding — crossed with early and late fusion and three final learners, over the same fifteen endpoints. 12,375 fitted configurations and 6,375 more for the two controls.",
       "finding": "The paper's central finding replicates: fusing modalities moves accuracy very little, and none of it survives a correction for multiple comparisons. What fusion buys is calibration. Two things the paper could not see from inside its own design also show up — a single well-initialised graph network beats all thirty-three configurations on both data sets, and when the GNN modality is actually a learned representation, which in the released code it is not, the ranking of which modality matters inverts.",
       "facts": [

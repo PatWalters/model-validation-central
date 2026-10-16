@@ -25,9 +25,9 @@ on Morgan fingerprints.
 The report is at
 [docs/reports/sdm-tabular.html](../../docs/reports/sdm-tabular.html), or on the
 [web](https://patwalters.github.io/model-validation-central/reports/sdm-tabular.html).
-It is a standalone page, not one of the cards on the site index: this study has no
-`study.json`, so `site/build_site.py` leaves it alone, and it does not enter the
-cross-study table. `05_build_page.py` publishes it directly.
+It is listed on the site index from this study's `study.json`, but it does not
+enter the cross-study table, which pools only the arms `site/overview.py` names.
+`05_build_page.py` publishes the page directly.
 
 ![Tukey HSD on MAE](results/expansion/figures/tukey_mae.png)
 

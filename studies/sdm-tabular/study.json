@@ -1,0 +1,69 @@
+{
+  "slug": "sdm-tabular",
+  "name": "sdm-tabular",
+  "datasets": [
+    "ExpansionRx",
+    "Biogen ADME"
+  ],
+  "endpoints": 15,
+  "protocol": "5 x 5 GroupKFold over chemical clusters, one fixed holdout, Tukey HSD",
+  "updated": "2026-09-30",
+  "reports": [
+    {
+      "slug": "sdm-tabular",
+      "date": "2026-09-30",
+      "title": "Swapping the head",
+      "eyebrow": "Tabular foundation models",
+      "question": "Holding Monroe's frozen embedding fixed, which in-context tabular model reads it best?",
+      "takeaway": "Kumo Tabular large is the best head, on top of all 45 combinations and at an eighth of TabFM's GPU time. But the head is the small lever: swapping it moves R² by a median 0.042, against 0.208 for the representation.",
+      "summary": "Every tabular foundation model in NVIDIA's structured-data-models package — TabICLv2, Kumo Tabular small, medium and large, and the 1.6-billion-parameter TabFM — reads the same frozen 720-d Monroe embedding on the same folds as Monroe + TabPFN 3, so the only thing that differs between arms is the head. The authors' own tabicl package, loading the same checkpoint as NVIDIA's TabICLv2 port, is the control.",
+      "finding": "Kumo Tabular large is on top of all 45 endpoint × metric combinations after Tukey's correction, the only arm never significantly worse than the best. In paired tests it is ahead of TabPFN 3 on 28 and behind on 6, and ahead of TabFM on 28 against 7 for an eighth of the GPU time. NVIDIA's TabICLv2 port reproduces upstream tabicl to within 0.008 R². Swapping heads moves R² by a median of 0.042 per endpoint, against 0.208 for the representation.",
+      "facts": [
+        {
+          "n": "9",
+          "label": "arms"
+        },
+        {
+          "n": "5",
+          "label": "heads fitted"
+        },
+        {
+          "n": "15",
+          "label": "endpoints"
+        },
+        {
+          "n": "45/45",
+          "label": "Kumo large on top"
+        }
+      ],
+      "validates": [
+        {
+          "name": "TabICLv2",
+          "authors": "Qu, J.; et al.",
+          "title": "TabICLv2: A Better, Faster, Scalable, and Open Tabular Foundation Model",
+          "venue": "ICML 2026",
+          "label": "arXiv:2602.11139",
+          "url": "https://arxiv.org/abs/2602.11139"
+        },
+        {
+          "name": "Kumo Tabular",
+          "authors": "Qu, J.; et al.",
+          "title": "NVIDIA Kumo Tabular Sets a New Accuracy-Efficiency Frontier for Tabular Prediction",
+          "venue": "Hugging Face blog, 2026",
+          "label": "huggingface.co/blog/nvidia/kumo-tabular",
+          "url": "https://huggingface.co/blog/nvidia/kumo-tabular"
+        },
+        {
+          "name": "TabFM",
+          "authors": "Kong, W.; et al.",
+          "title": "Introducing TabFM: A Zero-shot Foundation Model for Tabular Data",
+          "venue": "Google Research blog, 2026",
+          "label": "research.google/blog",
+          "url": "https://research.google/blog"
+        }
+      ],
+      "source": "results/report.html",
+      "builder": "05_build_page.py"
+    }
+  ]
+}

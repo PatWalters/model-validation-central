@@ -47,9 +47,9 @@ pre-training put in the frozen encoder.
 The report is at
 [docs/reports/atom-jepa.html](../../docs/reports/atom-jepa.html), or on the
 [web](https://patwalters.github.io/model-validation-central/reports/atom-jepa.html).
-It is a standalone page, not one of the cards on the site index. This study has
-no `study.json`, so `site/build_site.py` leaves it alone and it does not enter
-the cross-study table. `08_build_page.py` publishes it directly.
+It is listed on the site index from this study's `study.json`, but it does not
+enter the cross-study table, which pools only the arms `site/overview.py` names.
+`08_build_page.py` publishes the page directly.
 
 ![Tukey HSD on MAE](results/expansion/figures/tukey_mae.png)
 

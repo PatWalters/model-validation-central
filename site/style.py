@@ -116,54 +116,25 @@ ol.refs .venue{font-style:italic}
 .overfig figcaption{font-size:.86rem;color:var(--muted);max-width:74ch;
   margin-inline:auto;text-align:center;text-wrap:pretty}
 
-/* ------------------------------------------------------------------ CARDS */
-.cards{display:grid;gap:1.5rem;grid-template-columns:repeat(auto-fit,minmax(26rem,1fr));
-  margin-top:.6rem}
-.card{background:var(--panel);border:1px solid var(--rule);border-radius:4px;
-  box-shadow:var(--shadow);display:flex;flex-direction:column;gap:.65rem;
-  padding:1.5rem 1.6rem 1.2rem;position:relative;
-  transition:box-shadow .18s ease,transform .18s ease,border-color .18s ease}
-.card:hover,.card:focus-within{box-shadow:var(--shadow-lift);transform:translateY(-2px);
-  border-color:var(--accent)}
-.card h3{font-size:1.35rem;letter-spacing:-.01em}
-.card h3 a{color:inherit;text-decoration:none}
-.card h3 a::after{content:"";position:absolute;inset:0}
-.card .q{font-size:1rem;color:var(--muted);font-style:italic;text-wrap:pretty;margin-top:-.25rem}
-.card p{font-size:.94rem;text-wrap:pretty}
-.card .finding{font-size:.94rem;background:var(--accent-soft);border-left:2px solid var(--accent);
-  border-radius:0 3px 3px 0;padding:.7rem .9rem;text-wrap:pretty}
-.card .finding b{color:var(--win)}
-.card .caveat{font-size:.84rem;color:var(--muted);text-wrap:pretty}
-
-/* The paper the study puts to the test: cited in full, not as a bare link. */
-.papers{border:1px solid var(--rule);border-radius:3px;background:var(--ground);
-  padding:.85rem 1rem .9rem}
-.papers .plabel{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--muted);font-weight:700;margin-bottom:.5rem}
-.paperlist{list-style:none;padding:0;margin:0;display:grid;gap:.75rem}
-.paperlist .paper{margin:0}
-.paperlist .paper + .paper{border-top:1px solid var(--rule);padding-top:.75rem}
-.paper .ptitle{font-family:"Newsreader","Iowan Old Style",Charter,Georgia,serif;
-  font-size:1.02rem;font-weight:600;line-height:1.3;text-wrap:pretty;color:var(--ink)}
-.paper .pauthors{font-size:.82rem;color:var(--muted);margin-top:.15rem;text-wrap:pretty}
-.paper .pwhere{font-size:.82rem;margin-top:.2rem}
-.paper .pvenue{font-style:italic;color:var(--muted)}
-.paper .pdoi{font-family:ui-monospace,Menlo,monospace;font-size:.76rem;
-  position:relative;z-index:1}
-.card .cardfacts{display:grid;grid-template-columns:repeat(auto-fit,minmax(6.5rem,1fr));
-  gap:.6rem;padding:.85rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
-.card .cardfacts b{font-family:ui-monospace,Menlo,monospace;font-size:1.05rem;font-weight:600;
-  font-variant-numeric:tabular-nums;display:block;letter-spacing:-.02em}
-.card .cardfacts span{font-size:.68rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
-.card .meta{display:flex;flex-wrap:wrap;gap:.4rem;align-items:baseline;font-size:.82rem;
-  color:var(--muted);margin-top:auto;padding-top:.3rem}
-.card .meta a{position:relative;z-index:1}
-.card .sep{color:var(--rule)}
-.card .validates{font-size:.84rem;color:var(--muted);text-wrap:pretty}
-.card .validates a{position:relative;z-index:1}
-.card .go{font-weight:600;color:var(--accent)}
+/* ---------------------------------------------------------------- ENTRIES */
+/* The index's list of reports: date on the left, question and answer on the right. */
+.entries{list-style:none;padding:0;margin:.6rem 0 0;border-top:1px solid var(--rule)}
+.entry{display:grid;grid-template-columns:8.5rem 1fr;gap:1.4rem;padding:1.15rem 0;
+  border-bottom:1px solid var(--rule)}
+.entry .when{display:flex;flex-direction:column;gap:.3rem;padding-top:.3rem}
+.entry time{font-family:ui-monospace,Menlo,monospace;font-size:.86rem;
+  font-variant-numeric:tabular-nums;color:var(--ink)}
+.entry .eyebrow{font-size:.66rem;letter-spacing:.12em;line-height:1.35}
+.entry .body{display:flex;flex-direction:column;gap:.35rem;min-width:0}
+.entry h3{font-size:1.2rem;letter-spacing:-.01em}
+.entry h3 a{color:inherit;text-decoration:none}
+.entry h3 a:hover{color:var(--accent);text-decoration:underline}
+.entry .q{font-size:.95rem;color:var(--muted);font-style:italic;text-wrap:pretty}
+.entry .takeaway{font-size:.95rem;text-wrap:pretty}
+.entry .meta{font-size:.8rem;color:var(--muted);text-wrap:pretty}
 @media (max-width:700px){
   .bleed{width:100%;margin-inline:0}
-  .cards{grid-template-columns:1fr}
+  .entry{grid-template-columns:1fr;gap:.4rem}
+  .entry .when{flex-direction:row;align-items:baseline;gap:.8rem;padding-top:0}
 }
 """

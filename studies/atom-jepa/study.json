@@ -1,0 +1,53 @@
+{
+  "slug": "atom-jepa",
+  "name": "atom-jepa",
+  "datasets": [
+    "ExpansionRx",
+    "Biogen ADME"
+  ],
+  "endpoints": 15,
+  "protocol": "5 x 5 GroupKFold over chemical clusters, one fixed holdout, Tukey HSD",
+  "updated": "2026-10-12",
+  "reports": [
+    {
+      "slug": "atom-jepa",
+      "date": "2026-10-09",
+      "title": "Fine-tuning in 3D",
+      "eyebrow": "3D self-supervised pre-training",
+      "question": "Does a 3D equivariant encoder pre-trained on 19 million conformers beat the best frozen encoder?",
+      "takeaway": "Against its own comparators the paper's claim holds, ahead of fine-tuned CheMeleon on 38 of 45 combinations. Against Monroe + TabPFN 3 the data sets disagree: it leads on ExpansionRx and trails on Biogen, and what it wins it wins through fine-tuning, not the frozen encoder.",
+      "summary": "Atom-JEPA pre-trains a 39M-parameter EquiformerV3 by latent prediction on 19M Uni-Mol conformers and fine-tunes it, multitask, on ten conformers per molecule. It is run here with the authors' own code and released weights, against the arm the paper did not run, Monroe + TabPFN 3, and a frozen Atom-JEPA arm read by the same TabPFN 3 call separates the representation from the fine-tuning.",
+      "finding": "Fine-tuned Atom-JEPA is ahead of fine-tuned CheMeleon on 38 of 45 combinations and of LightGBM on all 45. Against Monroe it is ahead on 6 of 9 ExpansionRx endpoints and behind on 4 of 6 Biogen ones, and training-set size does not explain the split (ρ = −0.04). Frozen, its embedding never beats Monroe's, a median −0.09 R²; fine-tuning never loses to freezing and adds +0.13 on ExpansionRx and +0.07 on Biogen.",
+      "facts": [
+        {
+          "n": "7",
+          "label": "arms"
+        },
+        {
+          "n": "15",
+          "label": "endpoints"
+        },
+        {
+          "n": "50",
+          "label": "fine-tuned fold models"
+        },
+        {
+          "n": "46 h",
+          "label": "GPU time"
+        }
+      ],
+      "validates": [
+        {
+          "name": "Atom-JEPA",
+          "authors": "Petersen, K. H.; Tirsgaard, R. H.; Cornet, F. R. J.; Jordahn, M.; Schmidt, M. N.",
+          "title": "Atom-JEPA: Joint-Embedding Predictive Architecture for 3D Atomistic Systems",
+          "venue": "Preprint, 2026",
+          "label": "arXiv:2610.08400",
+          "url": "https://arxiv.org/abs/2610.08400"
+        }
+      ],
+      "source": "results/report.html",
+      "builder": "08_build_page.py"
+    }
+  ]
+}
