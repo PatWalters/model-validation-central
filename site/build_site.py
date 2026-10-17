@@ -28,6 +28,7 @@ import html
 import json
 import shutil
 import sys
+from collections import Counter
 from dataclasses import dataclass, field
 from datetime import date
 from pathlib import Path
@@ -347,7 +348,11 @@ def entry(report: Report) -> str:
 def summary_facts(studies) -> list[dict]:
     reports = all_reports(studies)
     methods = {v["name"] for r in reports for v in r.validates}
-    datasets = {d for s in studies for d in s.datasets}
+    # Only the data sets the studies share. One that a single study brings with
+    # it, as split-fragility brings its source paper's ChEMBL targets, is not
+    # part of the common protocol and would make the count read as though it were.
+    uses = Counter(d for s in studies for d in s.datasets)
+    datasets = {d for d, n in uses.items() if n > 1}
     endpoints = max((s.endpoints for s in studies), default=0)
     return [
         # Reports first: it is the number a reader can count off against the cards.
@@ -356,7 +361,7 @@ def summary_facts(studies) -> list[dict]:
         {"n": str(len(studies)), "label": "studies"},
         {"n": str(len(methods)), "label": "published methods"},
         {"n": str(endpoints), "label": "endpoints"},
-        {"n": str(len(datasets)), "label": "data sets"},
+        {"n": str(len(datasets)), "label": "ADME data sets"},
     ]
 
 
