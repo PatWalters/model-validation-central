@@ -1,0 +1,16 @@
+# The report side: everything from 02_collect_metrics.py onwards runs here.
+pandas
+numpy
+scipy
+scikit-learn
+pyarrow
+matplotlib
+seaborn
+pingouin
+statsmodels
+Pillow
+tabulate
+
+# The method runs in one environment on a CUDA machine: 01_run_unimol.py needs
+# unimol_tools 0.1.5 with torch and RDKit, set up as described in the README.
+# Everything from 02_collect_metrics.py onwards runs with the list above.

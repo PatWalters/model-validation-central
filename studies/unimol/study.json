@@ -1,0 +1,62 @@
+{
+  "slug": "unimol",
+  "name": "unimol",
+  "datasets": [
+    "ExpansionRx",
+    "Biogen ADME"
+  ],
+  "endpoints": 15,
+  "protocol": "5 x 5 GroupKFold over chemical clusters, one fixed holdout, Tukey HSD",
+  "updated": "2026-10-23",
+  "reports": [
+    {
+      "slug": "unimol",
+      "date": "2026-10-23",
+      "title": "Uni-Mol and Uni-Mol2, out of the box",
+      "eyebrow": "3D molecular pre-training at scale",
+      "question": "Do Uni-Mol and Uni-Mol2, fine-tuned with their own package at its defaults, hold up against the ADMET field?",
+      "takeaway": "Uni-Mol2 84M is a real step up from Uni-Mol and beats fine-tuned CheMeleon, but it trails fine-tuned Atom-JEPA everywhere and Monroe + TabPFN 3 on Biogen. Frozen, neither Uni-Mol vector wins a single call against Monroe's.",
+      "summary": "Uni-Mol and Uni-Mol2 pre-train 3D transformers on hundreds of millions of conformers, and ship a fine-tuning package, unimol_tools. Both are fine-tuned here with that package's own multitask recipe at its defaults, 25 fold models each, and both encoders are also frozen and read by TabPFN 3 with Monroe's exact call, against LightGBM, fine-tuned CheMeleon, Monroe + TabPFN 3 and fine-tuned Atom-JEPA.",
+      "finding": "Fine-tuned Uni-Mol2 beats Uni-Mol 30–12–3 over 45 endpoint × metric calls, fine-tuned CheMeleon 31–8–6 and LightGBM 42–3–0, and reaches the top Tukey tier on 14 of 27 ExpansionRx combinations, never alone. It splits ExpansionRx with Monroe + TabPFN 3 (14–5–8) but loses all 18 Biogen calls, and trails fine-tuned Atom-JEPA 3–6–36. Frozen under TabPFN 3 both Uni-Mol vectors lose all 45 calls to Monroe's; fine-tuning wins 40 and 41 of 45 against them.",
+      "caveat": "The package fits its target scaler on all five training fifths before splitting, so each held-out fifth slightly informs the scaling used for early stopping; the test set is never involved. Uni-Mol2 310M was dropped because it does not fit at batch 16 in 16 GB.",
+      "facts": [
+        {
+          "n": "8",
+          "label": "arms"
+        },
+        {
+          "n": "15",
+          "label": "endpoints"
+        },
+        {
+          "n": "100",
+          "label": "fine-tuned fold models"
+        },
+        {
+          "n": "43 h",
+          "label": "GPU time"
+        }
+      ],
+      "validates": [
+        {
+          "name": "Uni-Mol",
+          "authors": "Zhou, G.; Gao, Z.; Ding, Q.; Zheng, H.; Xu, H.; Wei, Z.; Zhang, L.; Ke, G.",
+          "title": "Uni-Mol: A Universal 3D Molecular Representation Learning Framework",
+          "venue": "ICLR 2023",
+          "label": "openreview:6K2RM6wVqKu",
+          "url": "https://openreview.net/forum?id=6K2RM6wVqKu"
+        },
+        {
+          "name": "Uni-Mol2",
+          "authors": "Ji, X.; Wang, Z.; Gao, Z.; et al.",
+          "title": "Uni-Mol2: Exploring Molecular Pretraining Model at Scale",
+          "venue": "NeurIPS 2024",
+          "label": "arXiv:2406.14969",
+          "url": "https://arxiv.org/abs/2406.14969"
+        }
+      ],
+      "source": "results/report.html",
+      "builder": "06_build_page.py"
+    }
+  ]
+}
