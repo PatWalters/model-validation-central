@@ -1,0 +1,361 @@
+dataset,endpoint,method,metric,rank
+Biogen ADME,LOG_HLM,atomjepa_ft,r2,1.0
+Biogen ADME,LOG_HLM,chemeleon,r2,6.0
+Biogen ADME,LOG_HLM,grover_base_ft,r2,4.0
+Biogen ADME,LOG_HLM,grover_large_ft,r2,5.0
+Biogen ADME,LOG_HLM,kermt_ft,r2,2.0
+Biogen ADME,LOG_HLM,kermt_tabpfn,r2,7.0
+Biogen ADME,LOG_HLM,lgbm,r2,8.0
+Biogen ADME,LOG_HLM,monroe,r2,3.0
+Biogen ADME,LOG_HPPB,atomjepa_ft,r2,2.0
+Biogen ADME,LOG_HPPB,chemeleon,r2,6.0
+Biogen ADME,LOG_HPPB,grover_base_ft,r2,4.0
+Biogen ADME,LOG_HPPB,grover_large_ft,r2,5.0
+Biogen ADME,LOG_HPPB,kermt_ft,r2,3.0
+Biogen ADME,LOG_HPPB,kermt_tabpfn,r2,7.0
+Biogen ADME,LOG_HPPB,lgbm,r2,8.0
+Biogen ADME,LOG_HPPB,monroe,r2,1.0
+Biogen ADME,LOG_MDR1_ER,atomjepa_ft,r2,2.0
+Biogen ADME,LOG_MDR1_ER,chemeleon,r2,6.0
+Biogen ADME,LOG_MDR1_ER,grover_base_ft,r2,4.0
+Biogen ADME,LOG_MDR1_ER,grover_large_ft,r2,5.0
+Biogen ADME,LOG_MDR1_ER,kermt_ft,r2,3.0
+Biogen ADME,LOG_MDR1_ER,kermt_tabpfn,r2,7.0
+Biogen ADME,LOG_MDR1_ER,lgbm,r2,8.0
+Biogen ADME,LOG_MDR1_ER,monroe,r2,1.0
+Biogen ADME,LOG_RLM,atomjepa_ft,r2,2.0
+Biogen ADME,LOG_RLM,chemeleon,r2,6.0
+Biogen ADME,LOG_RLM,grover_base_ft,r2,4.0
+Biogen ADME,LOG_RLM,grover_large_ft,r2,5.0
+Biogen ADME,LOG_RLM,kermt_ft,r2,3.0
+Biogen ADME,LOG_RLM,kermt_tabpfn,r2,7.0
+Biogen ADME,LOG_RLM,lgbm,r2,8.0
+Biogen ADME,LOG_RLM,monroe,r2,1.0
+Biogen ADME,LOG_RPPB,atomjepa_ft,r2,2.0
+Biogen ADME,LOG_RPPB,chemeleon,r2,6.0
+Biogen ADME,LOG_RPPB,grover_base_ft,r2,5.0
+Biogen ADME,LOG_RPPB,grover_large_ft,r2,4.0
+Biogen ADME,LOG_RPPB,kermt_ft,r2,3.0
+Biogen ADME,LOG_RPPB,kermt_tabpfn,r2,7.0
+Biogen ADME,LOG_RPPB,lgbm,r2,8.0
+Biogen ADME,LOG_RPPB,monroe,r2,1.0
+Biogen ADME,LOG_SOL,atomjepa_ft,r2,2.0
+Biogen ADME,LOG_SOL,chemeleon,r2,6.0
+Biogen ADME,LOG_SOL,grover_base_ft,r2,5.0
+Biogen ADME,LOG_SOL,grover_large_ft,r2,4.0
+Biogen ADME,LOG_SOL,kermt_ft,r2,3.0
+Biogen ADME,LOG_SOL,kermt_tabpfn,r2,7.0
+Biogen ADME,LOG_SOL,lgbm,r2,8.0
+Biogen ADME,LOG_SOL,monroe,r2,1.0
+ExpansionRx,LOG_Caco_AB,atomjepa_ft,r2,3.0
+ExpansionRx,LOG_Caco_AB,chemeleon,r2,2.0
+ExpansionRx,LOG_Caco_AB,grover_base_ft,r2,6.0
+ExpansionRx,LOG_Caco_AB,grover_large_ft,r2,7.0
+ExpansionRx,LOG_Caco_AB,kermt_ft,r2,5.0
+ExpansionRx,LOG_Caco_AB,kermt_tabpfn,r2,4.0
+ExpansionRx,LOG_Caco_AB,lgbm,r2,8.0
+ExpansionRx,LOG_Caco_AB,monroe,r2,1.0
+ExpansionRx,LOG_Caco_Efflux,atomjepa_ft,r2,2.0
+ExpansionRx,LOG_Caco_Efflux,chemeleon,r2,3.0
+ExpansionRx,LOG_Caco_Efflux,grover_base_ft,r2,6.0
+ExpansionRx,LOG_Caco_Efflux,grover_large_ft,r2,7.0
+ExpansionRx,LOG_Caco_Efflux,kermt_ft,r2,5.0
+ExpansionRx,LOG_Caco_Efflux,kermt_tabpfn,r2,4.0
+ExpansionRx,LOG_Caco_Efflux,lgbm,r2,8.0
+ExpansionRx,LOG_Caco_Efflux,monroe,r2,1.0
+ExpansionRx,LOG_HLM,atomjepa_ft,r2,1.0
+ExpansionRx,LOG_HLM,chemeleon,r2,6.0
+ExpansionRx,LOG_HLM,grover_base_ft,r2,3.0
+ExpansionRx,LOG_HLM,grover_large_ft,r2,4.0
+ExpansionRx,LOG_HLM,kermt_ft,r2,5.0
+ExpansionRx,LOG_HLM,kermt_tabpfn,r2,8.0
+ExpansionRx,LOG_HLM,lgbm,r2,7.0
+ExpansionRx,LOG_HLM,monroe,r2,2.0
+ExpansionRx,LOG_MBPB,atomjepa_ft,r2,1.0
+ExpansionRx,LOG_MBPB,chemeleon,r2,3.0
+ExpansionRx,LOG_MBPB,grover_base_ft,r2,4.0
+ExpansionRx,LOG_MBPB,grover_large_ft,r2,5.0
+ExpansionRx,LOG_MBPB,kermt_ft,r2,2.0
+ExpansionRx,LOG_MBPB,kermt_tabpfn,r2,6.0
+ExpansionRx,LOG_MBPB,lgbm,r2,8.0
+ExpansionRx,LOG_MBPB,monroe,r2,7.0
+ExpansionRx,LOG_MGMB,atomjepa_ft,r2,1.0
+ExpansionRx,LOG_MGMB,chemeleon,r2,3.0
+ExpansionRx,LOG_MGMB,grover_base_ft,r2,4.0
+ExpansionRx,LOG_MGMB,grover_large_ft,r2,5.0
+ExpansionRx,LOG_MGMB,kermt_ft,r2,2.0
+ExpansionRx,LOG_MGMB,kermt_tabpfn,r2,7.0
+ExpansionRx,LOG_MGMB,lgbm,r2,8.0
+ExpansionRx,LOG_MGMB,monroe,r2,6.0
+ExpansionRx,LOG_MLM,atomjepa_ft,r2,6.0
+ExpansionRx,LOG_MLM,chemeleon,r2,7.0
+ExpansionRx,LOG_MLM,grover_base_ft,r2,3.0
+ExpansionRx,LOG_MLM,grover_large_ft,r2,2.0
+ExpansionRx,LOG_MLM,kermt_ft,r2,4.0
+ExpansionRx,LOG_MLM,kermt_tabpfn,r2,5.0
+ExpansionRx,LOG_MLM,lgbm,r2,8.0
+ExpansionRx,LOG_MLM,monroe,r2,1.0
+ExpansionRx,LOG_MPPB,atomjepa_ft,r2,1.0
+ExpansionRx,LOG_MPPB,chemeleon,r2,3.0
+ExpansionRx,LOG_MPPB,grover_base_ft,r2,4.0
+ExpansionRx,LOG_MPPB,grover_large_ft,r2,6.0
+ExpansionRx,LOG_MPPB,kermt_ft,r2,2.0
+ExpansionRx,LOG_MPPB,kermt_tabpfn,r2,5.0
+ExpansionRx,LOG_MPPB,lgbm,r2,8.0
+ExpansionRx,LOG_MPPB,monroe,r2,7.0
+ExpansionRx,LogD,atomjepa_ft,r2,1.0
+ExpansionRx,LogD,chemeleon,r2,6.0
+ExpansionRx,LogD,grover_base_ft,r2,3.0
+ExpansionRx,LogD,grover_large_ft,r2,4.0
+ExpansionRx,LogD,kermt_ft,r2,2.0
+ExpansionRx,LogD,kermt_tabpfn,r2,8.0
+ExpansionRx,LogD,lgbm,r2,7.0
+ExpansionRx,LogD,monroe,r2,5.0
+ExpansionRx,LogS,atomjepa_ft,r2,1.0
+ExpansionRx,LogS,chemeleon,r2,5.0
+ExpansionRx,LogS,grover_base_ft,r2,3.0
+ExpansionRx,LogS,grover_large_ft,r2,4.0
+ExpansionRx,LogS,kermt_ft,r2,2.0
+ExpansionRx,LogS,kermt_tabpfn,r2,8.0
+ExpansionRx,LogS,lgbm,r2,7.0
+ExpansionRx,LogS,monroe,r2,6.0
+Biogen ADME,LOG_HLM,atomjepa_ft,spearman,1.0
+Biogen ADME,LOG_HLM,chemeleon,spearman,6.0
+Biogen ADME,LOG_HLM,grover_base_ft,spearman,4.0
+Biogen ADME,LOG_HLM,grover_large_ft,spearman,5.0
+Biogen ADME,LOG_HLM,kermt_ft,spearman,3.0
+Biogen ADME,LOG_HLM,kermt_tabpfn,spearman,7.0
+Biogen ADME,LOG_HLM,lgbm,spearman,8.0
+Biogen ADME,LOG_HLM,monroe,spearman,2.0
+Biogen ADME,LOG_HPPB,atomjepa_ft,spearman,3.0
+Biogen ADME,LOG_HPPB,chemeleon,spearman,6.0
+Biogen ADME,LOG_HPPB,grover_base_ft,spearman,4.0
+Biogen ADME,LOG_HPPB,grover_large_ft,spearman,5.0
+Biogen ADME,LOG_HPPB,kermt_ft,spearman,2.0
+Biogen ADME,LOG_HPPB,kermt_tabpfn,spearman,7.0
+Biogen ADME,LOG_HPPB,lgbm,spearman,8.0
+Biogen ADME,LOG_HPPB,monroe,spearman,1.0
+Biogen ADME,LOG_MDR1_ER,atomjepa_ft,spearman,2.0
+Biogen ADME,LOG_MDR1_ER,chemeleon,spearman,6.0
+Biogen ADME,LOG_MDR1_ER,grover_base_ft,spearman,4.0
+Biogen ADME,LOG_MDR1_ER,grover_large_ft,spearman,5.0
+Biogen ADME,LOG_MDR1_ER,kermt_ft,spearman,3.0
+Biogen ADME,LOG_MDR1_ER,kermt_tabpfn,spearman,8.0
+Biogen ADME,LOG_MDR1_ER,lgbm,spearman,7.0
+Biogen ADME,LOG_MDR1_ER,monroe,spearman,1.0
+Biogen ADME,LOG_RLM,atomjepa_ft,spearman,1.0
+Biogen ADME,LOG_RLM,chemeleon,spearman,6.0
+Biogen ADME,LOG_RLM,grover_base_ft,spearman,4.0
+Biogen ADME,LOG_RLM,grover_large_ft,spearman,5.0
+Biogen ADME,LOG_RLM,kermt_ft,spearman,2.0
+Biogen ADME,LOG_RLM,kermt_tabpfn,spearman,7.0
+Biogen ADME,LOG_RLM,lgbm,spearman,8.0
+Biogen ADME,LOG_RLM,monroe,spearman,3.0
+Biogen ADME,LOG_RPPB,atomjepa_ft,spearman,3.0
+Biogen ADME,LOG_RPPB,chemeleon,spearman,6.0
+Biogen ADME,LOG_RPPB,grover_base_ft,spearman,5.0
+Biogen ADME,LOG_RPPB,grover_large_ft,spearman,4.0
+Biogen ADME,LOG_RPPB,kermt_ft,spearman,2.0
+Biogen ADME,LOG_RPPB,kermt_tabpfn,spearman,8.0
+Biogen ADME,LOG_RPPB,lgbm,spearman,7.0
+Biogen ADME,LOG_RPPB,monroe,spearman,1.0
+Biogen ADME,LOG_SOL,atomjepa_ft,spearman,5.0
+Biogen ADME,LOG_SOL,chemeleon,spearman,6.0
+Biogen ADME,LOG_SOL,grover_base_ft,spearman,4.0
+Biogen ADME,LOG_SOL,grover_large_ft,spearman,3.0
+Biogen ADME,LOG_SOL,kermt_ft,spearman,2.0
+Biogen ADME,LOG_SOL,kermt_tabpfn,spearman,8.0
+Biogen ADME,LOG_SOL,lgbm,spearman,7.0
+Biogen ADME,LOG_SOL,monroe,spearman,1.0
+ExpansionRx,LOG_Caco_AB,atomjepa_ft,spearman,2.0
+ExpansionRx,LOG_Caco_AB,chemeleon,spearman,4.0
+ExpansionRx,LOG_Caco_AB,grover_base_ft,spearman,5.0
+ExpansionRx,LOG_Caco_AB,grover_large_ft,spearman,6.0
+ExpansionRx,LOG_Caco_AB,kermt_ft,spearman,3.0
+ExpansionRx,LOG_Caco_AB,kermt_tabpfn,spearman,8.0
+ExpansionRx,LOG_Caco_AB,lgbm,spearman,7.0
+ExpansionRx,LOG_Caco_AB,monroe,spearman,1.0
+ExpansionRx,LOG_Caco_Efflux,atomjepa_ft,spearman,2.0
+ExpansionRx,LOG_Caco_Efflux,chemeleon,spearman,3.0
+ExpansionRx,LOG_Caco_Efflux,grover_base_ft,spearman,4.0
+ExpansionRx,LOG_Caco_Efflux,grover_large_ft,spearman,6.0
+ExpansionRx,LOG_Caco_Efflux,kermt_ft,spearman,5.0
+ExpansionRx,LOG_Caco_Efflux,kermt_tabpfn,spearman,7.0
+ExpansionRx,LOG_Caco_Efflux,lgbm,spearman,8.0
+ExpansionRx,LOG_Caco_Efflux,monroe,spearman,1.0
+ExpansionRx,LOG_HLM,atomjepa_ft,spearman,1.0
+ExpansionRx,LOG_HLM,chemeleon,spearman,6.0
+ExpansionRx,LOG_HLM,grover_base_ft,spearman,3.0
+ExpansionRx,LOG_HLM,grover_large_ft,spearman,5.0
+ExpansionRx,LOG_HLM,kermt_ft,spearman,4.0
+ExpansionRx,LOG_HLM,kermt_tabpfn,spearman,8.0
+ExpansionRx,LOG_HLM,lgbm,spearman,7.0
+ExpansionRx,LOG_HLM,monroe,spearman,2.0
+ExpansionRx,LOG_MBPB,atomjepa_ft,spearman,1.0
+ExpansionRx,LOG_MBPB,chemeleon,spearman,3.0
+ExpansionRx,LOG_MBPB,grover_base_ft,spearman,4.0
+ExpansionRx,LOG_MBPB,grover_large_ft,spearman,5.0
+ExpansionRx,LOG_MBPB,kermt_ft,spearman,2.0
+ExpansionRx,LOG_MBPB,kermt_tabpfn,spearman,7.0
+ExpansionRx,LOG_MBPB,lgbm,spearman,8.0
+ExpansionRx,LOG_MBPB,monroe,spearman,6.0
+ExpansionRx,LOG_MGMB,atomjepa_ft,spearman,1.0
+ExpansionRx,LOG_MGMB,chemeleon,spearman,3.0
+ExpansionRx,LOG_MGMB,grover_base_ft,spearman,4.0
+ExpansionRx,LOG_MGMB,grover_large_ft,spearman,5.0
+ExpansionRx,LOG_MGMB,kermt_ft,spearman,2.0
+ExpansionRx,LOG_MGMB,kermt_tabpfn,spearman,7.0
+ExpansionRx,LOG_MGMB,lgbm,spearman,8.0
+ExpansionRx,LOG_MGMB,monroe,spearman,6.0
+ExpansionRx,LOG_MLM,atomjepa_ft,spearman,6.0
+ExpansionRx,LOG_MLM,chemeleon,spearman,7.0
+ExpansionRx,LOG_MLM,grover_base_ft,spearman,2.0
+ExpansionRx,LOG_MLM,grover_large_ft,spearman,1.0
+ExpansionRx,LOG_MLM,kermt_ft,spearman,3.0
+ExpansionRx,LOG_MLM,kermt_tabpfn,spearman,5.0
+ExpansionRx,LOG_MLM,lgbm,spearman,8.0
+ExpansionRx,LOG_MLM,monroe,spearman,4.0
+ExpansionRx,LOG_MPPB,atomjepa_ft,spearman,1.0
+ExpansionRx,LOG_MPPB,chemeleon,spearman,2.0
+ExpansionRx,LOG_MPPB,grover_base_ft,spearman,4.0
+ExpansionRx,LOG_MPPB,grover_large_ft,spearman,5.0
+ExpansionRx,LOG_MPPB,kermt_ft,spearman,3.0
+ExpansionRx,LOG_MPPB,kermt_tabpfn,spearman,6.0
+ExpansionRx,LOG_MPPB,lgbm,spearman,8.0
+ExpansionRx,LOG_MPPB,monroe,spearman,7.0
+ExpansionRx,LogD,atomjepa_ft,spearman,1.0
+ExpansionRx,LogD,chemeleon,spearman,6.0
+ExpansionRx,LogD,grover_base_ft,spearman,3.0
+ExpansionRx,LogD,grover_large_ft,spearman,4.0
+ExpansionRx,LogD,kermt_ft,spearman,2.0
+ExpansionRx,LogD,kermt_tabpfn,spearman,8.0
+ExpansionRx,LogD,lgbm,spearman,7.0
+ExpansionRx,LogD,monroe,spearman,5.0
+ExpansionRx,LogS,atomjepa_ft,spearman,1.0
+ExpansionRx,LogS,chemeleon,spearman,6.0
+ExpansionRx,LogS,grover_base_ft,spearman,2.0
+ExpansionRx,LogS,grover_large_ft,spearman,4.0
+ExpansionRx,LogS,kermt_ft,spearman,3.0
+ExpansionRx,LogS,kermt_tabpfn,spearman,8.0
+ExpansionRx,LogS,lgbm,spearman,7.0
+ExpansionRx,LogS,monroe,spearman,5.0
+Biogen ADME,LOG_HLM,atomjepa_ft,mae,1.0
+Biogen ADME,LOG_HLM,chemeleon,mae,6.0
+Biogen ADME,LOG_HLM,grover_base_ft,mae,4.0
+Biogen ADME,LOG_HLM,grover_large_ft,mae,5.0
+Biogen ADME,LOG_HLM,kermt_ft,mae,3.0
+Biogen ADME,LOG_HLM,kermt_tabpfn,mae,7.0
+Biogen ADME,LOG_HLM,lgbm,mae,8.0
+Biogen ADME,LOG_HLM,monroe,mae,2.0
+Biogen ADME,LOG_HPPB,atomjepa_ft,mae,2.0
+Biogen ADME,LOG_HPPB,chemeleon,mae,6.0
+Biogen ADME,LOG_HPPB,grover_base_ft,mae,4.0
+Biogen ADME,LOG_HPPB,grover_large_ft,mae,5.0
+Biogen ADME,LOG_HPPB,kermt_ft,mae,3.0
+Biogen ADME,LOG_HPPB,kermt_tabpfn,mae,8.0
+Biogen ADME,LOG_HPPB,lgbm,mae,7.0
+Biogen ADME,LOG_HPPB,monroe,mae,1.0
+Biogen ADME,LOG_MDR1_ER,atomjepa_ft,mae,2.0
+Biogen ADME,LOG_MDR1_ER,chemeleon,mae,6.0
+Biogen ADME,LOG_MDR1_ER,grover_base_ft,mae,4.0
+Biogen ADME,LOG_MDR1_ER,grover_large_ft,mae,5.0
+Biogen ADME,LOG_MDR1_ER,kermt_ft,mae,3.0
+Biogen ADME,LOG_MDR1_ER,kermt_tabpfn,mae,7.0
+Biogen ADME,LOG_MDR1_ER,lgbm,mae,8.0
+Biogen ADME,LOG_MDR1_ER,monroe,mae,1.0
+Biogen ADME,LOG_RLM,atomjepa_ft,mae,3.0
+Biogen ADME,LOG_RLM,chemeleon,mae,6.0
+Biogen ADME,LOG_RLM,grover_base_ft,mae,4.0
+Biogen ADME,LOG_RLM,grover_large_ft,mae,5.0
+Biogen ADME,LOG_RLM,kermt_ft,mae,2.0
+Biogen ADME,LOG_RLM,kermt_tabpfn,mae,7.0
+Biogen ADME,LOG_RLM,lgbm,mae,8.0
+Biogen ADME,LOG_RLM,monroe,mae,1.0
+Biogen ADME,LOG_RPPB,atomjepa_ft,mae,5.0
+Biogen ADME,LOG_RPPB,chemeleon,mae,6.0
+Biogen ADME,LOG_RPPB,grover_base_ft,mae,4.0
+Biogen ADME,LOG_RPPB,grover_large_ft,mae,3.0
+Biogen ADME,LOG_RPPB,kermt_ft,mae,2.0
+Biogen ADME,LOG_RPPB,kermt_tabpfn,mae,8.0
+Biogen ADME,LOG_RPPB,lgbm,mae,7.0
+Biogen ADME,LOG_RPPB,monroe,mae,1.0
+Biogen ADME,LOG_SOL,atomjepa_ft,mae,2.0
+Biogen ADME,LOG_SOL,chemeleon,mae,6.0
+Biogen ADME,LOG_SOL,grover_base_ft,mae,5.0
+Biogen ADME,LOG_SOL,grover_large_ft,mae,4.0
+Biogen ADME,LOG_SOL,kermt_ft,mae,3.0
+Biogen ADME,LOG_SOL,kermt_tabpfn,mae,7.0
+Biogen ADME,LOG_SOL,lgbm,mae,8.0
+Biogen ADME,LOG_SOL,monroe,mae,1.0
+ExpansionRx,LOG_Caco_AB,atomjepa_ft,mae,3.0
+ExpansionRx,LOG_Caco_AB,chemeleon,mae,2.0
+ExpansionRx,LOG_Caco_AB,grover_base_ft,mae,6.0
+ExpansionRx,LOG_Caco_AB,grover_large_ft,mae,7.0
+ExpansionRx,LOG_Caco_AB,kermt_ft,mae,4.0
+ExpansionRx,LOG_Caco_AB,kermt_tabpfn,mae,5.0
+ExpansionRx,LOG_Caco_AB,lgbm,mae,8.0
+ExpansionRx,LOG_Caco_AB,monroe,mae,1.0
+ExpansionRx,LOG_Caco_Efflux,atomjepa_ft,mae,3.0
+ExpansionRx,LOG_Caco_Efflux,chemeleon,mae,2.0
+ExpansionRx,LOG_Caco_Efflux,grover_base_ft,mae,6.0
+ExpansionRx,LOG_Caco_Efflux,grover_large_ft,mae,7.0
+ExpansionRx,LOG_Caco_Efflux,kermt_ft,mae,4.0
+ExpansionRx,LOG_Caco_Efflux,kermt_tabpfn,mae,5.0
+ExpansionRx,LOG_Caco_Efflux,lgbm,mae,8.0
+ExpansionRx,LOG_Caco_Efflux,monroe,mae,1.0
+ExpansionRx,LOG_HLM,atomjepa_ft,mae,1.0
+ExpansionRx,LOG_HLM,chemeleon,mae,6.0
+ExpansionRx,LOG_HLM,grover_base_ft,mae,3.0
+ExpansionRx,LOG_HLM,grover_large_ft,mae,4.0
+ExpansionRx,LOG_HLM,kermt_ft,mae,5.0
+ExpansionRx,LOG_HLM,kermt_tabpfn,mae,8.0
+ExpansionRx,LOG_HLM,lgbm,mae,7.0
+ExpansionRx,LOG_HLM,monroe,mae,2.0
+ExpansionRx,LOG_MBPB,atomjepa_ft,mae,1.0
+ExpansionRx,LOG_MBPB,chemeleon,mae,3.0
+ExpansionRx,LOG_MBPB,grover_base_ft,mae,4.0
+ExpansionRx,LOG_MBPB,grover_large_ft,mae,5.0
+ExpansionRx,LOG_MBPB,kermt_ft,mae,2.0
+ExpansionRx,LOG_MBPB,kermt_tabpfn,mae,6.0
+ExpansionRx,LOG_MBPB,lgbm,mae,8.0
+ExpansionRx,LOG_MBPB,monroe,mae,7.0
+ExpansionRx,LOG_MGMB,atomjepa_ft,mae,1.0
+ExpansionRx,LOG_MGMB,chemeleon,mae,3.0
+ExpansionRx,LOG_MGMB,grover_base_ft,mae,4.0
+ExpansionRx,LOG_MGMB,grover_large_ft,mae,5.0
+ExpansionRx,LOG_MGMB,kermt_ft,mae,2.0
+ExpansionRx,LOG_MGMB,kermt_tabpfn,mae,7.0
+ExpansionRx,LOG_MGMB,lgbm,mae,8.0
+ExpansionRx,LOG_MGMB,monroe,mae,6.0
+ExpansionRx,LOG_MLM,atomjepa_ft,mae,6.0
+ExpansionRx,LOG_MLM,chemeleon,mae,7.0
+ExpansionRx,LOG_MLM,grover_base_ft,mae,3.0
+ExpansionRx,LOG_MLM,grover_large_ft,mae,2.0
+ExpansionRx,LOG_MLM,kermt_ft,mae,4.0
+ExpansionRx,LOG_MLM,kermt_tabpfn,mae,5.0
+ExpansionRx,LOG_MLM,lgbm,mae,8.0
+ExpansionRx,LOG_MLM,monroe,mae,1.0
+ExpansionRx,LOG_MPPB,atomjepa_ft,mae,1.0
+ExpansionRx,LOG_MPPB,chemeleon,mae,3.0
+ExpansionRx,LOG_MPPB,grover_base_ft,mae,4.0
+ExpansionRx,LOG_MPPB,grover_large_ft,mae,6.0
+ExpansionRx,LOG_MPPB,kermt_ft,mae,2.0
+ExpansionRx,LOG_MPPB,kermt_tabpfn,mae,5.0
+ExpansionRx,LOG_MPPB,lgbm,mae,8.0
+ExpansionRx,LOG_MPPB,monroe,mae,7.0
+ExpansionRx,LogD,atomjepa_ft,mae,1.0
+ExpansionRx,LogD,chemeleon,mae,6.0
+ExpansionRx,LogD,grover_base_ft,mae,4.0
+ExpansionRx,LogD,grover_large_ft,mae,3.0
+ExpansionRx,LogD,kermt_ft,mae,2.0
+ExpansionRx,LogD,kermt_tabpfn,mae,8.0
+ExpansionRx,LogD,lgbm,mae,7.0
+ExpansionRx,LogD,monroe,mae,5.0
+ExpansionRx,LogS,atomjepa_ft,mae,1.0
+ExpansionRx,LogS,chemeleon,mae,4.0
+ExpansionRx,LogS,grover_base_ft,mae,3.0
+ExpansionRx,LogS,grover_large_ft,mae,5.0
+ExpansionRx,LogS,kermt_ft,mae,2.0
+ExpansionRx,LogS,kermt_tabpfn,mae,7.0
+ExpansionRx,LogS,lgbm,mae,8.0
+ExpansionRx,LogS,monroe,mae,6.0
