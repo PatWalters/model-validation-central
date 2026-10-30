@@ -1,0 +1,19 @@
+# The report side: everything from 08_collect_metrics.py onwards runs here.
+pandas
+numpy
+scipy
+scikit-learn
+pyarrow
+matplotlib
+seaborn
+pingouin
+statsmodels
+Pillow
+
+# The method runs in three environments on a CUDA machine; see the README.
+#   causalcp  the authors' environment.yml (python 3.11, chemprop 2.0.0,
+#             dowhy 0.11.1, dagma 1.1.1, lightning 2.4.0, rdkit 2024.3.6),
+#             with torch 2.7.1+cu128 for the RTX 5070 Ti, plus cclib, guacamol
+#             and tensorboard, which causal_utils imports
+#   monroe    Monroe and tabpfn 8.x, for the Monroe arms (05, 06)
+#   atomjepa  the Atom-JEPA environment of studies/atom-jepa, for 07

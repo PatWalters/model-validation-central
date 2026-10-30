@@ -1,0 +1,8 @@
+split,value,fits,causal_rho,encoder_rho,no_rho,median_contributors
+mode,"all SCM, low variance",8,0.6090392557574179,0.6468670808944265,0,6.5
+mode,"all SCM, switched",1,0.6,0.6,0,0.0
+mode,all counterfactual,62,0.1167515951336271,0.6916955215999081,0,10.5
+mode,mixed,39,0.24229549648883045,0.6181129914823921,0,5.0
+degenerate,False,109,0.19780217713218912,0.6620776665519542,0,8.0
+degenerate,True,1,0.6,0.6,0,0.0
+all,all,110,0.20145852097644196,0.6615133241287545,0,8.0

@@ -1,0 +1,54 @@
+{
+  "slug": "causal-chemprop",
+  "name": "causal-chemprop",
+  "datasets": [
+    "ExpansionRx",
+    "Biogen ADME",
+    "Causal-Chemprop kinase tasks"
+  ],
+  "endpoints": 12,
+  "protocol": "the paper's eleven tasks, then 5-fold GroupKFold (repeat 0 of 5 x 5) over chemical clusters with anchored series, Tukey HSD and series-level Wilcoxon",
+  "updated": "2026-10-20",
+  "reports": [
+    {
+      "slug": "causal-chemprop",
+      "date": "2026-10-20",
+      "title": "Counterfactuals from one analog",
+      "eyebrow": "Causal inference on a learned embedding",
+      "question": "Does a structural causal model on Chemprop's embedding, anchored on one measured member of a series, rank the rest of the series better?",
+      "takeaway": "Only with the released checkpoints. Refit with the authors' own code it loses within-task ρ on 10 of the paper's 11 tasks, and on ExpansionRx and Biogen it ranks worse than the Chemprop it is built on in 172 of 204 series.",
+      "summary": "Causal-Chemprop fits a linear SCM, learned by DAGMA, over Chemprop's last hidden layer and the target, and predicts a scaffold series as counterfactuals of one measured anchor. It is run with the authors' code on the paper's eleven kinase tasks, released and refitted, and per fold and per series on ExpansionRx and Biogen, against its own encoder, Monroe + TabPFN 3 with and without the anchors, fine-tuned Atom-JEPA, CheMeleon and LightGBM, each also given the anchor as a residual offset.",
+      "finding": "The released checkpoints reproduce Table 1 in 65 of 66 values and beat the released Chemprop on 9 of 11 tasks; refitting encoder and SCM loses ρ on 10 of 11 and gains on none. On the 182 ExpansionRx and 22 Biogen series its within-series ρ is behind its own encoder on 152 and 20 and behind Monroe + TabPFN 3 on 159 and 22. The counterfactual is what loses the ranking: series predicted entirely by it reach ρ −0.02 and 0.12 against the encoder's 0.65 and 0.69.",
+      "facts": [
+        {
+          "n": "11",
+          "label": "paper tasks"
+        },
+        {
+          "n": "204",
+          "label": "ADME series"
+        },
+        {
+          "n": "1,020",
+          "label": "SCM fits"
+        },
+        {
+          "n": "7",
+          "label": "arms per series"
+        }
+      ],
+      "validates": [
+        {
+          "name": "Causal-Chemprop",
+          "authors": "Natajaya, C.; Attia, L.; Burns, J. W.; Doyle, P. S.",
+          "title": "Causal-Chemprop: Causal Machine Learning for Molecular Property Prediction and Design",
+          "venue": "J. Chem. Inf. Model. 2026",
+          "label": "10.1021/acs.jcim.6c01429",
+          "url": "https://doi.org/10.1021/acs.jcim.6c01429"
+        }
+      ],
+      "source": "results/report.html",
+      "builder": "11_build_page.py"
+    }
+  ]
+}
