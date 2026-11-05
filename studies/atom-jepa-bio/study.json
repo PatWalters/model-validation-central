@@ -1,0 +1,53 @@
+{
+  "slug": "atom-jepa-bio",
+  "name": "atom-jepa-bio",
+  "datasets": [
+    "ExpansionRx",
+    "Biogen ADME"
+  ],
+  "endpoints": 15,
+  "protocol": "5 x 5 GroupKFold over chemical clusters, one fixed holdout, Tukey HSD",
+  "updated": "2026-11-04",
+  "reports": [
+    {
+      "slug": "atom-jepa-bio",
+      "date": "2026-11-04",
+      "title": "Bioassays Before ADMET",
+      "eyebrow": "Second-stage bioassay pre-training",
+      "question": "Does a second pre-training stage on 1,089 PCBA bioassays make the Atom-JEPA encoder better at ADMET, and does it overtake Monroe + TabPFN 3?",
+      "takeaway": "Yes, mostly. The authors' count reproduces within one, 35 of 45 best or tied against Monroe's 17. Swapping the checkpoint helps fine-tuning on 32 of 45 paired calls and hurts on one, most on Biogen, where a 3-ahead, 13-behind deficit against Monroe becomes 12 ahead, 3 behind. Caco-2 and MLM stay Monroe's.",
+      "summary": "Atom-JEPA-Bio continues the released Atom-JEPA encoder with the same self-supervised objectives plus a focal loss over 1,089 PCBA bioassays, and fine-tunes it with the unchanged recipe. Run here with the authors' code and weights, it is compared with stage-1 Atom-JEPA, fine-tuned and frozen, with Monroe + TabPFN 3, and with the authors' own scoreboard, with a machine re-run check and a split of the Biogen test set by PCBA membership.",
+      "finding": "Over the authors' six arms, fine-tuned Bio is best or tied on 35 of 45 combinations (their figure 34) and Monroe on 17 (their 18). Against stage 1 it is ahead on all 18 Biogen combinations and 14 of 27 ExpansionRx ones, behind on one, a median +0.067 R² on Biogen and +0.024 on ExpansionRx. Re-training stage 1 on the new GPU moves it by at most 0.007 R². On the 85% of Biogen test molecules PCBA does not contain, Bio still beats stage 1 on every endpoint.",
+      "facts": [
+        {
+          "n": "7",
+          "label": "arms"
+        },
+        {
+          "n": "15",
+          "label": "endpoints"
+        },
+        {
+          "n": "55",
+          "label": "fine-tuned fold models"
+        },
+        {
+          "n": "27 h",
+          "label": "GPU time"
+        }
+      ],
+      "validates": [
+        {
+          "name": "Atom-JEPA-Bio",
+          "authors": "Petersen, K. H.; Tirsgaard, R. H.; Larsen, L. F.; Cornet, F. R. J.; Jordahn, M.; Schmidt, M. N.",
+          "title": "Atom-JEPA-Bio: Improving Atom-JEPA's ADMET Predictions with Second-Stage Pretraining",
+          "venue": "Blog post, November 2026",
+          "label": "atom-jepa-website",
+          "url": "https://mjordahn.github.io/atom-jepa-website/atom-jepa-bio.html"
+        }
+      ],
+      "source": "results/report.html",
+      "builder": "08_build_page.py"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+dataset,method,host,gpu,folds,median_min,total_h,median_best_epoch,peak_mem_gb
+Biogen ADME,atomjepa_ft_rerun,mercury,NVIDIA RTX PRO 5000 Blackwell,5,14.152466162045796,1.1458789132701026,35.0,14.230682624
+Biogen ADME,bio_ft,mercury,NVIDIA RTX PRO 5000 Blackwell,25,11.653018387158712,5.105190939307213,19.0,14.230099968
+ExpansionRx,bio_ft,apollo,NVIDIA GeForce RTX 5070 Ti,13,62.17011965115865,13.45111576391591,28.0,11.081781248
+ExpansionRx,bio_ft,mercury,NVIDIA RTX PRO 5000 Blackwell,12,35.33365877866745,7.171513731413417,29.0,11.374970368

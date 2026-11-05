@@ -1,0 +1,271 @@
+dataset,endpoint,metric,method,kind
+ExpansionRx,LOG_Caco_AB,r2,atomjepa_ft,worse
+ExpansionRx,LOG_Caco_AB,r2,bio_ft,worse
+ExpansionRx,LOG_Caco_AB,r2,bio_tabpfn,worse
+ExpansionRx,LOG_Caco_AB,r2,chemeleon,worse
+ExpansionRx,LOG_Caco_AB,r2,lgbm,worse
+ExpansionRx,LOG_Caco_AB,r2,monroe,alone
+ExpansionRx,LOG_Caco_AB,spearman,atomjepa_ft,worse
+ExpansionRx,LOG_Caco_AB,spearman,bio_ft,tied
+ExpansionRx,LOG_Caco_AB,spearman,bio_tabpfn,worse
+ExpansionRx,LOG_Caco_AB,spearman,chemeleon,worse
+ExpansionRx,LOG_Caco_AB,spearman,lgbm,worse
+ExpansionRx,LOG_Caco_AB,spearman,monroe,tied
+ExpansionRx,LOG_Caco_AB,mae,atomjepa_ft,worse
+ExpansionRx,LOG_Caco_AB,mae,bio_ft,worse
+ExpansionRx,LOG_Caco_AB,mae,bio_tabpfn,worse
+ExpansionRx,LOG_Caco_AB,mae,chemeleon,worse
+ExpansionRx,LOG_Caco_AB,mae,lgbm,worse
+ExpansionRx,LOG_Caco_AB,mae,monroe,alone
+ExpansionRx,LOG_Caco_Efflux,r2,atomjepa_ft,worse
+ExpansionRx,LOG_Caco_Efflux,r2,bio_ft,worse
+ExpansionRx,LOG_Caco_Efflux,r2,bio_tabpfn,worse
+ExpansionRx,LOG_Caco_Efflux,r2,chemeleon,worse
+ExpansionRx,LOG_Caco_Efflux,r2,lgbm,worse
+ExpansionRx,LOG_Caco_Efflux,r2,monroe,alone
+ExpansionRx,LOG_Caco_Efflux,spearman,atomjepa_ft,tied
+ExpansionRx,LOG_Caco_Efflux,spearman,bio_ft,tied
+ExpansionRx,LOG_Caco_Efflux,spearman,bio_tabpfn,worse
+ExpansionRx,LOG_Caco_Efflux,spearman,chemeleon,worse
+ExpansionRx,LOG_Caco_Efflux,spearman,lgbm,worse
+ExpansionRx,LOG_Caco_Efflux,spearman,monroe,tied
+ExpansionRx,LOG_Caco_Efflux,mae,atomjepa_ft,worse
+ExpansionRx,LOG_Caco_Efflux,mae,bio_ft,tied
+ExpansionRx,LOG_Caco_Efflux,mae,bio_tabpfn,worse
+ExpansionRx,LOG_Caco_Efflux,mae,chemeleon,worse
+ExpansionRx,LOG_Caco_Efflux,mae,lgbm,worse
+ExpansionRx,LOG_Caco_Efflux,mae,monroe,tied
+ExpansionRx,LOG_HLM,r2,atomjepa_ft,tied
+ExpansionRx,LOG_HLM,r2,bio_ft,tied
+ExpansionRx,LOG_HLM,r2,bio_tabpfn,worse
+ExpansionRx,LOG_HLM,r2,chemeleon,worse
+ExpansionRx,LOG_HLM,r2,lgbm,worse
+ExpansionRx,LOG_HLM,r2,monroe,worse
+ExpansionRx,LOG_HLM,spearman,atomjepa_ft,worse
+ExpansionRx,LOG_HLM,spearman,bio_ft,alone
+ExpansionRx,LOG_HLM,spearman,bio_tabpfn,worse
+ExpansionRx,LOG_HLM,spearman,chemeleon,worse
+ExpansionRx,LOG_HLM,spearman,lgbm,worse
+ExpansionRx,LOG_HLM,spearman,monroe,worse
+ExpansionRx,LOG_HLM,mae,atomjepa_ft,tied
+ExpansionRx,LOG_HLM,mae,bio_ft,tied
+ExpansionRx,LOG_HLM,mae,bio_tabpfn,worse
+ExpansionRx,LOG_HLM,mae,chemeleon,worse
+ExpansionRx,LOG_HLM,mae,lgbm,worse
+ExpansionRx,LOG_HLM,mae,monroe,worse
+ExpansionRx,LOG_MBPB,r2,atomjepa_ft,tied
+ExpansionRx,LOG_MBPB,r2,bio_ft,tied
+ExpansionRx,LOG_MBPB,r2,bio_tabpfn,worse
+ExpansionRx,LOG_MBPB,r2,chemeleon,worse
+ExpansionRx,LOG_MBPB,r2,lgbm,worse
+ExpansionRx,LOG_MBPB,r2,monroe,worse
+ExpansionRx,LOG_MBPB,spearman,atomjepa_ft,tied
+ExpansionRx,LOG_MBPB,spearman,bio_ft,tied
+ExpansionRx,LOG_MBPB,spearman,bio_tabpfn,worse
+ExpansionRx,LOG_MBPB,spearman,chemeleon,worse
+ExpansionRx,LOG_MBPB,spearman,lgbm,worse
+ExpansionRx,LOG_MBPB,spearman,monroe,worse
+ExpansionRx,LOG_MBPB,mae,atomjepa_ft,tied
+ExpansionRx,LOG_MBPB,mae,bio_ft,tied
+ExpansionRx,LOG_MBPB,mae,bio_tabpfn,worse
+ExpansionRx,LOG_MBPB,mae,chemeleon,worse
+ExpansionRx,LOG_MBPB,mae,lgbm,worse
+ExpansionRx,LOG_MBPB,mae,monroe,worse
+ExpansionRx,LOG_MGMB,r2,atomjepa_ft,tied
+ExpansionRx,LOG_MGMB,r2,bio_ft,tied
+ExpansionRx,LOG_MGMB,r2,bio_tabpfn,worse
+ExpansionRx,LOG_MGMB,r2,chemeleon,tied
+ExpansionRx,LOG_MGMB,r2,lgbm,worse
+ExpansionRx,LOG_MGMB,r2,monroe,worse
+ExpansionRx,LOG_MGMB,spearman,atomjepa_ft,tied
+ExpansionRx,LOG_MGMB,spearman,bio_ft,tied
+ExpansionRx,LOG_MGMB,spearman,bio_tabpfn,worse
+ExpansionRx,LOG_MGMB,spearman,chemeleon,tied
+ExpansionRx,LOG_MGMB,spearman,lgbm,worse
+ExpansionRx,LOG_MGMB,spearman,monroe,worse
+ExpansionRx,LOG_MGMB,mae,atomjepa_ft,tied
+ExpansionRx,LOG_MGMB,mae,bio_ft,tied
+ExpansionRx,LOG_MGMB,mae,bio_tabpfn,worse
+ExpansionRx,LOG_MGMB,mae,chemeleon,tied
+ExpansionRx,LOG_MGMB,mae,lgbm,worse
+ExpansionRx,LOG_MGMB,mae,monroe,worse
+ExpansionRx,LOG_MLM,r2,atomjepa_ft,worse
+ExpansionRx,LOG_MLM,r2,bio_ft,worse
+ExpansionRx,LOG_MLM,r2,bio_tabpfn,worse
+ExpansionRx,LOG_MLM,r2,chemeleon,worse
+ExpansionRx,LOG_MLM,r2,lgbm,worse
+ExpansionRx,LOG_MLM,r2,monroe,alone
+ExpansionRx,LOG_MLM,spearman,atomjepa_ft,worse
+ExpansionRx,LOG_MLM,spearman,bio_ft,worse
+ExpansionRx,LOG_MLM,spearman,bio_tabpfn,worse
+ExpansionRx,LOG_MLM,spearman,chemeleon,worse
+ExpansionRx,LOG_MLM,spearman,lgbm,worse
+ExpansionRx,LOG_MLM,spearman,monroe,alone
+ExpansionRx,LOG_MLM,mae,atomjepa_ft,worse
+ExpansionRx,LOG_MLM,mae,bio_ft,worse
+ExpansionRx,LOG_MLM,mae,bio_tabpfn,worse
+ExpansionRx,LOG_MLM,mae,chemeleon,worse
+ExpansionRx,LOG_MLM,mae,lgbm,worse
+ExpansionRx,LOG_MLM,mae,monroe,alone
+ExpansionRx,LOG_MPPB,r2,atomjepa_ft,tied
+ExpansionRx,LOG_MPPB,r2,bio_ft,tied
+ExpansionRx,LOG_MPPB,r2,bio_tabpfn,worse
+ExpansionRx,LOG_MPPB,r2,chemeleon,worse
+ExpansionRx,LOG_MPPB,r2,lgbm,worse
+ExpansionRx,LOG_MPPB,r2,monroe,worse
+ExpansionRx,LOG_MPPB,spearman,atomjepa_ft,tied
+ExpansionRx,LOG_MPPB,spearman,bio_ft,tied
+ExpansionRx,LOG_MPPB,spearman,bio_tabpfn,worse
+ExpansionRx,LOG_MPPB,spearman,chemeleon,worse
+ExpansionRx,LOG_MPPB,spearman,lgbm,worse
+ExpansionRx,LOG_MPPB,spearman,monroe,worse
+ExpansionRx,LOG_MPPB,mae,atomjepa_ft,tied
+ExpansionRx,LOG_MPPB,mae,bio_ft,tied
+ExpansionRx,LOG_MPPB,mae,bio_tabpfn,worse
+ExpansionRx,LOG_MPPB,mae,chemeleon,worse
+ExpansionRx,LOG_MPPB,mae,lgbm,worse
+ExpansionRx,LOG_MPPB,mae,monroe,worse
+ExpansionRx,LogD,r2,atomjepa_ft,worse
+ExpansionRx,LogD,r2,bio_ft,alone
+ExpansionRx,LogD,r2,bio_tabpfn,worse
+ExpansionRx,LogD,r2,chemeleon,worse
+ExpansionRx,LogD,r2,lgbm,worse
+ExpansionRx,LogD,r2,monroe,worse
+ExpansionRx,LogD,spearman,atomjepa_ft,worse
+ExpansionRx,LogD,spearman,bio_ft,alone
+ExpansionRx,LogD,spearman,bio_tabpfn,worse
+ExpansionRx,LogD,spearman,chemeleon,worse
+ExpansionRx,LogD,spearman,lgbm,worse
+ExpansionRx,LogD,spearman,monroe,worse
+ExpansionRx,LogD,mae,atomjepa_ft,worse
+ExpansionRx,LogD,mae,bio_ft,alone
+ExpansionRx,LogD,mae,bio_tabpfn,worse
+ExpansionRx,LogD,mae,chemeleon,worse
+ExpansionRx,LogD,mae,lgbm,worse
+ExpansionRx,LogD,mae,monroe,worse
+ExpansionRx,LogS,r2,atomjepa_ft,worse
+ExpansionRx,LogS,r2,bio_ft,alone
+ExpansionRx,LogS,r2,bio_tabpfn,worse
+ExpansionRx,LogS,r2,chemeleon,worse
+ExpansionRx,LogS,r2,lgbm,worse
+ExpansionRx,LogS,r2,monroe,worse
+ExpansionRx,LogS,spearman,atomjepa_ft,tied
+ExpansionRx,LogS,spearman,bio_ft,tied
+ExpansionRx,LogS,spearman,bio_tabpfn,worse
+ExpansionRx,LogS,spearman,chemeleon,worse
+ExpansionRx,LogS,spearman,lgbm,worse
+ExpansionRx,LogS,spearman,monroe,worse
+ExpansionRx,LogS,mae,atomjepa_ft,tied
+ExpansionRx,LogS,mae,bio_ft,tied
+ExpansionRx,LogS,mae,bio_tabpfn,worse
+ExpansionRx,LogS,mae,chemeleon,worse
+ExpansionRx,LogS,mae,lgbm,worse
+ExpansionRx,LogS,mae,monroe,worse
+Biogen ADME,LOG_HLM,r2,atomjepa_ft,worse
+Biogen ADME,LOG_HLM,r2,bio_ft,alone
+Biogen ADME,LOG_HLM,r2,bio_tabpfn,worse
+Biogen ADME,LOG_HLM,r2,chemeleon,worse
+Biogen ADME,LOG_HLM,r2,lgbm,worse
+Biogen ADME,LOG_HLM,r2,monroe,worse
+Biogen ADME,LOG_HLM,spearman,atomjepa_ft,worse
+Biogen ADME,LOG_HLM,spearman,bio_ft,alone
+Biogen ADME,LOG_HLM,spearman,bio_tabpfn,worse
+Biogen ADME,LOG_HLM,spearman,chemeleon,worse
+Biogen ADME,LOG_HLM,spearman,lgbm,worse
+Biogen ADME,LOG_HLM,spearman,monroe,worse
+Biogen ADME,LOG_HLM,mae,atomjepa_ft,worse
+Biogen ADME,LOG_HLM,mae,bio_ft,alone
+Biogen ADME,LOG_HLM,mae,bio_tabpfn,worse
+Biogen ADME,LOG_HLM,mae,chemeleon,worse
+Biogen ADME,LOG_HLM,mae,lgbm,worse
+Biogen ADME,LOG_HLM,mae,monroe,worse
+Biogen ADME,LOG_HPPB,r2,atomjepa_ft,worse
+Biogen ADME,LOG_HPPB,r2,bio_ft,tied
+Biogen ADME,LOG_HPPB,r2,bio_tabpfn,worse
+Biogen ADME,LOG_HPPB,r2,chemeleon,worse
+Biogen ADME,LOG_HPPB,r2,lgbm,worse
+Biogen ADME,LOG_HPPB,r2,monroe,tied
+Biogen ADME,LOG_HPPB,spearman,atomjepa_ft,worse
+Biogen ADME,LOG_HPPB,spearman,bio_ft,tied
+Biogen ADME,LOG_HPPB,spearman,bio_tabpfn,tied
+Biogen ADME,LOG_HPPB,spearman,chemeleon,worse
+Biogen ADME,LOG_HPPB,spearman,lgbm,worse
+Biogen ADME,LOG_HPPB,spearman,monroe,tied
+Biogen ADME,LOG_HPPB,mae,atomjepa_ft,worse
+Biogen ADME,LOG_HPPB,mae,bio_ft,tied
+Biogen ADME,LOG_HPPB,mae,bio_tabpfn,tied
+Biogen ADME,LOG_HPPB,mae,chemeleon,worse
+Biogen ADME,LOG_HPPB,mae,lgbm,worse
+Biogen ADME,LOG_HPPB,mae,monroe,worse
+Biogen ADME,LOG_MDR1_ER,r2,atomjepa_ft,worse
+Biogen ADME,LOG_MDR1_ER,r2,bio_ft,worse
+Biogen ADME,LOG_MDR1_ER,r2,bio_tabpfn,worse
+Biogen ADME,LOG_MDR1_ER,r2,chemeleon,worse
+Biogen ADME,LOG_MDR1_ER,r2,lgbm,worse
+Biogen ADME,LOG_MDR1_ER,r2,monroe,alone
+Biogen ADME,LOG_MDR1_ER,spearman,atomjepa_ft,worse
+Biogen ADME,LOG_MDR1_ER,spearman,bio_ft,tied
+Biogen ADME,LOG_MDR1_ER,spearman,bio_tabpfn,worse
+Biogen ADME,LOG_MDR1_ER,spearman,chemeleon,worse
+Biogen ADME,LOG_MDR1_ER,spearman,lgbm,worse
+Biogen ADME,LOG_MDR1_ER,spearman,monroe,tied
+Biogen ADME,LOG_MDR1_ER,mae,atomjepa_ft,worse
+Biogen ADME,LOG_MDR1_ER,mae,bio_ft,worse
+Biogen ADME,LOG_MDR1_ER,mae,bio_tabpfn,tied
+Biogen ADME,LOG_MDR1_ER,mae,chemeleon,worse
+Biogen ADME,LOG_MDR1_ER,mae,lgbm,worse
+Biogen ADME,LOG_MDR1_ER,mae,monroe,tied
+Biogen ADME,LOG_RLM,r2,atomjepa_ft,worse
+Biogen ADME,LOG_RLM,r2,bio_ft,alone
+Biogen ADME,LOG_RLM,r2,bio_tabpfn,worse
+Biogen ADME,LOG_RLM,r2,chemeleon,worse
+Biogen ADME,LOG_RLM,r2,lgbm,worse
+Biogen ADME,LOG_RLM,r2,monroe,worse
+Biogen ADME,LOG_RLM,spearman,atomjepa_ft,worse
+Biogen ADME,LOG_RLM,spearman,bio_ft,alone
+Biogen ADME,LOG_RLM,spearman,bio_tabpfn,worse
+Biogen ADME,LOG_RLM,spearman,chemeleon,worse
+Biogen ADME,LOG_RLM,spearman,lgbm,worse
+Biogen ADME,LOG_RLM,spearman,monroe,worse
+Biogen ADME,LOG_RLM,mae,atomjepa_ft,worse
+Biogen ADME,LOG_RLM,mae,bio_ft,alone
+Biogen ADME,LOG_RLM,mae,bio_tabpfn,worse
+Biogen ADME,LOG_RLM,mae,chemeleon,worse
+Biogen ADME,LOG_RLM,mae,lgbm,worse
+Biogen ADME,LOG_RLM,mae,monroe,worse
+Biogen ADME,LOG_RPPB,r2,atomjepa_ft,worse
+Biogen ADME,LOG_RPPB,r2,bio_ft,tied
+Biogen ADME,LOG_RPPB,r2,bio_tabpfn,worse
+Biogen ADME,LOG_RPPB,r2,chemeleon,worse
+Biogen ADME,LOG_RPPB,r2,lgbm,worse
+Biogen ADME,LOG_RPPB,r2,monroe,tied
+Biogen ADME,LOG_RPPB,spearman,atomjepa_ft,worse
+Biogen ADME,LOG_RPPB,spearman,bio_ft,tied
+Biogen ADME,LOG_RPPB,spearman,bio_tabpfn,tied
+Biogen ADME,LOG_RPPB,spearman,chemeleon,worse
+Biogen ADME,LOG_RPPB,spearman,lgbm,worse
+Biogen ADME,LOG_RPPB,spearman,monroe,tied
+Biogen ADME,LOG_RPPB,mae,atomjepa_ft,worse
+Biogen ADME,LOG_RPPB,mae,bio_ft,worse
+Biogen ADME,LOG_RPPB,mae,bio_tabpfn,alone
+Biogen ADME,LOG_RPPB,mae,chemeleon,worse
+Biogen ADME,LOG_RPPB,mae,lgbm,worse
+Biogen ADME,LOG_RPPB,mae,monroe,worse
+Biogen ADME,LOG_SOL,r2,atomjepa_ft,worse
+Biogen ADME,LOG_SOL,r2,bio_ft,worse
+Biogen ADME,LOG_SOL,r2,bio_tabpfn,alone
+Biogen ADME,LOG_SOL,r2,chemeleon,worse
+Biogen ADME,LOG_SOL,r2,lgbm,worse
+Biogen ADME,LOG_SOL,r2,monroe,worse
+Biogen ADME,LOG_SOL,spearman,atomjepa_ft,worse
+Biogen ADME,LOG_SOL,spearman,bio_ft,tied
+Biogen ADME,LOG_SOL,spearman,bio_tabpfn,tied
+Biogen ADME,LOG_SOL,spearman,chemeleon,worse
+Biogen ADME,LOG_SOL,spearman,lgbm,worse
+Biogen ADME,LOG_SOL,spearman,monroe,tied
+Biogen ADME,LOG_SOL,mae,atomjepa_ft,worse
+Biogen ADME,LOG_SOL,mae,bio_ft,tied
+Biogen ADME,LOG_SOL,mae,bio_tabpfn,tied
+Biogen ADME,LOG_SOL,mae,chemeleon,worse
+Biogen ADME,LOG_SOL,mae,lgbm,worse
+Biogen ADME,LOG_SOL,mae,monroe,worse
